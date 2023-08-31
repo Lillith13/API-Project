@@ -12,18 +12,24 @@ if (process.env.NODE_ENV === "production") {
 
 const demoUsers = [
   {
+    firstName: "Bob",
+    lastName: "Builder",
     email: "demoUser1@user.io",
     username: "demoUser1",
     hashedPassword: bcrypt.hashSync("passDemo1"),
   },
   {
-    email: "demoUser2@user.io",
-    username: "demoUser2",
+    firstName: "Baul",
+    lastName: "Plart",
+    email: "theycallme_Sheriff@user.io",
+    username: "TheMallSheriff",
     hashedPassword: bcrypt.hashSync("passDemo2"),
   },
   {
-    email: "demoUser3@user.io",
-    username: "demoUser3",
+    firstName: "Mr",
+    lastName: "Pickles",
+    email: "tripleSixFix@hellspawn.io",
+    username: "theTripleSixer",
     hashedPassword: bcrypt.hashSync("passDemo3"),
   },
 ];
