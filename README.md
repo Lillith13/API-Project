@@ -55,7 +55,7 @@ Returns the information about the current user that is logged in.
 - Request
 
   - Method: GET
-  - URL: /api/users
+  - URL: /api/sessions
   - Body: none
 
 - Successful Response when there is a logged in user
@@ -98,8 +98,8 @@ information.
 - Require Authentication: false
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: POST
+  - URL: /api/sessions
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -168,8 +168,8 @@ user's information.
 - Require Authentication: false
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: POST
+  - URL: /api/users
   - Headers:
     - Content-Type: application/json
   - Body:
