@@ -55,7 +55,7 @@ Returns the information about the current user that is logged in.
 - Request
 
   - Method: GET
-  - URL: /api/sessions
+  - URL: /api/session
   - Body: none
 
 - Successful Response when there is a logged in user
@@ -99,7 +99,7 @@ information.
 - Request
 
   - Method: POST
-  - URL: /api/sessions
+  - URL: /api/session
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -263,8 +263,8 @@ Returns all the spots.
 - Require Authentication: false
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: GET
+  - URL: /api/spots
   - Body: none
 
 - Successful Response
@@ -285,7 +285,7 @@ Returns all the spots.
           "state": "California",
           "country": "United States of America",
           "lat": 37.7645358,
-          "lng": -122.4730327,
+          "lng": -117.37646,
           "name": "App Academy",
           "description": "Place where web developers are created",
           "price": 123,
@@ -305,8 +305,8 @@ Returns all the spots owned (created) by the current user.
 - Require Authentication: true
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: GET
+  - URL: /api/spots/mySpots
   - Body: none
 
 - Successful Response
@@ -347,8 +347,8 @@ Returns the details of a spot specified by its id.
 - Require Authentication: false
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: GET
+  - URL: /api/spots/:spotId
   - Body: none
 
 - Successful Response
@@ -415,8 +415,8 @@ Creates and returns a new spot.
 - Require Authentication: true
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: POST
+  - URL: /api/spots/mySpots
   - Headers:
     - Content-Type: application/json
   - Body:

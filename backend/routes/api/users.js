@@ -27,55 +27,36 @@ const validateSignup = [
   handleValidationErrors,
 ];
 
-// checks against saved user information to prevent duplicate usernames/emails
-const checkIfUserExists = async (username, email) => {
-  const usersWusername = await User.findOne({
-    where: {
-      username,
-    },
-  });
-  const usersWemail = await User.findOne({
-    where: {
-      email,
-    },
-  });
-  if (usersWusername) {
-    const err = new Error("The requested resource couldn't be found.");
-    err.status(500);
-    err.title = "User already exists";
-    err.errors = { username: "User with that username already exists." };
-    next(err);
-  }
-  if (usersWemail) {
-    const err = new Error("The requested resource couldn't be found.");
-    err.status(500);
-    err.title = "User already exists";
-    err.errors = { email: "User with that email already exists." };
-    next(err);
-  }
-};
+const {
+  checkIfUserExists,
+  doubleCheckInputs,
+} = require("../../utils/checkInputsOnSignup");
 
 // user sign-up endpoint
-router.post("/", validateSignup, async (req, res) => {
-  const { firstName, lastName, email, username, password } = req.body;
-  const hashedPassword = bcrypt.hashSync(password);
-  checkIfUserExists(username, email);
-  const user = await User.create({
-    firstName,
-    lastName,
-    email,
-    username,
-    hashedPassword,
-  });
-  const safeUser = {
-    id: user.id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    username: user.username,
-  };
-  await setTokenCookie(res, safeUser);
-  return res.json({ user: safeUser });
-});
+router.post(
+  "/",
+  [validateSignup, doubleCheckInputs, checkIfUserExists],
+  async (req, res) => {
+    const { firstName, lastName, email, username, password } = req.body;
+    const hashedPassword = bcrypt.hashSync(password);
+
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      username,
+      hashedPassword,
+    });
+    const safeUser = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+    };
+    await setTokenCookie(res, safeUser);
+    return res.json({ user: safeUser });
+  }
+);
 
 module.exports = router;
