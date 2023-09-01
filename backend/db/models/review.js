@@ -21,10 +21,20 @@ module.exports = (sequelize, DataTypes) => {
   }
   Review.init(
     {
-      spotId: DataTypes.INTEGER,
-      userId: DataTypes.INTEGER,
+      spotId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Spots",
+        },
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Users",
+        },
+      },
       review: DataTypes.STRING,
-      starts: DataTypes.INTEGER,
+      stars: DataTypes.INTEGER,
     },
     {
       sequelize,
