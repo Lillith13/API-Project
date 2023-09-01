@@ -24,13 +24,13 @@ module.exports = (sequelize, DataTypes) => {
       spotId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "Spot",
+          model: "Spots",
         },
       },
       userId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "User",
+          model: "Users",
         },
       },
       review: DataTypes.STRING,
