@@ -12,7 +12,7 @@ router.use("/users", usersRouter);
 router.use("/spots", spotsRouter);
 
 // display available tables and endpoints on start-up
-router.get("/test", (req, res) => {
+router.get("/test", async (req, res) => {
   const availableEndPointsList = {
     GET: {
       "/": "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
@@ -31,6 +31,7 @@ router.get("/test", (req, res) => {
         "creates new spot owned by the currently signed in user",
     },
   };
+  // const availableTables = await fetch()
   res.json(availableEndPointsList);
 });
 
