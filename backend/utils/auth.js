@@ -4,7 +4,7 @@ const { User } = require("../db/models");
 
 const { secret, expiresIn } = jwtConfig;
 
-// sends a jwt cookie -> for login & signup routes
+// sends a jwt cookie -> for login & signup routes (helper func)
 const setTokenCookie = (res, user) => {
   const safeUser = {
     id: user.id,
@@ -37,6 +37,7 @@ const restoreUser = (req, res, next) => {
       const { id } = jwtPayload.data;
       req.user = await User.findByPk(id, {
         attributes: {
+          // override part of default scope
           include: ["email", "createdAt", "updatedAt"],
         },
       });

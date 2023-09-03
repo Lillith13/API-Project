@@ -22,36 +22,49 @@ const spotSeed = [
     description: "Place where web developers are created",
     price: 123,
   },
+  {
+    ownerId: 2,
+    address: "903 Warren Ave",
+    city: "Front Royal",
+    state: "Virginia",
+    country: "United States of America",
+    lat: 38.93043,
+    lng: -78.19507,
+    name: "Fantasy Land Park",
+    description:
+      "An old ass park...beware of the volleyball court, its filled with needles",
+    price: 456,
+  },
+  {
+    ownerId: 3,
+    address: "3330 Chuckwagon Rd",
+    city: "Colorado Springs",
+    state: "Colorado",
+    country: "United States of America",
+    lat: 38.91696,
+    lng: -104.88446,
+    name: "Flying W Ranch & Chuckwagon Supper",
+    description: "CO tourist trap",
+    price: 789,
+  },
 ];
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
     await Spot.bulkCreate(spotSeed, {
       validate: true,
     });
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
     options.tableName = "Spots";
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        ownerId: 1,
+        ownerId: {
+          [Op.in]: [1, 2, 3],
+        },
       },
       {}
     );
