@@ -81,12 +81,7 @@ app.use((err, _req, res, _next) => {
 
 // display available tables and endpoints on start-up
 app.get("/", (req, res) => {
-  connection.query(
-    `SELECT * FROM information_schema.tables WHERE table_schema = airburbs`,
-    function (err, tables) {
-      res.json(tables);
-    }
-  );
+  res.json({ availableTables: db.tables });
 });
 
 module.exports = app;
