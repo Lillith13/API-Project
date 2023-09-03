@@ -4,4 +4,3 @@ build
 .DS_Store
 *.db
 utils/stuff.js
-seeders/20230901191403-spots-seeds.js
