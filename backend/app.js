@@ -81,8 +81,19 @@ app.use((err, _req, res, _next) => {
 
 // display available tables and endpoints on start-up
 app.get("/", (req, res) => {
-  res.send(`SELECT table_name
-    FROM information_schema.tables`);
+  const availableEndPointsList = {
+    GET: {
+      "/": "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
+      "/api/csrf/restore": "restores csrf token",
+      "/api/session":
+        "get currently signed in user -> displays null if no user signed in",
+      "/api/spots": "get all spots",
+      "/api/spots/:spotId": "get specific spot by it's ID",
+      "/api/spots/mySpots":
+        "returns all spots owned by the currently logged in user",
+    },
+  };
+  res.json(availableEndPointsList);
 });
 
 module.exports = app;
