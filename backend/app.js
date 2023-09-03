@@ -80,7 +80,7 @@ app.use((err, _req, res, _next) => {
 });
 
 // display available tables and endpoints on start-up
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   const availableEndPointsList = {
     GET: {
       "/": "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
