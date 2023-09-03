@@ -81,7 +81,8 @@ app.use((err, _req, res, _next) => {
 
 // display available tables and endpoints on start-up
 app.get("/", (req, res) => {
-  res.json({ availableTables: db.tables });
+  res.send(`SELECT table_name
+    FROM information_schema.tables`);
 });
 
 module.exports = app;
