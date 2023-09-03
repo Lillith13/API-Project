@@ -3,27 +3,27 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
-      Spot.hasMany(models.SpotImage, {
-        foreignKey: "spotId",
-      });
-      Spot.hasMany(models.Review, {
-        foreignKey: "spotId",
-      });
-      Spot.hasMany(models.Booking, {
-        foreignKey: "spotId",
-      });
-      Spot.belongsTo(models.User, {
-        foreignKey: "ownerId",
-      });
+      // Spot.hasMany(models.SpotImage, {
+      //   foreignKey: "spotId",
+      // });
+      // Spot.hasMany(models.Review, {
+      //   foreignKey: "spotId",
+      // });
+      // Spot.hasMany(models.Booking, {
+      //   foreignKey: "spotId",
+      // });
+      // Spot.belongsTo(models.User, {
+      //   foreignKey: "ownerId",
+      // });
     }
   }
   Spot.init(
     {
       ownerId: {
         type: DataTypes.INTEGER,
-        references: {
-          model: "Users",
-        },
+        // references: {
+        //   model: "Users",
+        // },
       },
       address: DataTypes.STRING,
       city: DataTypes.STRING,
