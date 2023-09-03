@@ -24,6 +24,12 @@ router.get("/test", (req, res) => {
       "/api/spots/mySpots":
         "returns all spots owned by the currently logged in user",
     },
+    POST: {
+      "/session": "user log-in route",
+      "/users": "user sign-up route",
+      "/spots/mySpots":
+        "creates new spot owned by the currently signed in user",
+    },
   };
   res.json(availableEndPointsList);
 });
