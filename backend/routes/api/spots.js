@@ -229,13 +229,12 @@ router.put(
 );
 
 // delete spot owned by currently signed in user
-router.delete("/mySpots/:spotId", requireAuth, async (req, res) => {
+router.delete("/mySpots/:spotId", requireAuth, async (req, res, next) => {
   const delSpot = await Spot.findByPk(req.params.spotId);
   if (req.user.id !== delSpot.ownerId) {
-    // * if currently logged in user or guest attempts to delete another users spot
-    return res.json({
-      message: "You cannot delete spots that don't belong to you",
-    });
+    const err = new Error("Spot doesn't belong to you");
+    err.status = 200;
+    return next(err);
   }
   try {
     await delSpot.destroy();
