@@ -22,6 +22,7 @@ router.get("/", async (req, res) => {
       "stars",
       [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
     ],
+    group: "Review.spotId",
   });
   const results = { Spots: [] };
   for (let spot of Spots) {
