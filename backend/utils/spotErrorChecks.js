@@ -19,8 +19,10 @@ const spotCreateErrorChecks = (req, res, next) => {
     if (!city) err.errors.city = "City is required";
     if (!state) err.errors.state = "State is required";
     if (!country) err.errors.country = "Country is required";
-    if (lat <= -90 && lat >= 90) err.errors.lat = "Latitude is not valid";
-    if (lng <= -180 && lng >= 180) err.errors.lng = "Longitude is not valid";
+    if ((Number(lat) <= -90 && Number(lat) >= 90) || !lat || isNaN(lat))
+      err.errors.lat = "Latitude is not valid";
+    if ((Number(lng) <= -180 && Number(lat) >= 180) || !lng || isNaN(lng))
+      err.errors.lng = "Longitude is not valid";
     if (name.length > 50)
       err.errors.name = "Name must be less than 50 characters";
     if (!description) err.errors.description = "Description is required";
