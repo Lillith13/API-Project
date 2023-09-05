@@ -19,6 +19,7 @@ router.get("/", async (req, res) => {
         where: {
           preview: true,
         },
+        group: "id",
       },
       {
         model: Review,
@@ -49,6 +50,7 @@ router.get("/mySpots", requireAuth, async (req, res) => {
         where: {
           preview: true,
         },
+        group: "id",
       },
       {
         model: Review,
