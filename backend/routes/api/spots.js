@@ -25,6 +25,7 @@ router.get("/", async (req, res) => {
         model: Review,
         // as: "avgRating", // * <- alias does work
         attributes: [
+          "id",
           // ! grabs all of the ratings for each spot hit on this query and averages their stars returning them under the "column" name avgRating <-- still displays as nested within Reviews
           [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
         ],
@@ -56,6 +57,7 @@ router.get("/mySpots", requireAuth, async (req, res) => {
         model: Review,
         // as: "avgRating", // * <- alias does work
         attributes: [
+          "id",
           // ! grabs all of the ratings for each spot hit on this query and averages their stars returning them under the "column" name avgRating <-- still displays as nested within Reviews
           [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
         ],
