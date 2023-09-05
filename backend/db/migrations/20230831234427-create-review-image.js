@@ -11,9 +11,10 @@ module.exports = {
       },
       reviewId: {
         type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
         // references: {
         //   model: "Reviews",
-        // },
+        // }, // <- causes [ERROR: SQLITE_CONSTRAINT: FOREIGN KEY constraint failed] ???
       },
       url: {
         type: Sequelize.STRING,
