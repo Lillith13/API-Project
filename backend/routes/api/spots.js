@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
         where: {
           preview: true,
         },
-        group: "previewImage.id",
+        // group: "previewImage.id",
       },
       {
         model: Review,
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
         ],
       },
     ],
-    group: "Spot.id",
+    group: ["Spot.id", "previewImage.id"],
   });
   return res.json({ Spots });
 });
@@ -50,7 +50,7 @@ router.get("/mySpots", requireAuth, async (req, res) => {
         where: {
           preview: true,
         },
-        group: "previewImage.id",
+        // group: "previewImage.id",
       },
       {
         model: Review,
@@ -61,7 +61,7 @@ router.get("/mySpots", requireAuth, async (req, res) => {
         ],
       },
     ],
-    group: "Spot.id",
+    group: ["Spot.id", "previewImage.id"],
   });
   if (userSpots.id == null) {
     // * If user doesn't have any spots, return message --- will only work/catch if there is only one entry in the array returned and it's id is equal to null
