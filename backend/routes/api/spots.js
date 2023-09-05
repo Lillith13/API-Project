@@ -101,7 +101,7 @@ router.get("/:spotId", async (req, res) => {
     where: {
       spotId: req.params.spotId,
     },
-    attributes: [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
+    attributes: [[Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"]],
   });
   const ownerInfo = await User.findOne({
     where: {
