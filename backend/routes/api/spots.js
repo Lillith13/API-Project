@@ -29,6 +29,7 @@ router.get("/", async (req, res) => {
         ],
       },
     ],
+    group: "id",
   });
   return res.json({ Spots });
 });
@@ -58,6 +59,7 @@ router.get("/mySpots", requireAuth, async (req, res) => {
         ],
       },
     ],
+    group: "id",
   });
   if (userSpots.id == null) {
     // * If user doesn't have any spots, return message --- will only work/catch if there is only one entry in the array returned and it's id is equal to null
