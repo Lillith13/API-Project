@@ -49,28 +49,19 @@ router.get("/mySpots", requireAuth, async (req, res) => {
     where: {
       ownerId: req.user.id,
     },
-    // ! Current structure of what's returned is fine for now, but will take extra work on the front end to pull the values i want up out of the object
-    include: [
-      {
-        model: SpotImage,
-        as: "previewImage",
-        attributes: ["id", "url"],
-        where: {
-          preview: true,
-        },
-        // group: "previewImage.id",
-      },
-      {
-        model: Review,
-        // as: "avgRating", // * <- alias does work
-        attributes: [
-          "id",
-          // ! grabs all of the ratings for each spot hit on this query and averages their stars returning them under the "column" name avgRating <-- still displays as nested within Reviews
-          [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
-        ],
-      },
+  });
+  const userSpotsImages = await SpotImage.findAll({
+    attributes: ["spotId", "url"],
+    where: {
+      preview: true,
+    },
+  });
+  const userSpotsReviews = await Review.findAll({
+    attributes: [
+      "spotId",
+      [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
     ],
-    group: ["Spot.id", "previewImage.id", "Reviews.id"],
+    group: "Review.spotId",
   });
   if (userSpots.id === null) {
     // * If user doesn't have any spots, return message --- will only work/catch if there is only one entry in the array returned and it's id is equal to null
@@ -78,7 +69,23 @@ router.get("/mySpots", requireAuth, async (req, res) => {
       message: "You currently do not own any spots",
     });
   }
-  return res.json(userSpots);
+  const results = { Spots: [] };
+  for (let spot of userSpots) {
+    let spotses = spot.toJSON();
+    for (let review of userSpotsReviews) {
+      if (review["spotId"] === spotses.id) {
+        review = review.toJSON();
+        spotses.avgRating = review.avgRating;
+      }
+    }
+    for (let spotImg of userSpotsImages) {
+      if (spotImg["spotId"] === spotses.id) {
+        spotses.previewImage = spotImg["url"];
+      }
+    }
+    results.Spots.push(spotses);
+  }
+  return res.json(results);
 });
 
 // get spot by it's id
