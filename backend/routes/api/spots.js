@@ -92,7 +92,11 @@ router.get("/mySpots", requireAuth, async (req, res) => {
 router.get("/:spotId", async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
 
-  if (!spot) return res.json({ message: "Spot couldn't be found" });
+  if (!spot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
 
   const spotImages = await SpotImage.findAll({
     where: {
@@ -154,7 +158,7 @@ router.post(
       description,
       price,
     });
-    return res.json(newSpot);
+    return res.status(201).json(newSpot);
   }
 );
 
@@ -162,9 +166,9 @@ router.post(
 router.post("/mySpots/:spotId", requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
   if (!spot) {
-    return res.status(404).json({
-      message: "Spot couldn't be found",
-    });
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
   }
   const { url, preview } = req.body;
   const newSpotImg = await SpotImage.create({
@@ -192,7 +196,14 @@ router.put(
       description,
       price,
     } = req.body;
+
     const spot = await Spot.findByPk(req.params.spotId);
+    if (req.user.id !== spot.ownerId) {
+      const err = new Error("Spot couldn't be found");
+      err.status = 404;
+      return next(err);
+    }
+
     if (address) spot.address = address;
     if (city) spot.city = city;
     if (state) spot.state = state;

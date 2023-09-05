@@ -541,8 +541,8 @@ Updates and returns an existing spot.
 - Require proper authorization: Spot must belong to the current user
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: PUT
+  - URL: /api/spots/mySpots/:spotId
   - Headers:
     - Content-Type: application/json
   - Body:
