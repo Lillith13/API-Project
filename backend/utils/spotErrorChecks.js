@@ -27,10 +27,12 @@ const spotCreateErrorChecks = (req, res, next) => {
     if (!price || price <= 0) err.errors.price = "Price per day is required";
     next(err);
   }
-  if (Number(lat) <= -90 || Number(lat) >= 90 || isNaN(lat))
-    err.errors.lat = "Latitude is not valid";
-  if (Number(lng) <= -180 || Number(lat) >= 180 || isNaN(lng))
-    err.errors.lng = "Longitude is not valid";
+  if (Number(lat) <= -90) err.errors.lat = "Latitude is not valid";
+  if (Number(lat) >= 90) err.errors.lat = "Latitude is not valid";
+  if (isNaN(lat)) err.errors.lat = "Latitude is not valid";
+  if (Number(lng) <= -180) err.errors.lng = "Longitude is not valid";
+  if (Number(lng) >= 180) err.errors.lng = "Longitude is not valid";
+  if (isNaN(lng)) err.errors.lng = "Longitude is not valid";
   if (name.length > 50)
     err.errors.name = "Name must be less than 50 characters";
   next();
