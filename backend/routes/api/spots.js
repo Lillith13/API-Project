@@ -110,10 +110,10 @@ router.get("/:spotId", async (req, res) => {
     attributes: ["id", "firstName", "lastName"],
   });
   if (!spot) return res.json({ message: "Spot couldn't be found" });
-
+  const avgRating = spotReviews["avgRating"];
   const result = spot.toJSON();
   result.numReviews = spotReviews.length;
-  result.avgStarRating = spotReviews['avgRating'];
+  result.avgStarRating = avgRating;
   result.SpotImages = spotImages;
   result.Owner = ownerInfo;
   return res.json(result);
