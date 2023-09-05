@@ -165,6 +165,11 @@ router.post(
 // add image to spot
 router.post("/mySpots/:spotId", requireAuth, async (req, res, next) => {
   const spot = await Spot.findByPk(req.params.spotId);
+  if (req.user.id !== spot.ownerId) {
+    const err = new Error("Spot doesn't belong to you");
+    err.status = 200;
+    return next(err);
+  }
   if (!spot) {
     const err = new Error("Spot couldn't be found");
     err.status = 404;
@@ -199,6 +204,11 @@ router.put(
 
     const spot = await Spot.findByPk(req.params.spotId);
     if (req.user.id !== spot.ownerId) {
+      const err = new Error("Spot doesn't belong to you");
+      err.status = 200;
+      return next(err);
+    }
+    if (!spot) {
       const err = new Error("Spot couldn't be found");
       err.status = 404;
       return next(err);
