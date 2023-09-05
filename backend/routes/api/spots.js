@@ -89,7 +89,7 @@ router.get("/mySpots", requireAuth, async (req, res) => {
 });
 
 // get spot by it's id
-router.get("/:spotId", async (req, res) => {
+router.get("/:spotId", async (req, res, next) => {
   const spot = await Spot.findByPk(req.params.spotId);
 
   if (!spot) {
@@ -163,7 +163,7 @@ router.post(
 );
 
 // add image to spot
-router.post("/mySpots/:spotId", requireAuth, async (req, res) => {
+router.post("/mySpots/:spotId", requireAuth, async (req, res, next) => {
   const spot = await Spot.findByPk(req.params.spotId);
   if (!spot) {
     const err = new Error("Spot couldn't be found");
@@ -183,7 +183,7 @@ router.post("/mySpots/:spotId", requireAuth, async (req, res) => {
 router.put(
   "/mySpots/:spotId",
   [spotCreateErrorChecks, requireAuth],
-  async (req, res) => {
+  async (req, res, next) => {
     // ! spotCreateErrorChecks requires for ALL attributes to be edited -> create new check for editing a spot to allow for individual attribute editing
     const {
       address,
