@@ -9,31 +9,37 @@ const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
 
 // get all spots
 router.get("/", async (req, res) => {
-  const Spots = await Spot.findAll({
-    // ! Current structure of what's returned is fine for now, but will take extra work on the front end to pull the values i want up out of the object
-    include: [
-      {
-        model: SpotImage,
-        as: "previewImage",
-        attributes: ["id", "url"],
-        where: {
-          preview: true,
-        },
-        // group: "previewImage.id",
-      },
-      {
-        model: Review,
-        // as: "avgRating", // * <- alias does work
-        attributes: [
-          "id",
-          // ! grabs all of the ratings for each spot hit on this query and averages their stars returning them under the "column" name avgRating <-- still displays as nested within Reviews
-          [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
-        ],
-      },
-    ],
-    group: ["Spot.id", "previewImage.id", "Reviews.id"],
+  const Spots = await Spot.findAll();
+  const SpotImages = await SpotImage.findAll({
+    attributes: ["spotId", "url"],
+    where: {
+      preview: true,
+    },
   });
-  return res.json({ Spots });
+  const Reviews = await Review.findAll({
+    attributes: [
+      "spotId",
+      "stars",
+      [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
+    ],
+  });
+  const results = { Spots: [] };
+  for (let spot of Spots) {
+    let spotses = spot.toJSON();
+    for (let review of Reviews) {
+      if (review["spotId"] === spotses.id) {
+        review = review.toJSON();
+        spotses.avgRating = review.avgRating;
+      }
+    }
+    for (let spotImg of SpotImages) {
+      if (spotImg["spotId"] === spotses.id) {
+        spotses.previewImage = spotImg["url"];
+      }
+    }
+    results.Spots.push(spotses);
+  }
+  return res.json(results);
 });
 
 // get spots owned by logged in user
