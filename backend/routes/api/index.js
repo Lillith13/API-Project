@@ -15,7 +15,7 @@ router.use("/spots", spotsRouter);
 router.get("/", async (req, res) => {
   const availableEndPointsList = {
     GET: {
-      "/": "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
+      "/api": "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
       "/api/csrf/restore": "restores csrf token",
       "/api/session":
         "get currently signed in user -> displays null if no user signed in",
