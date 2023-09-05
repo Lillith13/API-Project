@@ -40,8 +40,6 @@ const spotCreateErrorChecks = (req, res, next) => {
       err.errors.lng = "Longitude is not valid";
       errTriggored = true;
     }
-    // if (!name)
-    //   err.errors.name = "Name must be less than 50 characters";
     if (!description) {
       err.errors.description = "Description is required";
       errTriggored = true;
