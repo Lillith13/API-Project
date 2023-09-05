@@ -90,26 +90,33 @@ router.get("/mySpots", requireAuth, async (req, res) => {
 
 // get spot by it's id
 router.get("/:spotId", async (req, res) => {
-  const spot = await Spot.findByPk(req.params.spotId, {
-    include: [
-      {
-        model: Review,
-        // ! COUNT reviews & return as numReviews
-        // ! gather stars & return as avgStarRating
-      },
-      {
-        model: SpotImage,
-        attributes: ["id", "url", "preview"],
-      },
-      {
-        model: User,
-        as: "Owner", // ! reset db & test alias
-        attributes: ["id", "firstName", "lastName"],
-      },
-    ],
+  const spot = await Spot.findByPk(req.params.spotId);
+  const spotImages = await SpotImage.findAll({
+    where: {
+      spotId: req.params.spotId,
+    },
+    attributes: ["id", "url", "preview"],
+  });
+  const spotReviews = await Review.findAll({
+    where: {
+      spotId: req.params.spotId,
+    },
+    attributes: [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
+  });
+  const ownerInfo = await User.findOne({
+    where: {
+      id: spot["ownerId"],
+    },
+    attributes: ["id", "firstName", "lastName"],
   });
   if (!spot) return res.json({ message: "Spot couldn't be found" });
-  return res.json(spot);
+
+  const result = spot.toJSON();
+  result.numReviews = spotReviews.length;
+  result.avgStarRating = spotReviews["avgRating"];
+  result.SpotImages = spotImages;
+  result.Owner = ownerInfo;
+  return res.json(result);
 });
 
 // create new spot
