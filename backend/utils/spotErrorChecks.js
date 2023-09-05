@@ -24,7 +24,7 @@ const spotCreateErrorChecks = (req, res, next) => {
     if (name.length > 50)
       err.errors.name = "Name must be less than 50 characters";
     if (!description) err.errors.description = "Description is required";
-    if (!price) err.errors.price = "Price per day is required";
+    if (!price || price <= 0) err.errors.price = "Price per day is required";
     next(err);
   }
   next();
