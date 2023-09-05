@@ -60,6 +60,4 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 };
 
-// add authorization check for user actions
-
 module.exports = { setTokenCookie, restoreUser, requireAuth };

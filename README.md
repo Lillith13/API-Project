@@ -492,8 +492,8 @@ Create and return a new image for a spot specified by id.
 - Require proper authorization: Spot must belong to the current user
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: POST
+  - URL: /api/spots/mySpots/:spotId
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -631,8 +631,8 @@ Deletes an existing spot.
 - Require proper authorization: Spot must belong to the current user
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: DELETE
+  - URL: /api/spots/mySpots/:spotId
   - Body: none
 
 - Successful Response
