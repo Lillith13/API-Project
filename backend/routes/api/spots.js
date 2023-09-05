@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
       {
         model: SpotImage,
         as: "previewImage",
-        attributes: ["url"],
+        attributes: ["id", "url"],
         where: {
           preview: true,
         },
@@ -46,7 +46,7 @@ router.get("/mySpots", requireAuth, async (req, res) => {
       {
         model: SpotImage,
         as: "previewImage",
-        attributes: ["url"],
+        attributes: ["id", "url"],
         where: {
           preview: true,
         },
