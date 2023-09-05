@@ -19,10 +19,10 @@ router.get("/", async (req, res) => {
   const Reviews = await Review.findAll({
     attributes: [
       "spotId",
-      "stars",
+      // "stars",
       [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
     ],
-    group: "Review.spotId",
+    group: ["Review.spotId"],
   });
   const results = { Spots: [] };
   for (let spot of Spots) {
