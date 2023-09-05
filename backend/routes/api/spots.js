@@ -113,7 +113,7 @@ router.get("/:spotId", async (req, res) => {
 
   const result = spot.toJSON();
   result.numReviews = spotReviews.length;
-  result.avgStarRating = spotReviews["avgRating"];
+  result.avgStarRating = spotReviews;
   result.SpotImages = spotImages;
   result.Owner = ownerInfo;
   return res.json(result);
