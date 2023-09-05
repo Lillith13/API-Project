@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
       {
         model: SpotImage,
         as: "previewImage",
-        attributes: ["id", "url"],
+        attributes: ["spotId", "url"],
         where: {
           preview: true,
         },
@@ -25,13 +25,13 @@ router.get("/", async (req, res) => {
         model: Review,
         // as: "avgRating", // * <- alias does work
         attributes: [
-          "id",
+          "spotId",
           // ! grabs all of the ratings for each spot hit on this query and averages their stars returning them under the "column" name avgRating <-- still displays as nested within Reviews
           [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
         ],
       },
     ],
-    group: ["Spot.id", "previewImage.id", "Review.id"],
+    group: ["Spot.id", "previewImage.spotId", "Review.spotId"],
   });
   return res.json({ Spots });
 });
@@ -47,7 +47,7 @@ router.get("/mySpots", requireAuth, async (req, res) => {
       {
         model: SpotImage,
         as: "previewImage",
-        attributes: ["id", "url"],
+        attributes: ["spotId", "url"],
         where: {
           preview: true,
         },
@@ -57,13 +57,13 @@ router.get("/mySpots", requireAuth, async (req, res) => {
         model: Review,
         // as: "avgRating", // * <- alias does work
         attributes: [
-          "id",
+          "spotId",
           // ! grabs all of the ratings for each spot hit on this query and averages their stars returning them under the "column" name avgRating <-- still displays as nested within Reviews
           [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
         ],
       },
     ],
-    group: ["Spot.id", "previewImage.id", "Review.id"],
+    group: ["Spot.id", "previewImage.spotId", "Review.spotId"],
   });
   if (userSpots.id == null) {
     // * If user doesn't have any spots, return message --- will only work/catch if there is only one entry in the array returned and it's id is equal to null
