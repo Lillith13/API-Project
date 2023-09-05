@@ -106,6 +106,11 @@ router.get("/:spotId", async (req, res) => {
     },
     attributes: [[Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"]],
   });
+  const reviewsForLength = await Review.findAll({
+    where: {
+      spotId: req.params.spotId,
+    },
+  });
   const ownerInfo = await User.findOne({
     where: {
       id: spot["ownerId"],
@@ -114,7 +119,7 @@ router.get("/:spotId", async (req, res) => {
   });
 
   const result = spot.toJSON();
-  result.numReviews = spotReviews.length;
+  result.numReviews = reviewsForLength.length;
   result.avgStarRating = spotReviews[0].dataValues.avgRating;
   result.SpotImages = spotImages;
   result.Owner = ownerInfo;
