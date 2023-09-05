@@ -25,13 +25,13 @@ router.get("/", async (req, res) => {
         model: Review,
         // as: "avgRating", // * <- alias does work
         attributes: [
-          "spotId",
+          "id",
           // ! grabs all of the ratings for each spot hit on this query and averages their stars returning them under the "column" name avgRating <-- still displays as nested within Reviews
           [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
         ],
       },
     ],
-    group: ["Spot.id", "previewImage.id", "Reviews.spotId"],
+    group: ["Spot.id", "previewImage.id", "Reviews.id"],
   });
   return res.json({ Spots });
 });
@@ -57,13 +57,13 @@ router.get("/mySpots", requireAuth, async (req, res) => {
         model: Review,
         // as: "avgRating", // * <- alias does work
         attributes: [
-          "spotId",
+          "id",
           // ! grabs all of the ratings for each spot hit on this query and averages their stars returning them under the "column" name avgRating <-- still displays as nested within Reviews
           [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
         ],
       },
     ],
-    group: ["Spot.id", "previewImage.id", "Reviews.spotId"],
+    group: ["Spot.id", "previewImage.id", "Reviews.id"],
   });
   if (userSpots.id == null) {
     // * If user doesn't have any spots, return message --- will only work/catch if there is only one entry in the array returned and it's id is equal to null
