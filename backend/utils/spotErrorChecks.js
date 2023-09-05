@@ -49,27 +49,11 @@ const spotCreateErrorChecks = (req, res, next) => {
       errTriggored = true;
     }
   }
-  if (Number(lat) <= -90) {
+  if (Number(lat) < -90 || Number(lat) > 90 || isNaN(lat)) {
     err.errors.lat = "Latitude is not valid";
     errTriggored = true;
   }
-  if (Number(lat) >= 90) {
-    err.errors.lat = "Latitude is not valid";
-    errTriggored = true;
-  }
-  if (isNaN(lat)) {
-    err.errors.lat = "Latitude is not valid";
-    errTriggored = true;
-  }
-  if (Number(lng) <= -180) {
-    err.errors.lng = "Longitude is not valid";
-    errTriggored = true;
-  }
-  if (Number(lng) >= 180) {
-    err.errors.lng = "Longitude is not valid";
-    errTriggored = true;
-  }
-  if (isNaN(lng)) {
+  if (Number(lng) < -180 || Number(lng) > 180 || isNaN(lng)) {
     err.errors.lng = "Longitude is not valid";
     errTriggored = true;
   }
