@@ -11,8 +11,8 @@ router.use("/session", sessionRouter);
 router.use("/users", usersRouter);
 router.use("/spots", spotsRouter);
 
-// display available tables and endpoints on start-up
-router.get("/test", async (req, res) => {
+// display available endpoints on start-up -> /api
+router.get("/", async (req, res) => {
   const availableEndPointsList = {
     GET: {
       "/": "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
@@ -29,9 +29,17 @@ router.get("/test", async (req, res) => {
       "/users": "user sign-up route",
       "/spots/mySpots":
         "creates new spot owned by the currently signed in user",
+      "/spots/mySpots/:spotId":
+        "add image to spot owned by currently signed in user",
+    },
+    PUT: {
+      "/spots/mySpots/:spotId": "edit spot owned by currently signed in user",
+    },
+    DELETE: {
+      "/spots/mySpots/:spotId": "delete spot owned by currently signed in user",
     },
   };
-  // const availableTables = await fetch()
+  // * add list of available tables (if can, when able)
   res.json(availableEndPointsList);
 });
 
