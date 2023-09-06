@@ -37,7 +37,7 @@ function postRevErrChecks(req, _res, next) {
     err.message = "Spot couldn't be found";
     next(err);
   }
-  if (reviewByUserExists(req.user.id)) {
+  if (!reviewByUserExists(req.user.id).length > 0) {
     err.status = 500;
     err.message = "User already has a review for this spot";
     next(err);
