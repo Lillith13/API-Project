@@ -34,7 +34,7 @@ router.get("/", requireAuth, async (req, res) => {
         model: SpotImage,
         as: "previewImage",
         where: {
-          isPreview: true,
+          preview: true,
         },
       },
     ],
