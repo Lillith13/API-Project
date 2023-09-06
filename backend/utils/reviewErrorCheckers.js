@@ -6,14 +6,14 @@ const spotExists = async (spotId) => {
 };
 
 const reviewByUserExists = async (spotId, userId) => {
-  const review = await Review.findOne({
+  const review = await Review.findAll({
     where: {
       spotId,
       userId,
     },
   });
-  console.log(review.dataValues);
-  review.dataValues ? true : false;
+  console.log(review);
+  // review.dataValues ? true : false;
 };
 
 const reviewExists = async (reviewId) => {
