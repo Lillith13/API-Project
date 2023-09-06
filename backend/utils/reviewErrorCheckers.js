@@ -11,9 +11,8 @@ const reviewByUserExists = async (userId) => {
       userId,
     },
   });
-  review.dataValues.id == null || review.dataValues.id == undefined
-    ? true
-    : false;
+  console.log(review.dataValues.id == null);
+  console.log(review.dataValues.id == undefined);
 };
 
 const reviewExists = async (reviewId) => {
