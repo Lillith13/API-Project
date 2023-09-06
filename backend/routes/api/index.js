@@ -45,13 +45,13 @@ router.get("/", async (req, res) => {
       "/api/spots/mySpots/:spotId":
         "edit spot owned by currently signed in user",
       "/api/reviews/:reviewId":
-        "edit reviews written by currently signed in user --- not finished/returns nothing atm",
+        "edit reviews written by currently signed in user",
     },
     DELETE: {
       "/api/spots/mySpots/:spotId":
         "delete spot owned by currently signed in user",
       "/api/reviews/:reviewId":
-        "delete reviews posted by currently signed in user --- not finished/returns nothing atm",
+        "delete reviews posted by currently signed in user",
     },
   };
   // * add list of available tables (if can, when able)
