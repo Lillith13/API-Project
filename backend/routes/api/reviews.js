@@ -4,8 +4,11 @@ const router = express.Router();
 const { requireAuth } = require("../../utils/auth.js");
 const {
   spotExists,
+  reviewExists,
   postRevErrChecks,
   postRevImgErrChecks,
+  reviewEditErrChecks,
+  reviewBelongsToUser,
 } = require("../../utils/reviewErrorCheckers.js");
 
 const {
@@ -126,7 +129,7 @@ router.post(
 // POST Image -> Review by reviewId
 router.post(
   "/:reviewId",
-  [requireAuth, postRevImgErrChecks],
+  [requireAuth, reviewExists, reviewBelongsToUser, postRevImgErrChecks],
   async (req, res) => {
     const { url } = req.body;
     const newReviewImg = await ReviewImage.create({
@@ -141,13 +144,35 @@ router.post(
 );
 
 // PUT Review by reviewId
-router.put("/:reviewId", async (req, res) => {
-  //
-});
+router.put(
+  "/:reviewId",
+  [requireAuth, reviewExists, reviewBelongsToUser, reviewEditErrChecks],
+  async (req, res) => {
+    const { review, stars } = req.body;
+    const reviewToEdit = await Review.findByPk(req.params.reviewId);
+    if (review) reviewToEdit.review = review;
+    if (stars) reviewToEdit.stars = stars;
+    reviewToEdit.save();
+    return res.json(reviewToEdit);
+  }
+);
 
 // DELETE Review by reviewId
-router.delete("/:reviewId", async (req, res) => {
-  //
-});
+router.delete(
+  "/:reviewId",
+  [requireAuth, reviewExists, reviewBelongsToUser],
+  async (req, res) => {
+    const delRev = await Review.findByPk(req.params.reviewId);
+    try {
+      await delRev.destroy();
+      return res.json({
+        message: "Review deleted successfully",
+      });
+    } catch (e) {
+      // console long the caught error for now
+      console.log(e);
+    }
+  }
+);
 
 module.exports = router;
