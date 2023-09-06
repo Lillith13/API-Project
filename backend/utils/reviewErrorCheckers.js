@@ -11,6 +11,8 @@ const reviewByUserExists = async (userId) => {
       userId,
     },
   });
+  console.log(review);
+  console.log(review.length);
   return review.length > 0;
 };
 
