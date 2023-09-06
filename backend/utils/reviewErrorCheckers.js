@@ -53,7 +53,7 @@ async function postRevImgErrChecks(req, _res, next) {
   const err = new Error("Bad Request");
   err.errors = {};
 
-  const review = await Review.findByPk(reviewId);
+  const review = await Review.findByPk(req.params.reviewId);
   if (!review) {
     err.status = 404;
     err.message = "Review couldn't be found";

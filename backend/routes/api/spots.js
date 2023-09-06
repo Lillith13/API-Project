@@ -3,6 +3,7 @@ const router = express.Router();
 const Sequelize = require("sequelize");
 
 const { requireAuth } = require("../../utils/auth.js");
+const { spotExists } = require("../../utils/reviewErrorCheckers.js");
 
 const { Spot, Review, SpotImage, User } = require("../../db/models");
 const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
@@ -89,14 +90,8 @@ router.get("/mySpots", requireAuth, async (req, res) => {
 });
 
 // get spot by it's id
-router.get("/:spotId", async (req, res, next) => {
+router.get("/:spotId", spotExists, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
-
-  if (!spot) {
-    const err = new Error("Spot couldn't be found");
-    err.status = 404;
-    return next(err);
-  }
 
   const spotImages = await SpotImage.findAll({
     where: {
@@ -163,31 +158,30 @@ router.post(
 );
 
 // add image to spot
-router.post("/mySpots/:spotId", requireAuth, async (req, res, next) => {
-  const spot = await Spot.findByPk(req.params.spotId);
-  if (req.user.id !== spot.ownerId) {
-    const err = new Error("Spot doesn't belong to you");
-    err.status = 200;
-    return next(err);
+router.post(
+  "/mySpots/:spotId",
+  [requireAuth, spotExists],
+  async (req, res, next) => {
+    const spot = await Spot.findByPk(req.params.spotId);
+    if (req.user.id !== spot.ownerId) {
+      const err = new Error("Spot doesn't belong to you");
+      err.status = 200;
+      return next(err);
+    }
+    const { url, preview } = req.body;
+    const newSpotImg = await SpotImage.create({
+      spotId: req.params.spotId,
+      url,
+      preview,
+    });
+    return res.json(newSpotImg);
   }
-  if (!spot) {
-    const err = new Error("Spot couldn't be found");
-    err.status = 404;
-    return next(err);
-  }
-  const { url, preview } = req.body;
-  const newSpotImg = await SpotImage.create({
-    spotId: req.params.spotId,
-    url,
-    preview,
-  });
-  return res.json(newSpotImg);
-});
+);
 
 // edit a spot
 router.put(
   "/mySpots/:spotId",
-  [spotCreateErrorChecks, requireAuth],
+  [spotCreateErrorChecks, spotExists, requireAuth],
   async (req, res, next) => {
     // ! spotCreateErrorChecks requires for ALL attributes to be edited -> create new check for editing a spot to allow for individual attribute editing
     const {
@@ -208,11 +202,6 @@ router.put(
       err.status = 200;
       return next(err);
     }
-    if (!spot) {
-      const err = new Error("Spot couldn't be found");
-      err.status = 404;
-      return next(err);
-    }
 
     if (address) spot.address = address;
     if (city) spot.city = city;
@@ -229,26 +218,25 @@ router.put(
 );
 
 // delete spot owned by currently signed in user
-router.delete("/mySpots/:spotId", requireAuth, async (req, res, next) => {
-  const delSpot = await Spot.findByPk(req.params.spotId);
-  if (req.user.id !== delSpot.ownerId) {
-    const err = new Error("Spot doesn't belong to you");
-    err.status = 200;
-    return next(err);
+router.delete(
+  "/mySpots/:spotId",
+  [spotExists, requireAuth],
+  async (req, res, next) => {
+    const delSpot = await Spot.findByPk(req.params.spotId);
+    if (req.user.id !== delSpot.ownerId) {
+      const err = new Error("Spot doesn't belong to you");
+      err.status = 200;
+      return next(err);
+    }
+    try {
+      await delSpot.destroy();
+      return res.json({
+        message: "Successfully deleted",
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
-  if (!delSpot) {
-    const err = new Error("Spot couldn't be found");
-    err.status = 404;
-    return next(err);
-  }
-  try {
-    await delSpot.destroy();
-    return res.json({
-      message: "Successfully deleted",
-    });
-  } catch (err) {
-    console.log(err);
-  }
-});
+);
 
 module.exports = router;
