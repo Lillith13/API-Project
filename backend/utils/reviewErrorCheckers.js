@@ -5,9 +5,10 @@ const spotExists = async (spotId) => {
   !spot ? false : true;
 };
 
-const reviewByUserExists = async (userId) => {
+const reviewByUserExists = async (spotId, userId) => {
   const review = await Review.findOne({
     where: {
+      spotId,
       userId,
     },
   });
@@ -44,7 +45,7 @@ function postRevErrChecks(req, _res, next) {
     err.message = "Spot couldn't be found";
     next(err);
   }
-  if (reviewByUserExists(req.user.id)) {
+  if (reviewByUserExists(req.params.spotId, req.user.id)) {
     err.status = 500;
     err.message = "User already has a review for this spot";
     next(err);
