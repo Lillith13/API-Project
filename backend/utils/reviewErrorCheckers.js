@@ -1,5 +1,4 @@
 const { Spot, Review, ReviewImage } = require("../db/models");
-const reviewimage = require("../db/models/reviewimage");
 
 const spotExists = async (spotId) => {
   const spot = await Spot.findByPk(spotId);
@@ -78,6 +77,7 @@ function postRevImgErrChecks(req, _res, next) {
 }
 
 module.exports = {
+  spotExists,
   postRevErrChecks,
   postRevImgErrChecks,
 };
