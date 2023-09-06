@@ -11,7 +11,9 @@ const reviewByUserExists = async (userId) => {
       userId,
     },
   });
-  review.dataValues.id ? true : false;
+  review.dataValues.id == null || review.dataValues.id == undefined
+    ? true
+    : false;
 };
 
 const reviewExists = async (reviewId) => {
@@ -37,7 +39,7 @@ function postRevErrChecks(req, _res, next) {
     err.message = "Spot couldn't be found";
     next(err);
   }
-  if (!reviewByUserExists(req.user.id)) {
+  if (reviewByUserExists(req.user.id)) {
     err.status = 500;
     err.message = "User already has a review for this spot";
     next(err);
