@@ -70,7 +70,7 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 // GET ALL Reviews by spotId
-router.get("/spot/:spotId", spotExists, async (req, res, next) => {
+router.get("/spot/:spotId", spotExists, async (req, res) => {
   const spotReviews = await Review.findAll({
     where: {
       spotId: req.params.spotId,
