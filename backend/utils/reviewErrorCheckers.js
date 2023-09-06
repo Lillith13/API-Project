@@ -1,14 +1,5 @@
 const { Spot, Review, ReviewImage } = require("../db/models");
 
-const currRevImgs = async (reviewId) => {
-  const revImgs = await ReviewImage.findAll({
-    where: {
-      reviewId,
-    },
-  });
-  return revImgs.length;
-};
-
 async function spotExists(req, _res, next) {
   const spot = await Spot.findByPk(req.params.spotId);
   if (!spot) {
@@ -65,7 +56,13 @@ async function postRevImgErrChecks(req, _res, next) {
     err.status = 403;
     err.message = "You cannot add images to reviews that do not belong to you";
   }
-  if (currRevImgs >= 10) {
+
+  const revImgs = await ReviewImage.findAll({
+    where: {
+      reviewId: req.params.reviewId,
+    },
+  });
+  if (revImgs.length >= 10) {
     err.status = 403;
     err.message = "Maximum number of images for this resource was reached";
     return next(err);
