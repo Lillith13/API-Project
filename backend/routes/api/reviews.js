@@ -25,7 +25,13 @@ router.get("/", requireAuth, async (req, res) => {
     include: {
       model: User,
       attributes: {
-        exclude: ["username"],
+        exclude: [
+          "username",
+          "hashedPassword",
+          "email",
+          "createdAt",
+          "updatedAt",
+        ],
       },
     },
   });
