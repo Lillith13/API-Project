@@ -24,20 +24,17 @@ router.get("/", requireAuth, async (req, res) => {
     },
     include: {
       model: User,
-      exclude: ["username"],
+      attributes: {
+        exclude: ["username"],
+      },
     },
   });
 
-  const spots = await Spot.scope("defaultScope").findAll({
-    include: [
-      {
-        model: SpotImage,
-        as: "previewImage",
-        where: {
-          preview: true,
-        },
-      },
-    ],
+  const spots = await Spot.scope("defaultScope").findAll();
+  const prevImgs = await SpotImage.findAll({
+    where: {
+      preview: true,
+    },
   });
 
   const revImgs = await ReviewImage.scope("defaultScope").findAll();
@@ -47,6 +44,10 @@ router.get("/", requireAuth, async (req, res) => {
     let rev = review.toJSON();
     for (let spot of spots) {
       if (rev.spotId === spot["id"]) {
+        spot = spot.toJSON();
+        for (let prevImg of prevImgs) {
+          if (prevImg["spotId"] === spot.id) spot.previewImage = prevImg["url"];
+        }
         rev.Spot = spot;
       }
     }
