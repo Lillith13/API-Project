@@ -82,13 +82,15 @@ router.get("/spot/:spotId", async (req, res, next) => {
     },
     include: {
       model: User,
-      exclude: [
-        "username",
-        "hashedPassword",
-        "email",
-        "createdAt",
-        "updatedAt",
-      ],
+      attributes: {
+        exclude: [
+          "username",
+          "hashedPassword",
+          "email",
+          "createdAt",
+          "updatedAt",
+        ],
+      },
     },
   });
   const spotRevImgs = await ReviewImage.findAll();
