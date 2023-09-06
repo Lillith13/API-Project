@@ -82,17 +82,27 @@ router.get("/spot/:spotId", async (req, res, next) => {
     },
     include: {
       model: User,
-      exclude: ["username"],
+      exclude: [
+        "username",
+        "hashedPassword",
+        "email",
+        "createdAt",
+        "updatedAt",
+      ],
     },
   });
   const spotRevImgs = await ReviewImage.findAll();
+
   const results = { Reviews: [] };
   for (let spotReview of spotReviews) {
     const spotRev = spotReview.toJSON();
     spotRev.ReviewImages = [];
     for (let spotRevImg of spotRevImgs) {
       if (spotRevImg["reviewId"] === spotRev.id) {
-        spotRev.ReviewImages.push(spotRevImg);
+        spotRev.ReviewImages.push({
+          id: spotRevImg["id"],
+          url: spotRevImg["url"],
+        });
       }
     }
     results.Reviews.push(spotRev);
