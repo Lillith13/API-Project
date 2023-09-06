@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       url: DataTypes.STRING,
     },
     {
+      defaultScope: {
+        exclude: ["createdAt", "updatedAt"],
+      },
       sequelize,
       modelName: "ReviewImage",
     }

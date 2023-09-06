@@ -2,6 +2,7 @@ const router = require("express").Router();
 const sessionRouter = require("./session.js");
 const usersRouter = require("./users.js");
 const spotsRouter = require("./spots.js");
+const reviewsRouter = require("./reviews.js");
 
 const { restoreUser } = require("../../utils/auth.js");
 // checks if user signed in or guest
@@ -10,12 +11,14 @@ router.use(restoreUser);
 router.use("/session", sessionRouter);
 router.use("/users", usersRouter);
 router.use("/spots", spotsRouter);
+router.use("/reviews", reviewsRouter);
 
 // display available endpoints on start-up -> /api
 router.get("/", async (req, res) => {
   const availableEndPointsList = {
     GET: {
-      "/api": "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
+      "/api":
+        "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
       "/api/csrf/restore": "restores csrf token",
       "/api/session":
         "get currently signed in user -> displays null if no user signed in",
@@ -23,6 +26,7 @@ router.get("/", async (req, res) => {
       "/api/spots/:spotId": "get specific spot by it's ID",
       "/api/spots/mySpots":
         "returns all spots owned by the currently logged in user",
+      "/api/reviews": "get all reviews",
     },
     POST: {
       "/session": "user log-in route",

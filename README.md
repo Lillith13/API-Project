@@ -670,8 +670,8 @@ Returns all the reviews written by the current user.
 - Require Authentication: true
 - Request
 
-  - Method: ?
-  - URL: ?
+  - Method: GET
+  - URL: /api/reviews
   - Body: none
 
 - Successful Response

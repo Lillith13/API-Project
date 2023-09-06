@@ -45,6 +45,9 @@ module.exports = (sequelize, DataTypes) => {
       stars: DataTypes.INTEGER,
     },
     {
+      defaultScope: {
+        exclude: ["createdAt", "updatedAt"]
+      },
       sequelize,
       modelName: "Review",
     }
