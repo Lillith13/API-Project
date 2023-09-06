@@ -163,15 +163,15 @@ router.delete(
   [requireAuth, reviewExists, reviewBelongsToUser],
   async (req, res) => {
     const delRev = await Review.findByPk(req.params.reviewId);
-    // try {
-    await delRev.destroy();
-    return res.json({
-      message: "Review deleted successfully",
-    });
-    // } catch (e) {
-    //   // console long the caught error for now
-    //   console.log(e);
-    // }
+    try {
+      await delRev.destroy();
+      return res.json({
+        message: "Review deleted successfully",
+      });
+    } catch (e) {
+      // console long the caught error for now
+      console.log(e);
+    }
   }
 );
 
