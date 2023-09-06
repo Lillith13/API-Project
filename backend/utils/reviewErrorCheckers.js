@@ -2,18 +2,7 @@ const { Spot, Review, ReviewImage } = require("../db/models");
 
 const spotExists = async (spotId) => {
   const spot = await Spot.findByPk(spotId);
-  !spot ? false : true;
-};
-
-const reviewByUserExists = async (spotId, userId) => {
-  const review = await Review.findAll({
-    where: {
-      spotId,
-      userId,
-    },
-  });
-  console.log(review.length);
-  return review.length > 0;
+  return spot;
 };
 
 const reviewExists = async (reviewId) => {
@@ -30,20 +19,30 @@ const currRevImgs = async (reviewId) => {
   return revImgs.length;
 };
 
-function postRevErrChecks(req, _res, next) {
+async function postRevErrChecks(req, _res, next) {
   const err = new Error("Bad Request");
   err.errors = {};
   let errTriggered = false;
+
   if (!spotExists(req.params.spotId)) {
     err.status = 404;
     err.message = "Spot couldn't be found";
     next(err);
   }
-  if (reviewByUserExists(req.params.spotId, req.user.id)) {
+
+  const reviewQueried = await Review.findAll({
+    where: {
+      spotId: req.params.spotId,
+      userId: req.user.id,
+    },
+  });
+  console.log(reviewQueried.length > 0);
+  if (reviewQueried.length > 0) {
     err.status = 500;
     err.message = "User already has a review for this spot";
     next(err);
   }
+
   const { review, stars } = req.body;
   if (!review) {
     err.errors.review = "Review text is required";
@@ -60,12 +59,14 @@ function postRevErrChecks(req, _res, next) {
 function postRevImgErrChecks(req, _res, next) {
   const err = new Error("Bad Request");
   err.errors = {};
+
   const review = reviewExists(req.params.reviewId);
   if (!review || review == undefined) {
     err.status = 404;
     err.message = "Review couldn't be found";
     return next(err);
   }
+
   if (review["userId"] !== req.user.id) {
     err.status = 403;
     err.message = "You cannot add images to reviews that do not belong to you";
