@@ -93,6 +93,7 @@ async function reviewBelongsToUser(req, _res, next) {
     err.message = "You cannot edit a review that does not belong to you";
     next(err);
   }
+  next();
 }
 
 module.exports = {
