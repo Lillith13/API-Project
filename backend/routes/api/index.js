@@ -26,7 +26,8 @@ router.get("/", async (req, res) => {
       "/api/spots/:spotId": "get specific spot by it's ID",
       "/api/spots/mySpots":
         "returns all spots owned by the currently logged in user",
-      "/api/reviews": "get all reviews",
+      "/api/reviews": "get all reviews written by currently signed in user",
+      "/api/reviews/:spotId": "get all reviews for specified spotId",
     },
     POST: {
       "/session": "user log-in route",
@@ -35,12 +36,22 @@ router.get("/", async (req, res) => {
         "creates new spot owned by the currently signed in user",
       "/spots/mySpots/:spotId":
         "add image to spot owned by currently signed in user",
+      "/api/reviews/spot/:spotId":
+        "add a new review for specified spot(spotId)",
+      "/api/reviews/:reviewId":
+        "add new image to currently signed in user's posted reviews",
     },
     PUT: {
-      "/spots/mySpots/:spotId": "edit spot owned by currently signed in user",
+      "/api/spots/mySpots/:spotId":
+        "edit spot owned by currently signed in user",
+      "/api/reviews/:reviewId":
+        "edit reviews written by currently signed in user --- not finished/returns nothing atm",
     },
     DELETE: {
-      "/spots/mySpots/:spotId": "delete spot owned by currently signed in user",
+      "/api/spots/mySpots/:spotId":
+        "delete spot owned by currently signed in user",
+      "/api/reviews/:reviewId":
+        "delete reviews posted by currently signed in user --- not finished/returns nothing atm",
     },
   };
   // * add list of available tables (if can, when able)
