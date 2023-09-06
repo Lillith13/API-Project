@@ -12,6 +12,7 @@ const currRevImgs = async (reviewId) => {
 async function spotExists(req, _res, next) {
   const spot = await Spot.findByPk(req.params.spotId);
   if (!spot) {
+    const err = new Error();
     err.status = 404;
     err.message = "Spot couldn't be found";
     next(err);
