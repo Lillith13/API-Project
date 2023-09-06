@@ -12,7 +12,7 @@ const reviewByUserExists = async (spotId, userId) => {
       userId,
     },
   });
-  console.log(review);
+  console.log(review.length);
   // review.dataValues ? true : false;
 };
 
