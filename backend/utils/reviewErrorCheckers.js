@@ -1,15 +1,5 @@
 const { Spot, Review, ReviewImage } = require("../db/models");
 
-const spotExists = async (spotId) => {
-  const spot = await Spot.findByPk(spotId);
-  return spot;
-};
-
-const reviewExists = async (reviewId) => {
-  const review = await Review.findByPk(reviewId);
-  return review;
-};
-
 const currRevImgs = async (reviewId) => {
   const revImgs = await ReviewImage.findAll({
     where: {
@@ -19,16 +9,20 @@ const currRevImgs = async (reviewId) => {
   return revImgs.length;
 };
 
-async function postRevErrChecks(req, _res, next) {
-  const err = new Error("Bad Request");
-  err.errors = {};
-  let errTriggered = false;
-
-  if (!spotExists(req.params.spotId)) {
+async function spotExists(req, _res, next) {
+  const spot = await Spot.findByPk(spotId);
+  if (!spot) {
     err.status = 404;
     err.message = "Spot couldn't be found";
     next(err);
   }
+  next();
+}
+
+async function postRevErrChecks(req, _res, next) {
+  const err = new Error("Bad Request");
+  err.errors = {};
+  let errTriggered = false;
 
   const reviewQueried = await Review.findAll({
     where: {
@@ -36,7 +30,6 @@ async function postRevErrChecks(req, _res, next) {
       userId: req.user.id,
     },
   });
-  console.log(reviewQueried.length > 0);
   if (reviewQueried.length > 0) {
     err.status = 500;
     err.message = "User already has a review for this spot";
@@ -56,12 +49,12 @@ async function postRevErrChecks(req, _res, next) {
   next();
 }
 
-function postRevImgErrChecks(req, _res, next) {
+async function postRevImgErrChecks(req, _res, next) {
   const err = new Error("Bad Request");
   err.errors = {};
 
-  const review = reviewExists(req.params.reviewId);
-  if (!review || review == undefined) {
+  const review = await Review.findByPk(reviewId);
+  if (!review) {
     err.status = 404;
     err.message = "Review couldn't be found";
     return next(err);

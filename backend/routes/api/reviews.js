@@ -70,12 +70,7 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 // GET ALL Reviews by spotId
-router.get("/spot/:spotId", async (req, res, next) => {
-  if (!spotExists(req.params.spotId)) {
-    const err = new Error("Spot couldn't be found");
-    err.status = 404;
-    return next(err);
-  }
+router.get("/spot/:spotId", spotExists, async (req, res, next) => {
   const spotReviews = await Review.findAll({
     where: {
       spotId: req.params.spotId,
@@ -115,7 +110,7 @@ router.get("/spot/:spotId", async (req, res, next) => {
 // POST Review -> Spot by spotId
 router.post(
   "/spot/:spotId",
-  [requireAuth, postRevErrChecks],
+  [requireAuth, spotExists, postRevErrChecks],
   async (req, res) => {
     const { review, stars } = req.body;
     const newReview = await Review.create({
