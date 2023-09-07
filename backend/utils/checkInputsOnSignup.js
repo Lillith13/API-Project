@@ -1,7 +1,7 @@
 const { User } = require("../db/models");
 
 // checks against saved user information to prevent duplicate usernames/emails
-const checkIfUserExists = async (req, res, next) => {
+const checkIfUserExists = async (req, _res, next) => {
   const { username, email } = req.body;
   const usersWusername = await User.findOne({
     where: {
@@ -30,7 +30,7 @@ const checkIfUserExists = async (req, res, next) => {
 };
 
 // double check if inputs === valid
-const doubleCheckInputs = (req, res, next) => {
+const doubleCheckInputs = (req, _res, next) => {
   const { firstName, lastName, email, username } = req.body;
   if (!email || !username || !firstName || !lastName) {
     const err = new Error("Bad Request");

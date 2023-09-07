@@ -3,13 +3,12 @@ const router = express.Router();
 
 const { requireAuth } = require("../../utils/auth.js");
 const {
-  spotExists,
-  reviewExists,
   postRevErrChecks,
   postRevImgErrChecks,
   reviewEditErrChecks,
-  reviewBelongsToUser,
 } = require("../../utils/reviewErrorCheckers.js");
+const { spotExists, reviewExists } = require("../../utils/recordExists.js");
+const { reviewBelongsToUser } = require("../../utils/belongsToUser.js");
 
 const {
   Review,

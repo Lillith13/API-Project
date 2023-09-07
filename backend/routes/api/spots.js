@@ -3,10 +3,11 @@ const router = express.Router();
 const Sequelize = require("sequelize");
 
 const { requireAuth } = require("../../utils/auth.js");
-const { spotExists } = require("../../utils/reviewErrorCheckers.js");
+const { spotExists } = require("../../utils/recordExists.js");
+const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
+const { spotBelongsToUser } = require("../../utils/belongsToUser.js");
 
 const { Spot, Review, SpotImage, User } = require("../../db/models");
-const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
 
 // get all spots
 router.get("/", async (req, res) => {
@@ -160,7 +161,7 @@ router.post(
 // add image to spot
 router.post(
   "/mySpots/:spotId",
-  [requireAuth, spotExists],
+  [requireAuth, spotExists, spotBelongsToUser],
   async (req, res, next) => {
     const spot = await Spot.findByPk(req.params.spotId);
     if (req.user.id !== spot.ownerId) {
@@ -181,7 +182,7 @@ router.post(
 // edit a spot
 router.put(
   "/mySpots/:spotId",
-  [spotCreateErrorChecks, spotExists, requireAuth],
+  [requireAuth, spotExists, spotBelongsToUser, spotCreateErrorChecks],
   async (req, res, next) => {
     // ! spotCreateErrorChecks requires for ALL attributes to be edited -> create new check for editing a spot to allow for individual attribute editing
     const {
@@ -220,14 +221,9 @@ router.put(
 // delete spot owned by currently signed in user
 router.delete(
   "/mySpots/:spotId",
-  [spotExists, requireAuth],
-  async (req, res, next) => {
+  [requireAuth, spotExists, spotBelongsToUser],
+  async (req, res) => {
     const delSpot = await Spot.findByPk(req.params.spotId);
-    if (req.user.id !== delSpot.ownerId) {
-      const err = new Error("Spot doesn't belong to you");
-      err.status = 200;
-      return next(err);
-    }
     try {
       await delSpot.destroy();
       return res.json({

@@ -1,4 +1,4 @@
-const spotCreateErrorChecks = (req, res, next) => {
+const spotCreateErrorChecks = (req, _res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
   let errTriggored = false;

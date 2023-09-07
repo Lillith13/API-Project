@@ -1,25 +1,4 @@
-const { Spot, Review, ReviewImage } = require("../db/models");
-
-async function spotExists(req, _res, next) {
-  const spot = await Spot.findByPk(req.params.spotId);
-  if (!spot) {
-    const err = new Error();
-    err.status = 404;
-    err.message = "Spot couldn't be found";
-    next(err);
-  }
-  next();
-}
-
-async function reviewExists(req, _res, next) {
-  const review = await Review.findByPk(req.params.reviewId);
-  if (!review) {
-    const err = new Error("Review couldn't be found");
-    err.status = 404;
-    return next(err);
-  }
-  next();
-}
+const { Review, ReviewImage } = require("../db/models");
 
 async function postRevErrChecks(req, _res, next) {
   const err = new Error("Bad Request");
@@ -86,21 +65,8 @@ async function reviewEditErrChecks(req, _res, next) {
   next();
 }
 
-async function reviewBelongsToUser(req, _res, next) {
-  const review = await Review.findByPk(req.params.reviewId);
-  if (review["userId"] !== req.user.id) {
-    err.status = 403;
-    err.message = "You cannot edit a review that does not belong to you";
-    next(err);
-  }
-  next();
-}
-
 module.exports = {
-  spotExists,
-  reviewExists,
   postRevErrChecks,
   postRevImgErrChecks,
   reviewEditErrChecks,
-  reviewBelongsToUser,
 };

@@ -1,67 +1,148 @@
 const express = require("express");
 const router = express.Router();
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 const { requireAuth } = require("../../utils/auth.js");
+const { bookingExists, spotExists } = require("../../utils/recordExists.js");
+const {
+  bookingConflicts,
+  bodyValidation,
+  editBookingErrChecks,
+  delBookingErrChecks,
+} = require("../../utils/bookingErrCheckers.js");
+const { bookingBelongsToUser } = require("../../utils/belongsToUser.js");
+
+const { Booking, Spot, SpotImage } = require("../../db/models");
 
 // GET ALL of currently signed in user's bookings
-router.get("/", async (req, res) => {
-  // --> Require Auth
-  //
+router.get("/", requireAuth, async (req, res) => {
+  const bookings = await Booking.findAll({
+    where: {
+      userId: req.user.id,
+    },
+  });
+  const spots = await Spot.scope("defaultScope").findAll();
+  const spotImgs = await SpotImage.findAll({
+    where: {
+      preview: true,
+    },
+    attributes: ["id", "url"],
+  });
+
+  let results = { Bookings: [] };
+  for (let booking of bookings) {
+    booking = booking.toJSON();
+    for (let spot of spots) {
+      if (booking.spotId === spot["id"]) {
+        booking.Spot = spot;
+        break;
+      }
+    }
+    for (let spotImg of spotImgs) {
+      if (booking.Spot["id"] === spotImg["id"]) {
+        booking.Spot["previewImage"] = spotImg["url"];
+        break;
+      }
+    }
+    results.Bookings.push(booking);
+  }
+
+  return res.json(results);
 });
 
 // GET ALL bookings for spotId
-router.get("/:spotId", async (req, res) => {
-  // --> Require Auth
+router.get("/:spotId", [requireAuth, spotExists], async (req, res) => {
+  const ownedBookings = await Booking.findAll({
+    where: {
+      userId: req.user.id,
+      spotId: req.params.spotId,
+    },
+  });
+  const otherBookings = await Booking.findAll({
+    where: {
+      userId: {
+        [Op.not]: req.user.id,
+      },
+      spotId: req.params.spotId,
+    },
+    attributes: {
+      exclude: ["userId", "createdAt", "updateAt"],
+    },
+  });
+  const user = await User.scope("defaultScope").findByPk(req.user.id, {
+    attributes: {
+      exclude: ["username"],
+    },
+  });
   // --> different responses based on if you own the spot or not
-  // -> spotExists
-  //
+  const results = { Bookings: [] };
+  // Owned by currently signed in user:
+  for (let ownedBooking of ownedBookings) {
+    ownedBooking = ownedBooking.toJSON();
+    ownedBooking.User = user;
+    results.Bookings.push(ownedBooking);
+  }
+  // Not owned by signed in user:
+  for (let otherBooking of otherBookings) {
+    results.Bookings.push(otherBooking);
+  }
+
+  return res.json(results);
 });
 
 // POST Booking for spotId
-router.post("/:spotId", async (req, res) => {
-  // --> Require Auth
-  // --> Spot must NOT belong to the current user
-  // -> endDate cannot be on or before startDate
-  // -> spotExists
-  /* Booking conflict
-        {
-          "message": "Sorry, this spot is already booked for the specified dates",
-          "errors": {
-            "startDate": "Start date conflicts with an existing booking",
-            "endDate": "End date conflicts with an existing booking"
-          }
-        }
-    */
-  //
-});
+router.post(
+  "/:spotId",
+  [requireAuth, spotExists, bookingConflicts, bodyValidation],
+  async (req, res) => {
+    const { startDate, endDate } = req.body;
+    const newBooking = await Booking.create({
+      spotId: req.params.spotId,
+      userId: req.user.id,
+      startDate,
+      endDate,
+    });
+    return res.json(newBooking);
+  }
+);
 
 // PUT Booking
-router.put("/:bookingId", async (req, res) => {
-  // --> Require Auth
-  // --> Booking must belong to currently signed in user
-  // -> endDate cannot come before startDate
-  // -> bookingExists
-  // -> Past bookings can't be modified
-  /* Booking conflict
-        {
-          "message": "Sorry, this spot is already booked for the specified dates",
-          "errors": {
-            "startDate": "Start date conflicts with an existing booking",
-            "endDate": "End date conflicts with an existing booking"
-          }
-        }
-    */
-  //
-});
+router.put(
+  "/:bookingId",
+  [
+    requireAuth,
+    bookingExists,
+    bookingBelongsToUser,
+    bookingConflicts,
+    bodyValidation,
+    editBookingErrChecks,
+  ],
+  async (req, res) => {
+    const { startDate, endDate } = req.body;
+    const editBooking = await Booking.findByPk(req.params.bookingId);
+    if (startDate) editBooking.startDate = startDate;
+    if (endDate) editBooking.endDate = endDate;
+    await editBooking.save();
+    return res.json(editBooking);
+  }
+);
 
 // DELETE Booking
-router.delete("/:bookingId", async (req, res) => {
-  // --> Require Auth
-  // --> Booking must belong to currently signed in user
-  // --> Spot must belong to the currently signed in user
-  // -> bookingExists
-  // -> Bookings that have been started can't be deleted
-  //
-});
+router.delete(
+  "/:bookingId",
+  [requireAuth, bookingExists, bookingBelongsToUser, delBookingErrChecks],
+  async (req, res) => {
+    const booking = await Booking.findByPk(req.params.bookingId);
+    try {
+      await booking.destroy();
+      return res.json({
+        message: "Successfully deleted",
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
 
 module.exports = router;

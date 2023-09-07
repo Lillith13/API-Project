@@ -1040,7 +1040,7 @@ Return all the bookings that the current user has made.
 - Request
 
   - Method: GET
-  - URL: ?
+  - URL: /api/bookings
   - Body: none
 
 - Successful Response
@@ -1087,7 +1087,7 @@ Return all the bookings for a spot specified by id.
 - Request
 
   - Method: GET
-  - URL: ?
+  - URL: /api/bookings/:spotId
   - Body: none
 
 - Successful Response: If you ARE NOT the owner of the spot.
@@ -1159,7 +1159,7 @@ Create and return a new booking from a spot specified by id.
 - Request
 
   - Method: POST
-  - URL: ?
+  - URL: /api/bookings/:spotId
   - Body:
 
     ```json
@@ -1243,7 +1243,7 @@ Update and return an existing booking.
 - Request
 
   - Method: PUT
-  - URL: ?
+  - URL: /api/bookings/:bookingId
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -1343,7 +1343,7 @@ Delete an existing booking.
 - Request
 
   - Method: DELETE
-  - URL: ?
+  - URL: /api/bookings/:bookingId
   - Body: none
 
 - Successful Response
