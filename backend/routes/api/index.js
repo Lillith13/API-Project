@@ -62,8 +62,8 @@ router.get("/", async (req, res) => {
         "delete review posted by currently signed in user specified by reviewId",
       "/api/bookings/:bookingId":
         "delete booking created by currently signed in user specified by bookingId",
-      "/api/images/:spotId/:imgId": "delete spot image by imgId",
-      "/api/images/:reviewId/:imgId": "delete review image by imgId",
+      "/api/images/spot/:spotId/:imgId": "delete spot image by imgId",
+      "/api/images/review/:reviewId/:imgId": "delete review image by imgId",
     },
   };
   // * add list of available tables (if can, when able)
