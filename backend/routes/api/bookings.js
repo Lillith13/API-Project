@@ -71,9 +71,7 @@ router.get("/:spotId", [requireAuth, spotExists], async (req, res) => {
     },
   });
   const user = await User.scope("defaultScope").findByPk(req.user.id, {
-    attributes: {
-      exclude: ["username"],
-    },
+    attributes: ["id", "firstName", "lastName"],
   });
   // --> different responses based on if you own the spot or not
   const results = { Bookings: [] };
