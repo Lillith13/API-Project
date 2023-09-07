@@ -21,6 +21,9 @@ router.get("/", requireAuth, async (req, res) => {
     where: {
       userId: req.user.id,
     },
+    attributes: {
+      exclude: ["description"],
+    },
   });
   const spots = await Spot.findAll({
     attributes: {
