@@ -57,4 +57,4 @@ async function queryValidation(req, _res, next) {
   next();
 }
 
-module.exports = queryValidation;
+module.exports = { queryValidation };
