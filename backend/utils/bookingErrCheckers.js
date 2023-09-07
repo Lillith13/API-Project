@@ -47,8 +47,10 @@ async function bodyValidation(req, _res, next) {
 }
 
 async function editBookingErrChecks(req, _res, next) {
-  const { endDate } = req.body;
-  if (Date.now() > endDate) {
+  const booking = await Booking.findByPk(req.params.bookingId, {
+    attributes: ["endDate"],
+  });
+  if (Date.now() > booking["endDate"]) {
     let err = new Error("Booking Conflict");
     err.message = "Past bookings can't be modified";
     err.status = 403;

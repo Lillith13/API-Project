@@ -45,9 +45,7 @@ router.get("/", requireAuth, async (req, res) => {
     }
     for (let spotImg of spotImgs) {
       if (booking.Spot["id"] == spotImg["spotId"]) {
-        console.log(spotImg);
         booking.Spot.previewImage = spotImg["url"];
-        console.log(booking.Spot);
         break;
       }
     }
