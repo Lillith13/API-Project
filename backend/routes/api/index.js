@@ -21,8 +21,7 @@ router.use("/images", imagesRouter);
 router.get("/", async (req, res) => {
   const availableEndPointsList = {
     GET: {
-      "/api":
-        "displays home-page -> all available endpoints and database tables (tables currently unavailable to display)",
+      "/api": "displays all available endpoints W/ breif description",
       "/api/csrf/restore": "restores csrf token",
       "/api/session":
         "get currently signed in user -> displays null if no user signed in",

@@ -1,17 +1,48 @@
 const express = require("express");
 const router = express.Router();
 const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 const { requireAuth } = require("../../utils/auth.js");
 const { spotExists } = require("../../utils/recordExists.js");
 const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
 const { spotBelongsToUser } = require("../../utils/belongsToUser.js");
+const { queryValidation } = require("../../utils/queryValidation.js");
 
 const { Spot, Review, SpotImage, User } = require("../../db/models");
 
 // get all spots
-router.get("/", async (req, res) => {
-  const Spots = await Spot.findAll();
+router.get("/", queryValidation, async (req, res) => {
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
+    req.query;
+
+  if (!page || isNaN(page) || page >= 11) page = 1;
+  if (!size || isNaN(size) || size >= 21) size = 20;
+
+  const pagination = {
+    limit: size,
+    offset: (page - 1) * size,
+  };
+
+  const where = {};
+
+  if (minLat && maxLat) where.lat = { [Op.between]: [minLat, maxLat] };
+  else if (minLat && !maxLat) where.lat = { [Op.gte]: minLat };
+  else if (maxLat && !minLat) where.lat = { [Op.lte]: maxLat };
+
+  if (minLng && maxLng) where.lng = { [Op.between]: [minLng, maxLng] };
+  else if (minLng && !maxLng) where.lng = { [Op.gte]: minLng };
+  else if (maxLng && !minLng) where.lng = { [Op.lte]: maxLng };
+
+  if (minPrice && maxPrice)
+    where.price = { [Op.between]: [minPrice, maxPrice] };
+  else if (minPrice && !maxPrice) where.price = { [Op.gte]: minPrice };
+  else if (maxPrice && !minPrice) where.price = { [Op.lte]: maxPrice };
+
+  const Spots = await Spot.findAll({
+    where,
+    ...pagination,
+  });
   const SpotImages = await SpotImage.findAll({
     attributes: ["spotId", "url"],
     where: {
@@ -41,6 +72,8 @@ router.get("/", async (req, res) => {
       }
     }
     results.Spots.push(spotses);
+    results.page = Number(page);
+    results.size = Number(size);
   }
   return res.json(results);
 });
