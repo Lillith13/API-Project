@@ -53,6 +53,7 @@ router.get("/", requireAuth, async (req, res) => {
 
 // GET ALL bookings for spotId
 router.get("/:spotId", [requireAuth, spotExists], async (req, res) => {
+  console.log(req.user.id);
   const ownedBookings = await Booking.findAll({
     where: {
       userId: req.user.id,
