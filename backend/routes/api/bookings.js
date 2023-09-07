@@ -31,7 +31,7 @@ router.get("/", requireAuth, async (req, res) => {
     where: {
       preview: true,
     },
-    attributes: ["id", "url"],
+    attributes: ["spotId", "url"],
   });
 
   let results = { Bookings: [] };
@@ -40,13 +40,13 @@ router.get("/", requireAuth, async (req, res) => {
     for (let spot of spots) {
       if (booking.spotId === spot["id"]) {
         booking.Spot = spot;
-        // break;
+        break;
       }
     }
     for (let spotImg of spotImgs) {
       if (booking.Spot["id"] === spotImg["spotId"]) {
         booking.Spot.previewImage = spotImg["url"];
-        // break;
+        break;
       }
     }
     results.Bookings.push(booking);
