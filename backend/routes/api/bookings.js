@@ -21,13 +21,10 @@ router.get("/", requireAuth, async (req, res) => {
     where: {
       userId: req.user.id,
     },
-    attributes: {
-      exclude: ["description"],
-    },
   });
   const spots = await Spot.findAll({
     attributes: {
-      exclude: ["createdAt", "updatedAt"],
+      exclude: ["description", "createdAt", "updatedAt"],
     },
   });
   const spotImgs = await SpotImage.findAll({
