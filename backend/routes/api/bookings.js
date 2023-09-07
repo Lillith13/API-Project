@@ -45,7 +45,9 @@ router.get("/", requireAuth, async (req, res) => {
     }
     for (let spotImg of spotImgs) {
       if (booking.Spot["id"] == spotImg["spotId"]) {
+        console.log(spotImg);
         booking.Spot.previewImage = spotImg["url"];
+        console.log(booking.Spot);
         break;
       }
     }
@@ -57,7 +59,6 @@ router.get("/", requireAuth, async (req, res) => {
 
 // GET ALL bookings for spotId
 router.get("/:spotId", [requireAuth, spotExists], async (req, res) => {
-  console.log(req.user.id);
   const ownedBookings = await Booking.findAll({
     where: {
       userId: req.user.id,
@@ -81,7 +82,6 @@ router.get("/:spotId", [requireAuth, spotExists], async (req, res) => {
     },
   });
   // --> different responses based on if you own the spot or not
-  console.log(user);
   const results = { Bookings: [] };
   // Owned by currently signed in user:
   for (let ownedBooking of ownedBookings) {
