@@ -12,7 +12,7 @@ const {
 
 // DELETE spot image
 router.delete(
-  "/:spotId/:imgId",
+  "/spot/:spotId/:imgId",
   [requireAuth, spotExists, spotBelongsToUser],
   async (req, res) => {
     const spotImg = await SpotImage.findByPk(req.params.imgId);
@@ -29,7 +29,7 @@ router.delete(
 
 // DELETE review image
 router.delete(
-  "/:reviewId/:imgId",
+  "/review/:reviewId/:imgId",
   [requireAuth, reviewExists, reviewBelongsToUser],
   async (req, res) => {
     const revImg = await ReviewImage.findByPk(req.params.imgId);
