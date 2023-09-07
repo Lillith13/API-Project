@@ -39,7 +39,7 @@ router.get("/", requireAuth, async (req, res) => {
     booking = booking.toJSON();
     for (let spot of spots) {
       if (booking.spotId === spot["id"]) {
-        booking.Spot = spot;
+        booking.Spot = spot.dataValues;
         break;
       }
     }
