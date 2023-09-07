@@ -61,7 +61,7 @@ router.get("/", requireAuth, async (req, res) => {
     }
     rev.ReviewImages = [];
     for (let revImg of revImgs) {
-      if (rev.spotId === revImg.dataValues.reviewId) {
+      if (rev.id === revImg.dataValues.reviewId) {
         rev.ReviewImages.push({
           id: revImg.dataValues.id,
           url: revImg.dataValues.url,
