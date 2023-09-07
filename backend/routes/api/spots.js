@@ -43,20 +43,22 @@ router.get("/", queryValidation, async (req, res) => {
     where,
     ...pagination,
   });
+
   const SpotImages = await SpotImage.findAll({
     attributes: ["spotId", "url"],
     where: {
       preview: true,
     },
   });
+
   const Reviews = await Review.findAll({
     attributes: [
       "spotId",
-      // "stars",
       [Sequelize.fn("AVG", Sequelize.col("stars")), "avgRating"],
     ],
     group: ["Review.spotId"],
   });
+
   const results = { Spots: [] };
   for (let spot of Spots) {
     let spotses = spot.toJSON();
