@@ -1039,7 +1039,7 @@ Return all the bookings that the current user has made.
 - Require Authentication: true
 - Request
 
-  - Method: ?
+  - Method: GET
   - URL: ?
   - Body: none
 
@@ -1086,7 +1086,7 @@ Return all the bookings for a spot specified by id.
 - Require Authentication: true
 - Request
 
-  - Method: ?
+  - Method: GET
   - URL: ?
   - Body: none
 
@@ -1158,7 +1158,7 @@ Create and return a new booking from a spot specified by id.
 - Require proper authorization: Spot must NOT belong to the current user
 - Request
 
-  - Method: ?
+  - Method: POST
   - URL: ?
   - Body:
 
@@ -1242,7 +1242,7 @@ Update and return an existing booking.
 - Require proper authorization: Booking must belong to the current user
 - Request
 
-  - Method: ?
+  - Method: PUT
   - URL: ?
   - Headers:
     - Content-Type: application/json
@@ -1342,7 +1342,7 @@ Delete an existing booking.
   Spot must belong to the current user
 - Request
 
-  - Method: ?
+  - Method: DELETE
   - URL: ?
   - Body: none
 
