@@ -4,6 +4,7 @@ const usersRouter = require("./users.js");
 const spotsRouter = require("./spots.js");
 const reviewsRouter = require("./reviews.js");
 const bookingsRouter = require("./bookings.js");
+const imagesRouter = require("./images.js");
 
 const { restoreUser } = require("../../utils/auth.js");
 // checks if user signed in or guest
@@ -14,6 +15,7 @@ router.use("/users", usersRouter);
 router.use("/spots", spotsRouter);
 router.use("/reviews", reviewsRouter);
 router.use("/bookings", bookingsRouter);
+router.use("/images", imagesRouter);
 
 // display available endpoints on start-up -> /api
 router.get("/", async (req, res) => {
@@ -61,6 +63,8 @@ router.get("/", async (req, res) => {
         "delete review posted by currently signed in user specified by reviewId",
       "/api/bookings/:bookingId":
         "delete booking created by currently signed in user specified by bookingId",
+      "/api/images/:spotId/:imgId": "delete spot image by imgId",
+      "/api/images/:reviewId/:imgId": "delete review image by imgId",
     },
   };
   // * add list of available tables (if can, when able)
