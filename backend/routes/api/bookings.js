@@ -22,12 +22,14 @@ router.get("/", requireAuth, async (req, res) => {
       userId: req.user.id,
     },
   });
-  const spots = await Spot.scope("defaultScope").findAll();
+  const spots = await Spot.findAll();
   const spotImgs = await SpotImage.findAll({
     where: {
       preview: true,
     },
-    attributes: ["id", "url"],
+    attributes: {
+      exclude: ["createdAt", "updatedAt"],
+    },
   });
 
   let results = { Bookings: [] };
