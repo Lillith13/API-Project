@@ -25,11 +25,13 @@ router.get("/", async (req, res) => {
       "/api/session":
         "get currently signed in user -> displays null if no user signed in",
       "/api/spots": "get all spots",
-      "/api/spots/:spotId": "get specific spot by it's ID",
+      "/api/spots/:spotId": "get spots by spotId",
       "/api/spots/mySpots":
         "returns all spots owned by the currently logged in user",
       "/api/reviews": "get all reviews written by currently signed in user",
-      "/api/reviews/:spotId": "get all reviews for specified spotId",
+      "/api/reviews/:spotId": "get all reviews by spotId",
+      "/api/bookings": "get all bookings belonging to currently signed in user",
+      "/api/bookings/:spotId": "get all bookings by spotId",
     },
     POST: {
       "/session": "user log-in route",
@@ -42,18 +44,23 @@ router.get("/", async (req, res) => {
         "add a new review for specified spot(spotId)",
       "/api/reviews/:reviewId":
         "add new image to currently signed in user's posted reviews",
+      "/api/bookings/:spotId": "post new booking for specified spot",
     },
     PUT: {
       "/api/spots/mySpots/:spotId":
-        "edit spot owned by currently signed in user",
+        "edit spot owned by currently signed in user specified by spotId",
       "/api/reviews/:reviewId":
-        "edit reviews written by currently signed in user",
+        "edit review written by currently signed in user specified by reviewId",
+      "/api/bookings/:bookingId":
+        "edit booking written by currently signed in user specified by bookingId",
     },
     DELETE: {
       "/api/spots/mySpots/:spotId":
-        "delete spot owned by currently signed in user",
+        "delete spot owned by currently signed in user specified by spotId",
       "/api/reviews/:reviewId":
-        "delete reviews posted by currently signed in user",
+        "delete review posted by currently signed in user specified by reviewId",
+      "/api/bookings/:bookingId":
+        "delete booking created by currently signed in user specified by bookingId",
     },
   };
   // * add list of available tables (if can, when able)
