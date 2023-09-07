@@ -13,7 +13,7 @@ const {
 } = require("../../utils/bookingErrCheckers.js");
 const { bookingBelongsToUser } = require("../../utils/belongsToUser.js");
 
-const { Booking, Spot, SpotImage } = require("../../db/models");
+const { Booking, Spot, SpotImage, User } = require("../../db/models");
 
 // GET ALL of currently signed in user's bookings
 router.get("/", requireAuth, async (req, res) => {
@@ -72,7 +72,9 @@ router.get("/:spotId", [requireAuth, spotExists], async (req, res) => {
     },
   });
   const user = await User.scope("defaultScope").findByPk(req.user.id, {
-    attributes: ["id", "firstName", "lastName"],
+    attributes: {
+      exclude: ["username"],
+    },
   });
   // --> different responses based on if you own the spot or not
   console.log(user);
