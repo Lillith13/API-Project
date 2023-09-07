@@ -74,6 +74,7 @@ router.get("/:spotId", [requireAuth, spotExists], async (req, res) => {
     attributes: ["id", "firstName", "lastName"],
   });
   // --> different responses based on if you own the spot or not
+  console.log(user);
   const results = { Bookings: [] };
   // Owned by currently signed in user:
   for (let ownedBooking of ownedBookings) {
