@@ -40,8 +40,8 @@ router.get("/", requireAuth, async (req, res) => {
       }
     }
     for (let spotImg of spotImgs) {
-      if (booking.Spot["id"] === spotImg["id"]) {
-        booking.Spot["previewImage"] = spotImg["url"];
+      if (booking.Spot["id"] === spotImg["spotId"]) {
+        booking.Spot.previewImage = spotImg["url"];
         break;
       }
     }
