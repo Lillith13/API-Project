@@ -42,7 +42,7 @@ router.delete(
 
 // DELETE review image
 router.delete(
-  "/review-images/:imgId",
+  "/review-images/:imageId",
   [requireAuth, reviewBelongsToUser],
   async (req, res) => {
     const revImg = await ReviewImage.findByPk(req.params.imageId);
