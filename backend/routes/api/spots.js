@@ -8,8 +8,19 @@ const { spotExists } = require("../../utils/recordExists.js");
 const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
 const { spotBelongsToUser } = require("../../utils/belongsToUser.js");
 const { queryValidation } = require("../../utils/queryValidation.js");
+const {
+  bookingConflicts,
+  bodyValidation,
+} = require("../../utils/bookingErrCheckers.js");
 
-const { Spot, Review, SpotImage, User } = require("../../db/models");
+const {
+  Spot,
+  Review,
+  SpotImage,
+  User,
+  ReviewImage,
+  Booking,
+} = require("../../db/models");
 
 // get all spots
 router.get("/", queryValidation, async (req, res) => {
@@ -81,7 +92,7 @@ router.get("/", queryValidation, async (req, res) => {
 });
 
 // get spots owned by logged in user
-router.get("/mySpots", requireAuth, async (req, res) => {
+router.get("/current", requireAuth, async (req, res) => {
   const userSpots = await Spot.findAll({
     where: {
       ownerId: req.user.id,
@@ -162,40 +173,27 @@ router.get("/:spotId", spotExists, async (req, res) => {
 });
 
 // create new spot
-router.post(
-  "/mySpots",
-  [requireAuth, spotCreateErrorChecks],
-  async (req, res) => {
-    const {
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      description,
-      price,
-    } = req.body;
-    const newSpot = await Spot.create({
-      ownerId: req.user.id,
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      description,
-      price,
-    });
-    return res.status(201).json(newSpot);
-  }
-);
+router.post("/", [requireAuth, spotCreateErrorChecks], async (req, res) => {
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
+  const newSpot = await Spot.create({
+    ownerId: req.user.id,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+  });
+  return res.status(201).json(newSpot);
+});
 
 // add image to spot
 router.post(
-  "/mySpots/:spotId",
+  "/:spotId/images",
   [requireAuth, spotExists, spotBelongsToUser],
   async (req, res, next) => {
     const spot = await Spot.findByPk(req.params.spotId);
@@ -216,7 +214,7 @@ router.post(
 
 // edit a spot
 router.put(
-  "/mySpots/:spotId",
+  "/:spotId",
   [requireAuth, spotExists, spotBelongsToUser, spotCreateErrorChecks],
   async (req, res, next) => {
     // ! spotCreateErrorChecks requires for ALL attributes to be edited -> create new check for editing a spot to allow for individual attribute editing
@@ -255,7 +253,7 @@ router.put(
 
 // delete spot owned by currently signed in user
 router.delete(
-  "/mySpots/:spotId",
+  "/:spotId",
   [requireAuth, spotExists, spotBelongsToUser],
   async (req, res) => {
     const delSpot = await Spot.findByPk(req.params.spotId);
@@ -267,6 +265,116 @@ router.delete(
     } catch (err) {
       console.log(err);
     }
+  }
+);
+
+// GET ALL Reviews by spotId
+router.get("/:spotId/reviews", spotExists, async (req, res) => {
+  const spotReviews = await Review.findAll({
+    where: {
+      spotId: req.params.spotId,
+    },
+    include: {
+      model: User,
+      attributes: {
+        exclude: [
+          "username",
+          "hashedPassword",
+          "email",
+          "createdAt",
+          "updatedAt",
+        ],
+      },
+    },
+  });
+  const spotRevImgs = await ReviewImage.findAll();
+
+  const results = { Reviews: [] };
+  for (let spotReview of spotReviews) {
+    const spotRev = spotReview.toJSON();
+    spotRev.ReviewImages = [];
+    for (let spotRevImg of spotRevImgs) {
+      if (spotRevImg["reviewId"] === spotRev.id) {
+        spotRev.ReviewImages.push({
+          id: spotRevImg["id"],
+          url: spotRevImg["url"],
+        });
+      }
+    }
+    results.Reviews.push(spotRev);
+  }
+  return res.json(results);
+});
+
+// POST Review -> Spot by spotId
+router.post(
+  "/:spotId/reviews",
+  [requireAuth, spotExists, postRevErrChecks],
+  async (req, res) => {
+    const { review, stars } = req.body;
+    const newReview = await Review.create({
+      spotId: req.params.spotId,
+      userId: req.user.id,
+      review,
+      stars,
+    });
+    return res.json(newReview);
+  }
+);
+
+// GET ALL bookings for spotId
+router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
+  const ownedBookings = await Booking.findAll({
+    where: {
+      userId: req.user.id,
+      spotId: req.params.spotId,
+    },
+  });
+  const otherBookings = await Booking.findAll({
+    where: {
+      userId: {
+        [Op.not]: req.user.id,
+      },
+      spotId: req.params.spotId,
+    },
+    attributes: {
+      exclude: ["userId", "createdAt", "updateAt"],
+    },
+  });
+  const user = await User.scope("defaultScope").findByPk(req.user.id, {
+    attributes: {
+      exclude: ["username"],
+    },
+  });
+  // --> different responses based on if you own the spot or not
+  const results = { Bookings: [] };
+  // Owned by currently signed in user:
+  for (let ownedBooking of ownedBookings) {
+    ownedBooking = ownedBooking.toJSON();
+    ownedBooking.User = user;
+    results.Bookings.push(ownedBooking);
+  }
+  // Not owned by signed in user:
+  for (let otherBooking of otherBookings) {
+    results.Bookings.push(otherBooking);
+  }
+
+  return res.json(results);
+});
+
+// POST Booking for spotId
+router.post(
+  "/:spotId/bookings",
+  [requireAuth, spotExists, bookingConflicts, bodyValidation],
+  async (req, res) => {
+    const { startDate, endDate } = req.body;
+    const newBooking = await Booking.create({
+      spotId: req.params.spotId,
+      userId: req.user.id,
+      startDate,
+      endDate,
+    });
+    return res.json(newBooking);
   }
 );
 

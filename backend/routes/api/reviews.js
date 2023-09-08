@@ -3,11 +3,10 @@ const router = express.Router();
 
 const { requireAuth } = require("../../utils/auth.js");
 const {
-  postRevErrChecks,
   postRevImgErrChecks,
   reviewEditErrChecks,
 } = require("../../utils/reviewErrorCheckers.js");
-const { spotExists, reviewExists } = require("../../utils/recordExists.js");
+const { reviewExists } = require("../../utils/recordExists.js");
 const { reviewBelongsToUser } = require("../../utils/belongsToUser.js");
 
 const {
@@ -19,7 +18,7 @@ const {
 } = require("../../db/models");
 
 // GET ALL Reviews
-router.get("/", requireAuth, async (req, res) => {
+router.get("/current", requireAuth, async (req, res) => {
   const reviews = await Review.scope("defaultScope").findAll({
     where: {
       userId: req.user.id,
@@ -74,63 +73,9 @@ router.get("/", requireAuth, async (req, res) => {
   return res.json(results);
 });
 
-// GET ALL Reviews by spotId
-router.get("/spot/:spotId", spotExists, async (req, res) => {
-  const spotReviews = await Review.findAll({
-    where: {
-      spotId: req.params.spotId,
-    },
-    include: {
-      model: User,
-      attributes: {
-        exclude: [
-          "username",
-          "hashedPassword",
-          "email",
-          "createdAt",
-          "updatedAt",
-        ],
-      },
-    },
-  });
-  const spotRevImgs = await ReviewImage.findAll();
-
-  const results = { Reviews: [] };
-  for (let spotReview of spotReviews) {
-    const spotRev = spotReview.toJSON();
-    spotRev.ReviewImages = [];
-    for (let spotRevImg of spotRevImgs) {
-      if (spotRevImg["reviewId"] === spotRev.id) {
-        spotRev.ReviewImages.push({
-          id: spotRevImg["id"],
-          url: spotRevImg["url"],
-        });
-      }
-    }
-    results.Reviews.push(spotRev);
-  }
-  return res.json(results);
-});
-
-// POST Review -> Spot by spotId
-router.post(
-  "/spot/:spotId",
-  [requireAuth, spotExists, postRevErrChecks],
-  async (req, res) => {
-    const { review, stars } = req.body;
-    const newReview = await Review.create({
-      spotId: req.params.spotId,
-      userId: req.user.id,
-      review,
-      stars,
-    });
-    return res.json(newReview);
-  }
-);
-
 // POST Image -> Review by reviewId
 router.post(
-  "/:reviewId",
+  "/:reviewId/images",
   [requireAuth, reviewExists, reviewBelongsToUser, postRevImgErrChecks],
   async (req, res) => {
     const { url } = req.body;

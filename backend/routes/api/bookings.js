@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 const { requireAuth } = require("../../utils/auth.js");
-const { bookingExists, spotExists } = require("../../utils/recordExists.js");
+const { bookingExists } = require("../../utils/recordExists.js");
 const {
   bookingConflicts,
   bodyValidation,
@@ -13,10 +13,10 @@ const {
 } = require("../../utils/bookingErrCheckers.js");
 const { bookingBelongsToUser } = require("../../utils/belongsToUser.js");
 
-const { Booking, Spot, SpotImage, User } = require("../../db/models");
+const { Booking, Spot, SpotImage } = require("../../db/models");
 
 // GET ALL of currently signed in user's bookings
-router.get("/", requireAuth, async (req, res) => {
+router.get("/current", requireAuth, async (req, res) => {
   const bookings = await Booking.findAll({
     where: {
       userId: req.user.id,
@@ -54,62 +54,6 @@ router.get("/", requireAuth, async (req, res) => {
 
   return res.json(results);
 });
-
-// GET ALL bookings for spotId
-router.get("/:spotId", [requireAuth, spotExists], async (req, res) => {
-  const ownedBookings = await Booking.findAll({
-    where: {
-      userId: req.user.id,
-      spotId: req.params.spotId,
-    },
-  });
-  const otherBookings = await Booking.findAll({
-    where: {
-      userId: {
-        [Op.not]: req.user.id,
-      },
-      spotId: req.params.spotId,
-    },
-    attributes: {
-      exclude: ["userId", "createdAt", "updateAt"],
-    },
-  });
-  const user = await User.scope("defaultScope").findByPk(req.user.id, {
-    attributes: {
-      exclude: ["username"],
-    },
-  });
-  // --> different responses based on if you own the spot or not
-  const results = { Bookings: [] };
-  // Owned by currently signed in user:
-  for (let ownedBooking of ownedBookings) {
-    ownedBooking = ownedBooking.toJSON();
-    ownedBooking.User = user;
-    results.Bookings.push(ownedBooking);
-  }
-  // Not owned by signed in user:
-  for (let otherBooking of otherBookings) {
-    results.Bookings.push(otherBooking);
-  }
-
-  return res.json(results);
-});
-
-// POST Booking for spotId
-router.post(
-  "/:spotId",
-  [requireAuth, spotExists, bookingConflicts, bodyValidation],
-  async (req, res) => {
-    const { startDate, endDate } = req.body;
-    const newBooking = await Booking.create({
-      spotId: req.params.spotId,
-      userId: req.user.id,
-      startDate,
-      endDate,
-    });
-    return res.json(newBooking);
-  }
-);
 
 // PUT Booking
 router.put(
