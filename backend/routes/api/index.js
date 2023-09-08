@@ -28,7 +28,7 @@ router.delete(
   "/spot-images/:imageId",
   [requireAuth, spotBelongsToUser],
   async (req, res) => {
-    const spotImg = await SpotImage.findByPk(req.params.imgId);
+    const spotImg = await SpotImage.findByPk(req.params.imageId);
     try {
       await spotImg.destroy();
       return res.json({
@@ -45,7 +45,7 @@ router.delete(
   "/review-images/:imgId",
   [requireAuth, reviewBelongsToUser],
   async (req, res) => {
-    const revImg = await ReviewImage.findByPk(req.params.imgId);
+    const revImg = await ReviewImage.findByPk(req.params.imageId);
     try {
       await revImg.destroy();
       return res.json({
