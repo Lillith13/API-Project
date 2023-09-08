@@ -4,7 +4,6 @@ const usersRouter = require("./users.js");
 const spotsRouter = require("./spots.js");
 const reviewsRouter = require("./reviews.js");
 const bookingsRouter = require("./bookings.js");
-const imagesRouter = require("./images.js");
 
 const { restoreUser } = require("../../utils/auth.js");
 // checks if user signed in or guest
