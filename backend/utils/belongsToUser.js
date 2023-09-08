@@ -19,7 +19,7 @@ async function spotBelongsToUser(req, _res, next) {
 
 async function reviewBelongsToUser(req, _res, next) {
   const revImg = await ReviewImage.findByPk(req.params.imageId);
-  const review = await Review.findByPk(revImg.reviewId);
+  const review = await Review.findByPk(revImg["reviewId"]);
   if (review["userId"] !== req.user.id) {
     const err = new Error("Review doesn't belong to you");
     err.status = 403;
