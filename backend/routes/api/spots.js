@@ -8,6 +8,7 @@ const { spotExists } = require("../../utils/recordExists.js");
 const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
 const { spotBelongsToUser } = require("../../utils/belongsToUser.js");
 const { queryValidation } = require("../../utils/queryValidation.js");
+const { postRevErrChecks } = require("../../utils/reviewErrorCheckers.js");
 const {
   bookingConflicts,
   bodyValidation,
