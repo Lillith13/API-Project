@@ -197,7 +197,11 @@ router.post(
   "/:spotId/images",
   [requireAuth, spotExists, spotBelongsToUser],
   async (req, res, next) => {
-    const spot = await Spot.findByPk(req.params.spotId);
+    const spot = await Spot.findByPk(req.params.spotId, {
+      attributes: {
+        exclude: ["spotId", "createdAt", "updatedAt"],
+      },
+    });
     if (req.user.id !== spot.ownerId) {
       const err = new Error("Spot doesn't belong to you");
       err.status = 200;
@@ -323,12 +327,15 @@ router.post(
   }
 );
 
-// GET ALL bookings for spotId
+// ! GET ALL bookings for spotId --> issue with response data (owned vs not owned spots)
 router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   const ownedBookings = await Booking.findAll({
     where: {
       userId: req.user.id,
       spotId: req.params.spotId,
+    },
+    attributes: {
+      exclude: ["userId", "createdAt", "updateAt"],
     },
   });
   const otherBookings = await Booking.findAll({

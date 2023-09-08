@@ -37,7 +37,11 @@ router.get("/current", requireAuth, async (req, res) => {
     },
   });
 
-  const spots = await Spot.scope("defaultScope").findAll();
+  const spots = await Spot.findAll({
+    attributes: {
+      exclude: ["description", "createdAt", "updatedAt"],
+    },
+  });
   const prevImgs = await SpotImage.findAll({
     where: {
       preview: true,

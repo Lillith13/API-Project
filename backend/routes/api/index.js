@@ -18,7 +18,6 @@ router.use("/bookings", bookingsRouter);
 const { SpotImage, ReviewImage } = require("../../db/models");
 
 const { requireAuth } = require("../../utils/auth");
-const { spotExists, reviewExists } = require("../../utils/recordExists");
 const {
   spotBelongsToUser,
   reviewBelongsToUser,
@@ -27,7 +26,7 @@ const {
 // DELETE spot image
 router.delete(
   "/spot-images/:imageId",
-  [requireAuth, spotExists, spotBelongsToUser],
+  [requireAuth, spotBelongsToUser],
   async (req, res) => {
     const spotImg = await SpotImage.findByPk(req.params.imgId);
     try {
@@ -44,7 +43,7 @@ router.delete(
 // DELETE review image
 router.delete(
   "/review-images/:imgId",
-  [requireAuth, reviewExists, reviewBelongsToUser],
+  [requireAuth, reviewBelongsToUser],
   async (req, res) => {
     const revImg = await ReviewImage.findByPk(req.params.imgId);
     try {
