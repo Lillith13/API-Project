@@ -343,7 +343,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
       spotId: req.params.spotId,
     },
     attributes: {
-      exclude: ["userId", "createdAt", "updatedAt"],
+      exclude: ["id", "userId", "createdAt", "updatedAt"],
     },
   });
   const user = await User.scope("defaultScope").findByPk(req.user.id, {
