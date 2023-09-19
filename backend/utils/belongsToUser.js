@@ -7,8 +7,14 @@ const {
 } = require("../db/models");
 
 async function spotBelongsToUser(req, _res, next) {
-  const spotImg = await SpotImage.findByPk(req.params.imageId);
-  const spot = await Spot.findByPk(spotImg.spotId);
+  let spot;
+  if (req.params.imageId) {
+    const spotImg = await SpotImage.findByPk(req.params.imageId);
+    spot = await Spot.findByPk(spotImg.spotId);
+  } else {
+    spot = await Spot.findByPk(req.params.spotId);
+    console.log(spot);
+  }
   if (req.user.id !== spot.ownerId) {
     const err = new Error("Spot doesn't belong to you");
     err.status = 403;
@@ -18,8 +24,13 @@ async function spotBelongsToUser(req, _res, next) {
 }
 
 async function reviewBelongsToUser(req, _res, next) {
-  const revImg = await ReviewImage.findByPk(req.params.imageId);
-  const review = await Review.findByPk(revImg["reviewId"]);
+  let review;
+  if (req.params.imageId) {
+    const revImg = await ReviewImage.findByPk(req.params.imageId);
+    review = await Review.findByPk(revImg["reviewId"]);
+  } else {
+    review = await Review.findByPk(req.params.reviewId);
+  }
   if (review["userId"] !== req.user.id) {
     const err = new Error("Review doesn't belong to you");
     err.status = 403;

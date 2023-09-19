@@ -318,7 +318,7 @@ router.post(
   async (req, res) => {
     const { review, stars } = req.body;
     const newReview = await Review.create({
-      spotId: req.params.spotId,
+      spotId: Number(req.params.spotId),
       userId: req.user.id,
       review,
       stars,
@@ -356,11 +356,41 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   // Owned by currently signed in user:
   for (let ownedBooking of ownedBookings) {
     ownedBooking = ownedBooking.toJSON();
+
+    const startDate = ownedBooking.startDate;
+    const endDate = ownedBooking.endDate;
+
+    let year = startDate.getFullYear();
+    let month = startDate.getMonth();
+    let day = startDate.getDate();
+    ownedBooking.startDate = `${year}-${month}-${day}`;
+
+    year = endDate.getFullYear();
+    month = endDate.getMonth();
+    day = endDate.getDate();
+    ownedBooking.endDate = `${year}-${month}-${day}`;
+
     ownedBooking.User = user;
+
     results.Bookings.push(ownedBooking);
   }
   // Not owned by signed in user:
   for (let otherBooking of otherBookings) {
+    otherBooking = otherBooking.toJSON();
+
+    const startDate = otherBooking.startDate;
+    const endDate = otherBooking.endDate;
+
+    let year = startDate.getFullYear();
+    let month = startDate.getMonth();
+    let day = startDate.getDate();
+    otherBooking.startDate = `${year}-${month}-${day}`;
+
+    year = endDate.getFullYear();
+    month = endDate.getMonth();
+    day = endDate.getDate();
+    otherBooking.endDate = `${year}-${month}-${day}`;
+
     results.Bookings.push(otherBooking);
   }
 
