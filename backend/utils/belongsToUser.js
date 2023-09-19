@@ -13,7 +13,6 @@ async function spotBelongsToUser(req, _res, next) {
     spot = await Spot.findByPk(spotImg.spotId);
   } else {
     spot = await Spot.findByPk(req.params.spotId);
-    console.log(spot);
   }
   if (req.user.id !== spot.ownerId) {
     const err = new Error("Spot doesn't belong to you");
