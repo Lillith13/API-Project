@@ -2,7 +2,6 @@ const { Spot, Review, Booking } = require("../db/models");
 
 async function spotExists(req, _res, next) {
   let spot = await Spot.findByPk(req.params.spotId);
-  spot = spot.dataValues;
   if (!spot) {
     const err = new Error();
     err.status = 404;
