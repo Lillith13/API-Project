@@ -24,25 +24,25 @@ async function bookingConflicts(req, _res, next) {
 
   if (booking) {
     if (
-      bookedStartYear === startDate.split("/")[2] ||
-      bookedEndYear === endDate.split("/")[2]
+      bookedStartYear === Number(startDate.split("/")[2]) ||
+      bookedEndYear === Number(endDate.split("/")[2])
     ) {
       // if desired startDate falls within an already booked timeframe
       if (
-        startDate.split("/")[0] >= bookedStartMonth &&
-        startDate.split("/")[1] >= bookedStartDay &&
-        startDate.split("/")[0] <= bookedEndMonth &&
-        startDate.split("/")[1] <= bookedEndDay
+        Number(startDate.split("/")[0]) >= bookedStartMonth &&
+        Number(startDate.split("/")[1]) >= bookedStartDay &&
+        Number(startDate.split("/")[0]) <= bookedEndMonth &&
+        Number(startDate.split("/")[1]) <= bookedEndDay
       ) {
         err.errors.startDate = "Start date conflicts with an existing booking";
         errTriggered = true;
       }
       // if desired endDate falls within an already booked timeFrame
       if (
-        endDate.split("/")[0] >= bookedStartMonth &&
-        endDate.split("/")[1] >= bookedStartDay &&
-        endDate.split("/")[0] <= bookedEndMonth &&
-        endDate.split("/")[1] <= bookedEndDay
+        Number(endDate.split("/")[0]) >= bookedStartMonth &&
+        Number(endDate.split("/")[1]) >= bookedStartDay &&
+        Number(endDate.split("/")[0]) <= bookedEndMonth &&
+        Number(endDate.split("/")[1]) <= bookedEndDay
       ) {
         err.errors.endDate = "End date conflicts with an existing booking";
         errTriggered = true;
