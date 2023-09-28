@@ -77,6 +77,7 @@ router.get("/", queryValidation, async (req, res) => {
     for (let review of Reviews) {
       if (review["spotId"] === spotses.id) {
         review = review.toJSON();
+        spotses.avgRating = review.avgRating;
       }
     }
     for (let spotImg of SpotImages) {
