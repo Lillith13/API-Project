@@ -327,7 +327,7 @@ router.post(
   }
 );
 
-// ! GET ALL bookings for spotId --> issue with response data (owned vs not owned spots)
+// ! GET ALL bookings for spotId --> owned vs not owned spots return different data
 router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   const ownedBookings = await Booking.findAll({
     where: {
