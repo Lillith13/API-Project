@@ -361,14 +361,14 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     const endDate = ownedBooking.endDate;
 
     let year = startDate.getFullYear();
-    let month = startDate.getMonth();
+    let month = startDate.getMonth() + 1;
     let day = startDate.getDate();
-    ownedBooking.startDate = `${year}-${month + 1}-${day}`;
+    ownedBooking.startDate = `${year}-${month}-${day}`;
 
     year = endDate.getFullYear();
-    month = endDate.getMonth();
+    month = endDate.getMonth() + 1;
     day = endDate.getDate();
-    ownedBooking.endDate = `${year}-${month + 1}-${day}`;
+    ownedBooking.endDate = `${year}-${month}-${day}`;
 
     ownedBooking.User = user;
 
@@ -382,12 +382,12 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     const endDate = otherBooking.endDate;
 
     let year = startDate.getFullYear();
-    let month = startDate.getMonth();
+    let month = startDate.getMonth() + 1;
     let day = startDate.getDate();
     otherBooking.startDate = `${year}-${month}-${day}`;
 
     year = endDate.getFullYear();
-    month = endDate.getMonth();
+    month = endDate.getMonth() + 1;
     day = endDate.getDate();
     otherBooking.endDate = `${year}-${month}-${day}`;
 

@@ -10,22 +10,29 @@ async function bookingConflicts(req, _res, next) {
   const bookingSD = await Booking.findOne({
     where: {
       spotId: req.params.spotId,
-      startDate: {
-        [Op.between]: [startDate, endDate],
-      },
+      [Op.or]: [
+        {
+          startDate: {
+            [Op.between]: [startDate, endDate],
+          },
+        },
+        { startDate },
+      ],
     },
   });
-  console.log(bookingSD);
   const bookingED = await Booking.findOne({
     where: {
       spotId: req.params.spotId,
-      endDate: {
-        [Op.between]: [startDate, endDate],
-      },
+      [Op.or]: [
+        {
+          endDate: {
+            [Op.between]: [startDate, endDate],
+          },
+        },
+        { endDate },
+      ],
     },
   });
-  console.log(bookingED);
-
   if (bookingSD) {
     err.errors.startDate = "Start date conflicts with an existing booking";
     errTriggered = true;
