@@ -61,7 +61,7 @@ router.delete(
 router.get("/", async (req, res) => {
   const availableEndPointsList = {
     GET: {
-      "/api": "displays all available endpoints W/ breif description",
+      "/api": "displays all available endpoints W/ brief description",
       "/api/csrf/restore": "restores csrf token",
       "/api/session":
         "get currently signed in user -> displays null if no user signed in",
