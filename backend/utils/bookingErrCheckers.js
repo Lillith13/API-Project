@@ -5,7 +5,7 @@ async function bookingConflicts(req, _res, next) {
   let err = new Error("Booking Conflict");
   err.errors = {};
   let errTriggered = false;
-  const bookingSD = await Booking.findByPk(req.params.spotId, {
+  const booking = await Booking.findByPk(req.params.spotId, {
     where: {
       [Op.between]: [startDate, endDate]
       // startDate,
