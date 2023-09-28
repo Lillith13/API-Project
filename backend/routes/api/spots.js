@@ -77,7 +77,7 @@ router.get("/", queryValidation, async (req, res) => {
     for (let review of Reviews) {
       if (review["spotId"] === spotses.id) {
         review = review.toJSON();
-        spotses.avgRating = review.avgRating;
+        spotses.avgRating.toFixed() = review.avgRating;
       }
     }
     for (let spotImg of SpotImages) {
@@ -124,7 +124,7 @@ router.get("/current", requireAuth, async (req, res) => {
     for (let review of userSpotsReviews) {
       if (review["spotId"] === spotses.id) {
         review = review.toJSON();
-        spotses.avgRating = review.avgRating;
+        spotses.avgRating.toFixed() = review.avgRating;
       }
     }
     for (let spotImg of userSpotsImages) {
@@ -167,7 +167,7 @@ router.get("/:spotId", spotExists, async (req, res) => {
 
   const result = spot.toJSON();
   result.numReviews = reviewsForLength.length;
-  result.avgStarRating = spotReviews[0].dataValues.avgRating;
+  result.avgStarRating.toFixed() = spotReviews[0].dataValues.avgRating;
   result.SpotImages = spotImages;
   result.Owner = ownerInfo;
   return res.json(result);
