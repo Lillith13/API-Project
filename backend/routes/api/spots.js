@@ -363,12 +363,12 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     let year = startDate.getFullYear();
     let month = startDate.getMonth();
     let day = startDate.getDate();
-    ownedBooking.startDate = `${year}-${month}-${day}`;
+    ownedBooking.startDate = `${year}-${month + 1}-${day}`;
 
     year = endDate.getFullYear();
     month = endDate.getMonth();
     day = endDate.getDate();
-    ownedBooking.endDate = `${year}-${month}-${day}`;
+    ownedBooking.endDate = `${year}-${month + 1}-${day}`;
 
     ownedBooking.User = user;
 
