@@ -13,36 +13,36 @@ async function bookingConflicts(req, _res, next) {
   });
 
   const bookedStart = booking["startDate"];
-  const startYear = bookedStart.getFullYear();
-  const startMonth = bookedStart.getMonth();
-  const startDay = bookedStart.getDate();
+  const bookedStartYear = bookedStart.getFullYear();
+  const bookedStartMonth = bookedStart.getMonth();
+  const bookedStartDay = bookedStart.getDate();
 
   const bookedEnd = booking["endDate"];
-  const endYear = bookedEnd.getFullYear();
-  const endMonth = bookedEnd.getMonth();
-  const endDay = bookedEnd.getDate();
+  const bookedEndYear = bookedEnd.getFullYear();
+  const bookedEndMonth = bookedEnd.getMonth();
+  const bookedEndDay = bookedEnd.getDate();
 
   if (booking) {
     if (
-      startYear === startDate.getFullYear() ||
-      endYear === endDate.getFullYear()
+      bookedStartYear === startDate.split("/")[2] ||
+      bookedEndYear === endDate.split("/")[2]
     ) {
       // if desired startDate falls within an already booked timeframe
       if (
-        startDate.getMonth() >= startMonth &&
-        startDate.getDate() >= startDay &&
-        startDate.getMonth() <= endMonth &&
-        startDate.getDate() <= endDay
+        startDate.split("/")[0] >= bookedStartMonth &&
+        startDate.split("/")[1] >= bookedStartDay &&
+        startDate.split("/")[0] <= bookedEndMonth &&
+        startDate.split("/")[1] <= bookedEndDay
       ) {
         err.errors.startDate = "Start date conflicts with an existing booking";
         errTriggered = true;
       }
       // if desired endDate falls within an already booked timeFrame
       if (
-        endDate.getMonth() >= startMonth &&
-        endDate.getDate() >= startDay &&
-        endDate.getMonth() <= endMonth &&
-        endDate.getDate() <= endDay
+        endDate.split("/")[0] >= bookedStartMonth &&
+        endDate.split("/")[1] >= bookedStartDay &&
+        endDate.split("/")[0] <= bookedEndMonth &&
+        endDate.split("/")[1] <= bookedEndDay
       ) {
         err.errors.endDate = "End date conflicts with an existing booking";
         errTriggered = true;
