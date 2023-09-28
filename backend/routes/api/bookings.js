@@ -41,12 +41,12 @@ router.get("/current", requireAuth, async (req, res) => {
     const endDate = booking.endDate;
 
     let year = startDate.getFullYear();
-    let month = startDate.getMonth();
+    let month = startDate.getMonth() + 1;
     let day = startDate.getDate();
     booking.startDate = `${year}-${month}-${day}`;
 
     year = endDate.getFullYear();
-    month = endDate.getMonth();
+    month = endDate.getMonth() + 1;
     day = endDate.getDate();
     booking.endDate = `${year}-${month}-${day}`;
 
