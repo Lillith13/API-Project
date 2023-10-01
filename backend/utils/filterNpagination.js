@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 
-export default async function filterNpagi(req, _res, next) {
+async function filterNpagi(req, _res, next) {
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
     req.query;
 
@@ -29,3 +29,5 @@ export default async function filterNpagi(req, _res, next) {
 
   next();
 }
+
+module.exports = { filterNpagi };
