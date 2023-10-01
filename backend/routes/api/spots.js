@@ -7,7 +7,10 @@ const { requireAuth } = require("../../utils/auth.js");
 const { spotExists } = require("../../utils/recordExists.js");
 const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
 const { spotBelongsToUser } = require("../../utils/belongsToUser.js");
-const { queryValidation } = require("../../utils/queryValidation.js");
+const {
+  queryValidation,
+  filterNpagi,
+} = require("../../utils/queryValidation.js");
 const { postRevErrChecks } = require("../../utils/reviewErrorCheckers.js");
 const {
   bookingConflicts,
@@ -24,32 +27,9 @@ const {
 } = require("../../db/models");
 
 // get all spots
-router.get("/", queryValidation, async (req, res) => {
-  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
-    req.query;
-
-  if (!page || isNaN(page) || page >= 11) page = 1;
-  if (!size || isNaN(size) || size >= 21) size = 20;
-
-  const pagination = {
-    limit: size,
-    offset: (page - 1) * size,
-  };
-
-  const where = {};
-
-  if (minLat && maxLat) where.lat = { [Op.between]: [minLat, maxLat] };
-  else if (minLat && !maxLat) where.lat = { [Op.gte]: minLat };
-  else if (maxLat && !minLat) where.lat = { [Op.lte]: maxLat };
-
-  if (minLng && maxLng) where.lng = { [Op.between]: [minLng, maxLng] };
-  else if (minLng && !maxLng) where.lng = { [Op.gte]: minLng };
-  else if (maxLng && !minLng) where.lng = { [Op.lte]: maxLng };
-
-  if (minPrice && maxPrice)
-    where.price = { [Op.between]: [minPrice, maxPrice] };
-  else if (minPrice && !maxPrice) where.price = { [Op.gte]: minPrice };
-  else if (maxPrice && !minPrice) where.price = { [Op.lte]: maxPrice };
+router.get("/", [queryValidation, filterNpagi], async (req, res) => {
+  const where = req.where;
+  const pagination = req.pagination;
 
   const Spots = await Spot.findAll({
     where,
@@ -86,9 +66,11 @@ router.get("/", queryValidation, async (req, res) => {
       }
     }
     results.Spots.push(spotses);
-    results.page = Number(page);
-    results.size = Number(size);
   }
+
+  results.page = Number(req.pagination.offset / 2 + 1);
+  results.size = Number(req.pagination.limit);
+
   return res.json(results);
 });
 
@@ -112,12 +94,13 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
     group: "Review.spotId",
   });
-  if (userSpots.id === null) {
-    // * If user doesn't have any spots, return message --- will only work/catch if there is only one entry in the array returned and it's id is equal to null
+
+  if (userSpots.id === null || userSpots.length === 0) {
     return res.json({
       message: "You currently do not own any spots",
     });
   }
+
   const results = { Spots: [] };
   for (let spot of userSpots) {
     let spotses = spot.toJSON();
@@ -134,6 +117,7 @@ router.get("/current", requireAuth, async (req, res) => {
     }
     results.Spots.push(spotses);
   }
+
   return res.json(results);
 });
 
@@ -327,7 +311,6 @@ router.post(
   }
 );
 
-// ! GET ALL bookings for spotId --> owned vs not owned spots return different data
 router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   const ownedBookings = await Booking.findAll({
     where: {
@@ -351,7 +334,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
       exclude: ["username"],
     },
   });
-  // --> different responses based on if you own the spot or not
+  // --> different responses based on if user owns the spot or not
   const results = { Bookings: [] };
   // Owned by currently signed in user:
   for (let ownedBooking of ownedBookings) {
