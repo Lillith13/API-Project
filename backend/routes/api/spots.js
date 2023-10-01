@@ -7,10 +7,8 @@ const { requireAuth } = require("../../utils/auth.js");
 const { spotExists } = require("../../utils/recordExists.js");
 const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
 const { spotBelongsToUser } = require("../../utils/belongsToUser.js");
-const {
-  queryValidation,
-  filterNpagi,
-} = require("../../utils/queryValidation.js");
+const { queryValidation } = require("../../utils/queryValidation.js");
+const { filterNpagi } = require("../../utils/filterNpagination.js");
 const { postRevErrChecks } = require("../../utils/reviewErrorCheckers.js");
 const {
   bookingConflicts,
