@@ -62,7 +62,7 @@ router.delete("/", (_req, res) => {
 
 // restore user session
 // --> Add auth check (403: forbidden)
-router.get("/", (req, res) => {
+router.get("/", restoreUser, (req, res) => {
   const { user } = req;
   if (user) {
     const safeUser = {

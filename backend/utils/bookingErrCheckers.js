@@ -1,7 +1,16 @@
 const { Booking } = require("../db/models");
 const { Op } = require("sequelize");
+
 async function bookingConflicts(req, _res, next) {
   const { startDate, endDate } = req.body;
+
+  let spotId
+  if(req.params.spotId) spotId = req.params.spotId
+  else {
+    const booking = await Booking.findByPk(req.params.bookingId)
+    spotId = booking.spotId
+  }
+
 
   let err = new Error("Booking Conflict");
   err.errors = {};
@@ -9,7 +18,7 @@ async function bookingConflicts(req, _res, next) {
 
   const bookingSD = await Booking.findOne({
     where: {
-      spotId: req.params.spotId,
+      spotId,
       [Op.or]: [
         {
           startDate: {
@@ -22,7 +31,7 @@ async function bookingConflicts(req, _res, next) {
   });
   const bookingED = await Booking.findOne({
     where: {
-      spotId: req.params.spotId,
+      spotId,
       [Op.or]: [
         {
           endDate: {
