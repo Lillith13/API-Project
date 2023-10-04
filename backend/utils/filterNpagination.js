@@ -1,4 +1,5 @@
 const { Op } = require("sequelize");
+const {Spot} = require("../db/models");
 
 async function filterNpagi(req, _res, next) {
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
@@ -8,11 +9,6 @@ async function filterNpagi(req, _res, next) {
 
   if (!page || isNaN(page) || page >= 11) page = 1;
   if (!size || isNaN(size) || size >= 21) size = 20;
-
-  req.pagination = {
-    limit: size,
-    offset: (page - 1) * size,
-  };
 
   if (minLat && maxLat) req.where.lat = { [Op.between]: [minLat, maxLat] };
   else if (minLat && !maxLat) req.where.lat = { [Op.gte]: minLat };
@@ -26,6 +22,16 @@ async function filterNpagi(req, _res, next) {
     req.where.price = { [Op.between]: [minPrice, maxPrice] };
   else if (minPrice && !maxPrice) req.where.price = { [Op.gte]: minPrice };
   else if (maxPrice && !minPrice) req.where.price = { [Op.lte]: maxPrice };
+
+  const spotCount = await Spot.count({
+    where
+  })
+  if(size > spotCount) size = spotCount
+
+  req.pagination = {
+    limit: size,
+    offset: (page - 1) * size,
+  };
 
   next();
 }
