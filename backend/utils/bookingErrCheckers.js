@@ -78,6 +78,8 @@ async function bodyValidation(req, _res, next) {
     Day: Number(endDate.split("/")[1]),
   };
 
+  console.log([start, end])
+
   if (
     start.Year > end.Year ||
     (start.Year <= end.Year && start.Month > end.Month) ||
