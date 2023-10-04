@@ -41,8 +41,20 @@ module.exports = (sequelize, DataTypes) => {
           model: "Users",
         },
       },
-      review: DataTypes.STRING,
-      stars: DataTypes.INTEGER,
+      review: {
+        type: DataTypes.STRING,
+        validate: {
+          len: [0, 50]
+        }
+      },
+      stars: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          min: 0
+        }
+      },
     },
     {
       defaultScope: {
