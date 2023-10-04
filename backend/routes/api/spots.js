@@ -52,7 +52,7 @@ router.get("/", [queryValidation, filterNpagi], async (req, res) => {
   for (let spot of Spots) {
     let spotses = spot.toJSON();
     const price = spotses.price
-    spotses.price = Number(price.toFixed(2));
+    spotses.price = Number(price).toFixed(2);
     for (let review of Reviews) {
       if (review["spotId"] === spotses.id) {
         review = review.toJSON();
@@ -104,7 +104,7 @@ router.get("/current", requireAuth, async (req, res) => {
   for (let spot of userSpots) {
     let spotses = spot.toJSON();
     const price = spotses.price
-    spotses.price = Number(price.toFixed(2));
+    spotses.price = Number(price).toFixed(2);
     for (let review of userSpotsReviews) {
       if (review["spotId"] === spotses.id) {
         review = review.toJSON();
