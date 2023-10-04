@@ -318,7 +318,20 @@ router.post(
 
 router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
-  const ownedBookings = await Booking.findAll({
+  const where = { spotId: req.params.spotId }
+  const include = []
+  const attributes = []
+  if(spot.ownerId === req.user.id) {
+    const fullView = {
+      model: "Users",
+      attributes: ["id", "firstName", "lastName"]
+    }
+    include.push(fullView)
+  } else {
+    const minView = ["spotId", "startDate", "endDate"]
+    minView.forEach(view => attributes.push(view))
+  }
+  /* const ownedBookings = await Booking.findAll({
     where: {
       userId: req.user.id,
       spotId: req.params.spotId,
@@ -339,11 +352,18 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     attributes: {
       exclude: ["username"],
     },
-  });
+  }); */
   // --> different responses based on if user owns the spot or not
-  const results = { Bookings: [] };
-  // Owned by currently signed in user:
-  for (let ownedBooking of ownedBookings) {
+  const results = {
+    /* Bookings: [] */
+  };
+  results.Bookings = await Booking.findAll({
+    where,
+    include,
+    attributes
+  });
+  // booking owned by currently signed in user:
+  /* for (let ownedBooking of ownedBookings) {
     ownedBooking = ownedBooking.toJSON();
 
     const startDate = ownedBooking.startDate;
@@ -359,11 +379,11 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     day = endDate.getDate();
     ownedBooking.endDate = `${year}-${month}-${day}`;
 
-    ownedBooking.User = user;
+    ownedBooking.BookedBy = user;
 
     results.Bookings.push(ownedBooking);
   }
-  // Not owned by signed in user:
+  // booking Not owned by signed in user:
   for (let otherBooking of otherBookings) {
     otherBooking = otherBooking.toJSON();
 
@@ -381,10 +401,13 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     otherBooking.endDate = `${year}-${month}-${day}`;
 
     results.Bookings.push(otherBooking);
-  }
-  if (spot.ownerId === req.user.id) {
+  } */
+
+  // spot owned by current user
+  /* if (spot.ownerId === req.user.id) {
     const bookings = results.Bookings;
     for (let booking of bookings) {
+      booking = booking.toJSON();
       const rentingUser = await User.scope("defaultScope").findByPk(
         booking.userId,
         {
@@ -393,7 +416,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
       );
       booking.User = rentingUser;
     }
-  }
+  } */
 
   return res.json(results);
 });
