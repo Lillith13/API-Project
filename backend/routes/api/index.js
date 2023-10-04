@@ -22,38 +22,36 @@ const {
   spotBelongsToUser,
   reviewBelongsToUser,
 } = require("../../utils/belongsToUser");
+const {
+  spotImageExists,
+  revImageExists,
+} = require("../../utils/recordExists.js");
 
 // DELETE spot image
 router.delete(
   "/spot-images/:imageId",
-  [requireAuth, spotBelongsToUser],
+  [requireAuth, spotImageExists, spotBelongsToUser],
   async (req, res) => {
     const spotImg = await SpotImage.findByPk(req.params.imageId);
-    try {
-      await spotImg.destroy();
-      return res.json({
-        message: "Successfully deleted",
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    
+    await spotImg.destroy();
+    return res.json({
+      message: "Successfully deleted",
+    });
   }
 );
 
 // DELETE review image
 router.delete(
   "/review-images/:imageId",
-  [requireAuth, reviewBelongsToUser],
+  [requireAuth, revImageExists, reviewBelongsToUser],
   async (req, res) => {
     const revImg = await ReviewImage.findByPk(req.params.imageId);
-    try {
-      await revImg.destroy();
-      return res.json({
-        message: "Successfully deleted",
-      });
-    } catch (e) {
-      console.log(e);
-    }
+
+    await revImg.destroy();
+    return res.json({
+      message: "Successfully deleted",
+    });
   }
 );
 

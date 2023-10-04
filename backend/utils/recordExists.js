@@ -1,4 +1,30 @@
-const { Spot, Review, Booking } = require("../db/models");
+const {
+  Spot,
+  Review,
+  Booking,
+  SpotImage,
+  ReviewImage,
+} = require("../db/models");
+
+async function spotImageExists(req, _res, next) {
+  const spotImage = await SpotImage.findByPk(req.params.imageId);
+  if (!spotImage) {
+    const err = new Error();
+    err.status = 404;
+    err.message = "Spot Image couldn't be found";
+    return next(err);
+  }
+}
+
+async function revImageExists(req, _res, next) {
+  const revImage = await ReviewImage.findByPk(req.params.imageId);
+  if (!revImage) {
+    const err = new Error();
+    err.status = 404;
+    err.message = "Review Image couldn't be found";
+    return next(err);
+  }
+}
 
 async function spotExists(req, _res, next) {
   let spot = await Spot.findByPk(req.params.spotId);
