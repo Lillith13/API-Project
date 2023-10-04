@@ -41,11 +41,11 @@ async function bookingConflicts(req, _res, next) {
       },
     },
   });
-  if (bookingSD) {
+  if (bookingSD && bookingSD.id != req.params.bookingId) {
     err.errors.startDate = "Start date conflicts with an existing booking";
     errTriggered = true;
   }
-  if (bookingED) {
+  if (bookingED && bookingED.id != req.params.bookingId) {
     err.errors.endDate = "End date conflicts with an existing booking";
     errTriggered = true;
   }

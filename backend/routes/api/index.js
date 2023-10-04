@@ -95,14 +95,15 @@ router.get("/", async (req, res) => {
         "edit booking written by currently signed in user specified by bookingId",
     },
     DELETE: {
+      "/api/session": "user log-out route",
       "/api/spots/:spotId":
         "delete spot owned by currently signed in user specified by spotId",
       "/api/reviews/:reviewId":
         "delete review posted by currently signed in user specified by reviewId",
       "/api/bookings/:bookingId":
         "delete booking created by currently signed in user specified by bookingId",
-      "/api/spot-images/:spotId/:imageId": "delete spot image by imgId",
-      "/api/review-images/:reviewId/:imgId": "delete review image by imgId",
+      "/api/spot-images/:imageId": "delete spot image by imgId",
+      "/api/review-images/:imageId": "delete review image by imgId",
     },
   };
   // * add list of available tables (if can, when able)
