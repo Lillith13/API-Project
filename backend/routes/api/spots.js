@@ -51,7 +51,7 @@ router.get("/", [queryValidation, filterNpagi], async (req, res) => {
   const results = { Spots: [] };
   for (let spot of Spots) {
     let spotses = spot.toJSON();
-    const price = spotses.price
+    const price = spotses.price;
     spotses.price = Number(price).toFixed(2);
     for (let review of Reviews) {
       if (review["spotId"] === spotses.id) {
@@ -103,7 +103,7 @@ router.get("/current", requireAuth, async (req, res) => {
   const results = { Spots: [] };
   for (let spot of userSpots) {
     let spotses = spot.toJSON();
-    const price = spotses.price
+    const price = spotses.price;
     spotses.price = Number(price).toFixed(2);
     for (let review of userSpotsReviews) {
       if (review["spotId"] === spotses.id) {
@@ -151,6 +151,8 @@ router.get("/:spotId", spotExists, async (req, res) => {
   });
 
   const result = spot.toJSON();
+  const price = result.price;
+  result.price = Number(price).toFixed(2);
   result.numReviews = reviewsForLength.length;
   result.avgStarRating = spotReviews[0].dataValues.avgRating;
   result.SpotImages = spotImages;
@@ -172,7 +174,7 @@ router.post("/", [requireAuth, spotCreateErrorChecks], async (req, res) => {
     lng,
     name,
     description,
-    price: Number(price.toFixed(2)),
+    price: Number(price).toFixed(2),
   });
   return res.status(201).json(newSpot);
 });
