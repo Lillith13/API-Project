@@ -60,7 +60,8 @@ async function bookingConflicts(req, _res, next) {
 
 async function bodyValidation(req, _res, next) {
   const { startDate, endDate } = req.body;
-  console.log([startDate, endDate])
+  console.log([startDate, endDate]);
+  /* [ '12/30/2023', '01/10/2024' ] */
 
   /* {
     "startDate": "12/30/2023",
@@ -78,12 +79,18 @@ async function bodyValidation(req, _res, next) {
     Day: Number(endDate.split("/")[1]),
   };
 
-  console.log([start, end])
+  console.log([start, end]);
+  /* [
+      { Year: 2023, Month: 12, Day: 30 },
+      { Year: 2024, Month: 1, Day: 10 }
+ ] */
 
   if (
     start.Year > end.Year ||
-    (start.Year <= end.Year && start.Month > end.Month) ||
-    (start.Year <= end.Year && start.Month <= end.Month && start.Day > end.Day)
+    (start.Year === end.Year && start.Month > end.Month) ||
+    (start.Year === end.Year &&
+      start.Month === end.Month &&
+      start.Day > end.Day)
   ) {
     let err = new Error("Booking Conflict");
     err.errors = {};
