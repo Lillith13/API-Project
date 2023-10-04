@@ -34,7 +34,7 @@ router.delete(
   async (req, res) => {
     const spotImg = await SpotImage.findByPk(req.params.imageId);
 
-    /* await  */ spotImg.destroy();
+    await spotImg.destroy();
     return res.json({
       message: "Successfully deleted",
     });
@@ -48,7 +48,7 @@ router.delete(
   async (req, res) => {
     const revImg = await ReviewImage.findByPk(req.params.imageId);
 
-    /* await  */ revImg.destroy();
+    await revImg.destroy();
     return res.json({
       message: "Successfully deleted",
     });
