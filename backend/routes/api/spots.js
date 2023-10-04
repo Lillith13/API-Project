@@ -194,7 +194,12 @@ router.post(
       url,
       preview,
     });
-    return res.json(newSpotImg);
+    const results = {
+      id: newSpotImg.id,
+      url,
+      preview,
+    };
+    return res.json(results);
   }
 );
 
