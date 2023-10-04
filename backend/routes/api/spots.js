@@ -331,28 +331,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     const minView = ["spotId", "startDate", "endDate"];
     minView.forEach((view) => attributes.push(view));
   }
-  /* const ownedBookings = await Booking.findAll({
-    where: {
-      userId: req.user.id,
-      spotId: req.params.spotId,
-    },
-  });
-  const otherBookings = await Booking.findAll({
-    where: {
-      userId: {
-        [Op.not]: req.user.id,
-      },
-      spotId: req.params.spotId,
-    },
-    attributes: {
-      exclude: ["id", "userId", "createdAt", "updatedAt"],
-    },
-  });
-  const user = await User.scope("defaultScope").findByPk(req.user.id, {
-    attributes: {
-      exclude: ["username"],
-    },
-  }); */
+  
   // --> different responses based on if user owns the spot or not
   const results = {};
   const query = { where };
@@ -360,61 +339,20 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   if (attributes && attributes.length > 0) query.attributes = attributes;
 
   results.Bookings = await Booking.findAll(query);
-  // booking owned by currently signed in user:
-  /* for (let ownedBooking of ownedBookings) {
-    ownedBooking = ownedBooking.toJSON();
+  for(let booking of results.Bookings) {
+    booking = booking.toJSON()
+    const { startDate, endDate } = booking
 
-    const startDate = ownedBooking.startDate;
-    const endDate = ownedBooking.endDate;
-
-    let year = startDate.getFullYear();
+    let year = startDate.getFullYear()
     let month = startDate.getMonth() + 1;
     let day = startDate.getDate();
-    ownedBooking.startDate = `${year}-${month}-${day}`;
+    booking.startDate = `${year}-${month}-${day}`;
 
     year = endDate.getFullYear();
     month = endDate.getMonth() + 1;
     day = endDate.getDate();
-    ownedBooking.endDate = `${year}-${month}-${day}`;
-
-    ownedBooking.BookedBy = user;
-
-    results.Bookings.push(ownedBooking);
+    booking.endDate = `${year}-${month}-${day}`;
   }
-  // booking Not owned by signed in user:
-  for (let otherBooking of otherBookings) {
-    otherBooking = otherBooking.toJSON();
-
-    const startDate = otherBooking.startDate;
-    const endDate = otherBooking.endDate;
-
-    let year = startDate.getFullYear();
-    let month = startDate.getMonth() + 1;
-    let day = startDate.getDate();
-    otherBooking.startDate = `${year}-${month}-${day}`;
-
-    year = endDate.getFullYear();
-    month = endDate.getMonth() + 1;
-    day = endDate.getDate();
-    otherBooking.endDate = `${year}-${month}-${day}`;
-
-    results.Bookings.push(otherBooking);
-  } */
-
-  // spot owned by current user
-  /* if (spot.ownerId === req.user.id) {
-    const bookings = results.Bookings;
-    for (let booking of bookings) {
-      booking = booking.toJSON();
-      const rentingUser = await User.scope("defaultScope").findByPk(
-        booking.userId,
-        {
-          attributes: ["id", "firstName", "lastName"],
-        }
-      );
-      booking.User = rentingUser;
-    }
-  } */
 
   return res.json(results);
 });
