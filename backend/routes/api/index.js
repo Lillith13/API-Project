@@ -34,10 +34,14 @@ router.delete(
   async (req, res) => {
     const spotImg = await SpotImage.findByPk(req.params.imageId);
 
-    await spotImg.destroy();
-    return res.json({
-      message: "Successfully deleted",
-    });
+    try {
+      await spotImg.destroy();
+      return res.json({
+        message: "Successfully deleted",
+      });
+    } catch(e) {
+      console.log(e)
+    }
   }
 );
 
