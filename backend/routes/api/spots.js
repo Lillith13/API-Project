@@ -317,6 +317,7 @@ router.post(
 );
 
 router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
   const ownedBookings = await Booking.findAll({
     where: {
       userId: req.user.id,
@@ -380,6 +381,18 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     otherBooking.endDate = `${year}-${month}-${day}`;
 
     results.Bookings.push(otherBooking);
+  }
+  if (spot.ownerId === req.user.id) {
+    const bookings = results.Bookings;
+    for (let booking of bookings) {
+      const rentingUser = await User.scope("defaultScope").findByPk(
+        booking.userId,
+        {
+          attributes: ["id", "firstName", "lastName"],
+        }
+      );
+      booking.User = rentingUser;
+    }
   }
 
   return res.json(results);
