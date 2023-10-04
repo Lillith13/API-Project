@@ -357,7 +357,6 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   }
 
   return res.json(results);
-  // return res.json(Bookings)
 });
 
 // POST Booking for spotId
