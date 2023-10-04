@@ -168,7 +168,7 @@ router.post("/", [requireAuth, spotCreateErrorChecks], async (req, res) => {
     lng,
     name,
     description,
-    price,
+    price: Number(price.toFixed(2)),
   });
   return res.status(201).json(newSpot);
 });
