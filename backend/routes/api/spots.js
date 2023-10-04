@@ -154,7 +154,7 @@ router.get("/:spotId", spotExists, async (req, res) => {
   const price = result.price;
   result.price = Number(price).toFixed(2);
   result.numReviews = reviewsForLength.length;
-  result.avgStarRating = spotReviews[0].dataValues.avgRating;
+  result.avgStarRating = spotReviews[0].dataValues.avgRating.toFixed(2);
   result.SpotImages = spotImages;
   result.Owner = ownerInfo;
   return res.json(result);
