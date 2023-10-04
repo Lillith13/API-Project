@@ -5,7 +5,10 @@ const Op = Sequelize.Op;
 
 const { requireAuth } = require("../../utils/auth.js");
 const { spotExists } = require("../../utils/recordExists.js");
-const spotCreateErrorChecks = require("../../utils/spotErrorChecks");
+const {
+  spotCreateErrorChecks,
+  /* spotEditErrorChecks, */
+} = require("../../utils/spotErrorChecks");
 const { spotBelongsToUser } = require("../../utils/belongsToUser.js");
 const { queryValidation } = require("../../utils/queryValidation.js");
 const { filterNpagi } = require("../../utils/filterNpagination.js");
@@ -212,9 +215,13 @@ router.post(
 // edit a spot
 router.put(
   "/:spotId",
-  [requireAuth, spotExists, spotBelongsToUser, spotCreateErrorChecks],
+  [
+    requireAuth,
+    spotExists,
+    spotBelongsToUser,
+    spotCreateErrorChecks /* spotEditErrorChecks */,
+  ],
   async (req, res, next) => {
-    // ! spotCreateErrorChecks requires for ALL attributes to be edited -> create new check for editing a spot to allow for individual attribute editing
     const {
       address,
       city,
@@ -243,6 +250,7 @@ router.put(
     if (name) spot.name = name;
     if (description) spot.description = description;
     if (price) spot.price = price;
+
     await spot.save();
     return res.json(spot);
   }

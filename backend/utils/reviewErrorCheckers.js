@@ -34,16 +34,12 @@ async function postRevImgErrChecks(req, _res, next) {
   const err = new Error("Bad Request");
   err.errors = {};
 
-  // const revImgs = await ReviewImage.findAll({
-  //   where: {
-  //     reviewId: req.params.reviewId,
-  //   },
-  // });
   const revImgCount = await ReviewImage.count({
     where: {
-      reviewId: req.params.reviewId
-    }
-  })
+      reviewId: req.params.reviewId,
+    },
+  });
+
   if (revImgCount >= 10) {
     err.status = 403;
     err.message = "Maximum number of images for this resource was reached";
@@ -66,6 +62,7 @@ async function reviewEditErrChecks(req, _res, next) {
     err.errors.stars = "Stars must be an integer from 1 to 5";
     errTriggered = true;
   }
+
   if (errTriggered) return next(err);
   next();
 }
