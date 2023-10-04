@@ -102,8 +102,8 @@ router.put(
     const { review, stars } = req.body;
     const reviewToEdit = await Review.findByPk(req.params.reviewId);
     if (review) reviewToEdit.review = review;
-    if (stars) reviewToEdit.stars = stars.toFixed(1);
-    reviewToEdit.save();
+    if (stars) reviewToEdit.stars = stars;
+    await reviewToEdit.save();
     return res.json(reviewToEdit);
   }
 );
