@@ -18,27 +18,27 @@ async function bookingConflicts(req, _res, next) {
   const bookingSD = await Booking.findOne({
     where: {
       spotId,
-      [Op.or]: [
-        {
-          startDate: {
-            [Op.between]: [startDate, endDate],
+      startDate: {
+        [Op.or]: [
+          {
+            [Op.between]: [Date(startDate), Date(endDate)],
           },
-        },
-        { startDate },
-      ],
+          { startDate },
+        ],
+      },
     },
   });
   const bookingED = await Booking.findOne({
     where: {
       spotId,
-      [Op.or]: [
-        {
-          endDate: {
-            [Op.between]: [startDate, endDate],
+      endDate: {
+        [Op.or]: [
+          {
+            [Op.between]: [Date(startDate), Date(endDate)],
           },
-        },
-        { endDate },
-      ],
+          { endDate },
+        ],
+      },
     },
   });
   if (bookingSD) {
