@@ -333,7 +333,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   }
 
   // --> different responses based on if user owns the spot or not
-  const results = { Bookings: [] };
+  // const results = { Bookings: [] };
   const query = { where };
   if (include && include.length > 0) query.include = include;
   if (attributes && attributes.length > 0) query.attributes = attributes;
