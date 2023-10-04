@@ -111,6 +111,6 @@ const spotEditErrorChecks = async (req, res, next) => {
 
   if (errTriggored) next(err);
   next();
-}
+};
 
-module.exports = { spotCreateErrorChecks, /* spotEditErrorChecks */ };
+module.exports = { spotCreateErrorChecks /* spotEditErrorChecks */ };
