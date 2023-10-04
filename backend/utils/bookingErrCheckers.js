@@ -60,6 +60,7 @@ async function bookingConflicts(req, _res, next) {
 
 async function bodyValidation(req, _res, next) {
   const { startDate, endDate } = req.body;
+  console.log([startDate, endDate])
 
   /* {
     "startDate": "12/30/2023",
