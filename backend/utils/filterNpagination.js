@@ -23,6 +23,11 @@ async function filterNpagi(req, _res, next) {
   else if (minPrice && !maxPrice) req.where.price = { [Op.gte]: minPrice };
   else if (maxPrice && !minPrice) req.where.price = { [Op.lte]: maxPrice };
 
+  const spotCount = await Spot.count({
+    where: req.where,
+  });
+  if (size >= spotCount) size = spotCount;
+
   req.pagination = {
     limit: size,
     offset: (page - 1) * size,
