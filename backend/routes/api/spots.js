@@ -339,11 +339,11 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   if (attributes && attributes.length > 0) query.attributes = attributes;
 
   const bookings = await Booking.findAll(query);
-  for(let booking of bookings) {
-    booking = booking.toJSON()
-    const { startDate, endDate } = booking
+  for (let booking of bookings) {
+    booking = booking.toJSON();
+    const { startDate, endDate } = booking;
 
-    let year = startDate.getFullYear()
+    let year = startDate.getFullYear();
     let month = startDate.getMonth() + 1;
     let day = startDate.getDate();
     booking.startDate = `${year}-${month}-${day}`;
@@ -353,7 +353,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     day = endDate.getDate();
     booking.endDate = `${year}-${month}-${day}`;
 
-    results.Bookings.push(booking)
+    results.Bookings.push(booking);
   }
 
   return res.json(results);
