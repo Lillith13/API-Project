@@ -26,8 +26,7 @@ const {
 
 // get all spots
 router.get("/", [queryValidation, filterNpagi], async (req, res) => {
-  const where = req.where;
-  const pagination = req.pagination;
+  const { where, pagination } = req;
 
   const Spots = await Spot.findAll({
     where,
