@@ -63,4 +63,6 @@ module.exports = {
   spotExists,
   reviewExists,
   bookingExists,
+  spotImageExists,
+  revImageExists,
 };
