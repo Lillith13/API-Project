@@ -21,7 +21,7 @@ async function bookingConflicts(req, _res, next) {
       startDate: {
         [Op.or]: [
           {
-            [Op.between]: [Date(startDate), Date(endDate)],
+            [Op.between]: [startDate, endDate],
           },
           { startDate },
         ],
@@ -34,7 +34,7 @@ async function bookingConflicts(req, _res, next) {
       endDate: {
         [Op.or]: [
           {
-            [Op.between]: [Date(startDate), Date(endDate)],
+            [Op.between]: [startDate, endDate],
           },
           { endDate },
         ],
