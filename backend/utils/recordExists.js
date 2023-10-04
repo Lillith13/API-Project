@@ -14,6 +14,7 @@ async function spotImageExists(req, _res, next) {
     err.message = "Spot Image couldn't be found";
     return next(err);
   }
+  next()
 }
 
 async function revImageExists(req, _res, next) {
@@ -24,6 +25,7 @@ async function revImageExists(req, _res, next) {
     err.message = "Review Image couldn't be found";
     return next(err);
   }
+  next()
 }
 
 async function spotExists(req, _res, next) {
