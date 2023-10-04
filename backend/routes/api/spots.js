@@ -333,13 +333,13 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   }
 
   // --> different responses based on if user owns the spot or not
-  // const results = { Bookings: [] };
+  const results = { Bookings: [] };
   const query = { where };
   if (include && include.length > 0) query.include = include;
   if (attributes && attributes.length > 0) query.attributes = attributes;
 
-  const Bookings = await Booking.findAll(query);
-  /* for(let booking of bookings) {
+  const bookings = await Booking.findAll(query);
+  for(let booking of bookings) {
     booking = booking.toJSON()
     const { startDate, endDate } = booking
 
@@ -356,8 +356,8 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     results.Bookings.push(booking)
   }
 
-  return res.json(results); */
-  return res.json(Bookings)
+  return res.json(results);
+  // return res.json(Bookings)
 });
 
 // POST Booking for spotId
