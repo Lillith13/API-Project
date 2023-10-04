@@ -61,15 +61,20 @@ async function bookingConflicts(req, _res, next) {
 async function bodyValidation(req, _res, next) {
   const { startDate, endDate } = req.body;
 
+  /* {
+    "startDate": "12/30/2023",
+    "endDate": "01/10/2024"
+} */
+
   const start = {
-    Year: startDate.split("/")[2],
-    Month: startDate.split("/")[0],
-    Day: startDate.split("/")[1],
+    Year: Number(startDate.split("/")[2]),
+    Month: Number(startDate.split("/")[0]),
+    Day: Number(startDate.split("/")[1]),
   };
   const end = {
-    Year: endDate.split("/")[2],
-    Month: endDate.split("/")[0],
-    Day: endDate.split("/")[1],
+    Year: Number(endDate.split("/")[2]),
+    Month: Number(endDate.split("/")[0]),
+    Day: Number(endDate.split("/")[1]),
   };
 
   if (
