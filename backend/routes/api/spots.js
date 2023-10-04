@@ -323,7 +323,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   const attributes = [];
   if (spot.ownerId === req.user.id) {
     const fullView = {
-      model: "Users",
+      model: User,
       attributes: ["id", "firstName", "lastName"],
     };
     include.push(fullView);
