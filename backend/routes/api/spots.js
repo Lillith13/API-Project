@@ -66,8 +66,8 @@ router.get("/", [queryValidation, filterNpagi], async (req, res) => {
     results.Spots.push(spotses);
   }
 
-  results.page = req.query.page || 1;
-  results.size = req.query.size || 20;
+  results.page = Number(req.query.page) || 1;
+  results.size = Number(req.query.size) || 20;
 
   return res.json(results);
 });
