@@ -44,21 +44,21 @@ module.exports = (sequelize, DataTypes) => {
       review: {
         type: DataTypes.STRING,
         validate: {
-          len: [0, 50]
-        }
+          len: [0, 50],
+        },
       },
       stars: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DECIMAL(1, 1),
         allowNull: false,
         defaultValue: 0,
         validate: {
-          min: 0
-        }
+          min: 0,
+        },
       },
     },
     {
       defaultScope: {
-        exclude: ["createdAt", "updatedAt"]
+        exclude: ["createdAt", "updatedAt"],
       },
       sequelize,
       modelName: "Review",

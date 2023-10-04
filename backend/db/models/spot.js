@@ -86,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       price: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DECIMAL(4, 2),
         allowNull: false,
         validate: {
           min: 0.01,
