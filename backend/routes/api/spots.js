@@ -318,18 +318,18 @@ router.post(
 
 router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
-  const where = { spotId: req.params.spotId }
-  const include = []
-  const attributes = []
-  if(spot.ownerId === req.user.id) {
+  const where = { spotId: req.params.spotId };
+  const include = [];
+  const attributes = [];
+  if (spot.ownerId === req.user.id) {
     const fullView = {
       model: "Users",
-      attributes: ["id", "firstName", "lastName"]
-    }
-    include.push(fullView)
+      attributes: ["id", "firstName", "lastName"],
+    };
+    include.push(fullView);
   } else {
-    const minView = ["spotId", "startDate", "endDate"]
-    minView.forEach(view => attributes.push(view))
+    const minView = ["spotId", "startDate", "endDate"];
+    minView.forEach((view) => attributes.push(view));
   }
   /* const ownedBookings = await Booking.findAll({
     where: {
@@ -354,14 +354,12 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     },
   }); */
   // --> different responses based on if user owns the spot or not
-  const results = {
-    /* Bookings: [] */
-  };
-  results.Bookings = await Booking.findAll({
-    where,
-    include,
-    attributes
-  });
+  const results = {};
+  const query = { where };
+  if (include && include.length > 0) query.include = include;
+  if (attributes && attributes.length > 0) query.attributes = attributes;
+
+  results.Bookings = await Booking.findAll(query);
   // booking owned by currently signed in user:
   /* for (let ownedBooking of ownedBookings) {
     ownedBooking = ownedBooking.toJSON();
