@@ -333,7 +333,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
   }
 
   // --> different responses based on if user owns the spot or not
-  const results = {};
+  const results = { Bookings: [] };
   const query = { where };
   if (include && include.length > 0) query.include = include;
   if (attributes && attributes.length > 0) query.attributes = attributes;
@@ -352,7 +352,7 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     month = endDate.getMonth() + 1;
     day = endDate.getDate();
     booking.endDate = `${year}-${month}-${day}`;
-    
+
     results.Bookings.push(booking)
   }
 
