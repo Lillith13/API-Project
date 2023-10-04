@@ -331,15 +331,15 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     const minView = ["spotId", "startDate", "endDate"];
     minView.forEach((view) => attributes.push(view));
   }
-  
+
   // --> different responses based on if user owns the spot or not
   const results = {};
   const query = { where };
   if (include && include.length > 0) query.include = include;
   if (attributes && attributes.length > 0) query.attributes = attributes;
 
-  results.Bookings = await Booking.findAll(query);
-  for(let booking of results.Bookings) {
+  const bookings = await Booking.findAll(query);
+  for(let booking of bookings) {
     booking = booking.toJSON()
     const { startDate, endDate } = booking
 
@@ -352,6 +352,8 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     month = endDate.getMonth() + 1;
     day = endDate.getDate();
     booking.endDate = `${year}-${month}-${day}`;
+    
+    results.Bookings.push(booking)
   }
 
   return res.json(results);
