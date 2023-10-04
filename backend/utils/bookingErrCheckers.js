@@ -61,7 +61,16 @@ async function bookingConflicts(req, _res, next) {
 
 async function bodyValidation(req, _res, next) {
   const { startDate, endDate } = req.body;
-  if (endDate <= startDate) {
+
+  const sYear = startDate.split('/')[2]
+  const sMonth = startDate.split('/')[0]
+  const sDay = startDate.split('/')[1]
+
+  const eYear = endDate.split('/')[2]
+  const eMonth = endDate.split('/')[0]
+  const eDay = endDate.split('/')[1]
+
+  if (sYear > eYear || (sYear <= eYear && sMonth > eMonth) || (sYear <= eYear && sMonth <= eMonth && sDay > eDay)) {
     let err = new Error("Booking Conflict");
     err.errors = {};
     err.status = 400;
