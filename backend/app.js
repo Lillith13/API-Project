@@ -42,7 +42,7 @@ app.use(
 const routes = require("./routes");
 app.use(routes); //collect all routes
 
-// display available endpoints on start-up -> /
+// display available endpoints on start-up
 app.get("/", async (req, res) => {
   const availableEndPointsList = {
     GET: {
