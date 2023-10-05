@@ -17,25 +17,39 @@ const { Booking, Spot, SpotImage } = require("../../db/models");
 
 // GET ALL of currently signed in user's bookings
 router.get("/current", requireAuth, async (req, res) => {
-  const bookings = await Booking.findAll({
+  const Bookings = await Booking.findAll({
     where: {
       userId: req.user.id,
     },
+    include: {
+      model: Spot,
+      attributes: {
+        exclude: ["updatedAt", "createdAt"]
+      },
+      include: {
+        model: Image,
+        as: "previewImage",
+        where: {
+          preview: true
+        },
+        attributes: ["url"]
+      }
+    }
   });
-  const spots = await Spot.findAll({
-    attributes: {
-      exclude: ["description", "createdAt", "updatedAt"],
-    },
-  });
-  const spotImgs = await SpotImage.findAll({
-    where: {
-      preview: true,
-    },
-    attributes: ["spotId", "url"],
-  });
+  // const spots = await Spot.findAll({
+  //   attributes: {
+  //     exclude: ["description", "createdAt", "updatedAt"],
+  //   },
+  // });
+  // const spotImgs = await SpotImage.findAll({
+  //   where: {
+  //     preview: true,
+  //   },
+  //   attributes: ["spotId", "url"],
+  // });
 
-  let results = { Bookings: [] };
-  for (let booking of bookings) {
+  // let results = { Bookings: [] };
+  // for (let booking of bookings) {
     /* booking = booking.toJSON();
     const startDate = booking.startDate;
     const endDate = booking.endDate;
@@ -50,7 +64,7 @@ router.get("/current", requireAuth, async (req, res) => {
     day = endDate.getDate();
     booking.endDate = `${year}-${month}-${day}`; */
 
-    for (let spot of spots) {
+    /* for (let spot of spots) {
       if (booking.spotId === spot["id"]) {
         booking.Spot = spot.dataValues;
         break;
@@ -61,11 +75,11 @@ router.get("/current", requireAuth, async (req, res) => {
         booking.Spot.previewImage = spotImg["url"];
         break;
       }
-    }
-    results.Bookings.push(booking);
-  }
+    } */
+    // results.Bookings.push(booking);
+  // }
 
-  return res.json(results);
+  return res.json(Bookings);
 });
 
 // PUT Booking
