@@ -20,7 +20,7 @@ const spotSeed = [
     lng: -117.37646,
     name: "App Academy",
     description: "Place where web developers are created",
-    price: 123,
+    price: 50,
   },
   {
     ownerId: 2,
@@ -33,7 +33,7 @@ const spotSeed = [
     name: "Fantasy Land Park",
     description:
       "An old ass park...beware of the volleyball court, its filled with needles",
-    price: 456,
+    price: 25,
   },
   {
     ownerId: 3,
@@ -45,7 +45,7 @@ const spotSeed = [
     lng: -104.88446,
     name: "Flying W Ranch & Chuckwagon Supper",
     description: "CO tourist trap",
-    price: 789,
+    price: 89,
   },
 ];
 
