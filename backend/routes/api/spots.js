@@ -364,13 +364,19 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
 
   const Bookings = await Booking.findAll(query);
 
-  return res.json(Bookings);
+  return res.json({ Bookings });
 });
 
 // POST Booking for spotId
 router.post(
   "/:spotId/bookings",
-  [requireAuth, spotExists, bookingConflicts, bodyValidation],
+  [
+    requireAuth,
+    spotExists,
+    spotDoesntBelongToUser,
+    bookingConflicts,
+    bodyValidation,
+  ],
   async (req, res) => {
     const { startDate, endDate } = req.body;
 

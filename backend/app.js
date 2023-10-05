@@ -103,10 +103,6 @@ app.get("/", async (req, res) => {
     "Bookings",
   ];
 
-  console.log({
-    availableEndPointsList,
-    availableTables,
-  });
   res.json({
     availableEndPointsList,
     availableTables,

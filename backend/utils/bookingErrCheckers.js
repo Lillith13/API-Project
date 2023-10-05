@@ -8,7 +8,7 @@ async function bookingConflicts(req, _res, next) {
   if (req.params.spotId) {
     var spotId = req.params.spotId;
   } else {
-    var bookingId = req.params.bookingId
+    var bookingId = req.params.bookingId;
     const booking = await Booking.findByPk(bookingId);
     spotId = booking.spotId;
   }
@@ -20,27 +20,33 @@ async function bookingConflicts(req, _res, next) {
   const bookings = await Booking.findAll({
     where: {
       spotId,
-    }
-  })
+    },
+  });
 
-  if(bookings) {
-    for(let booking of bookings) {
+  if (bookings) {
+    for (let booking of bookings) {
       // if start date falls on or between existing booking dates
-      if((booking.startDate > startDate && booking.startDate < endDate) || booking.startDate === startDate ||
-      (booking.startDate < startDate && booking.endDate > startDate) ||
-      booking.endDate === startDate) {
-          err.errors.startDate = "Start date conflicts with an existing booking";
-          errTriggered = true;
+      if (
+        (booking.startDate > startDate && booking.startDate < endDate) ||
+        booking.startDate === startDate ||
+        (booking.startDate < startDate && booking.endDate > startDate) ||
+        booking.endDate === startDate
+      ) {
+        err.errors.startDate = "Start date conflicts with an existing booking";
+        errTriggered = true;
       }
       // if send date falls on or between existing booking dates
-      if(booking.startDate === endDate ||
-      (booking.startDate < endDate && booking.endDate > endDate) ||
-      booking.endDate === endDate || (booking.endDate > startDate && booking.endDate < endDate)) {
+      if (
+        booking.startDate === endDate ||
+        (booking.startDate < endDate && booking.endDate > endDate) ||
+        booking.endDate === endDate ||
+        (booking.endDate > startDate && booking.endDate < endDate)
+      ) {
         err.errors.endDate = "End date conflicts with an existing booking";
         errTriggered = true;
       }
       // if existing booking falls between desired booking dates
-      if((booking.startDate > startDate && booking.endDate < endDate)) {
+      if (booking.startDate > startDate && booking.endDate < endDate) {
         err.errors.startDate = "Start date conflicts with an existing booking";
         err.errors.endDate = "End date conflicts with an existing booking";
         errTriggered = true;
@@ -59,7 +65,7 @@ async function bookingConflicts(req, _res, next) {
 async function bodyValidation(req, _res, next) {
   const { startDate, endDate } = req.body;
 
-  if(endDate < startDate) {
+  if (endDate < startDate || endDate === startDate) {
     let err = new Error("Booking Conflict");
     err.errors = {};
     err.status = 400;
