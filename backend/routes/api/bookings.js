@@ -26,6 +26,7 @@ router.get("/current", requireAuth, async (req, res) => {
       attributes: {
         exclude: ["updatedAt", "createdAt"],
       },
+      // ! may have to change this and lazy load the spotImgs - dependent on pretest
       include: {
         model: SpotImage,
         where: {

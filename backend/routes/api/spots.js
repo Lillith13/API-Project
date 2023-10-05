@@ -311,19 +311,19 @@ router.get("/:spotId/reviews", spotExists, async (req, res) => {
 
 // POST Review -> Spot by spotId
 const spotDoesntBelongToUser = async (req, _res, next) => {
-  const userId = req.user.id
-  const {spotId} = req.params
+  const userId = req.user.id;
+  const { spotId } = req.params;
 
-  const spot = await Spot.findByPk(spotId)
-  const ownerId = spot.ownerId
+  const spot = await Spot.findByPk(spotId);
+  const ownerId = spot.ownerId;
 
-  if(ownerId == userId) {
+  if (ownerId == userId) {
     const err = new Error("Spot belongs to you");
     err.status = 403;
     return next(err);
   }
-  next()
-}
+  next();
+};
 router.post(
   "/:spotId/reviews",
   [requireAuth, spotExists, spotDoesntBelongToUser, postRevErrChecks],
@@ -340,34 +340,33 @@ router.post(
 );
 
 router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
-  const {spotId} = req.params
+  const { spotId } = req.params;
   const spot = await Spot.findByPk(spotId);
 
-  const include = [];
-  const attributes = [];
+  const query = {
+    where: {
+      spotId,
+    },
+  };
   if (spot.ownerId === req.user.id) {
-    const fullView = {
+    query.include = {
       model: User,
       attributes: ["id", "firstName", "lastName"],
     };
-    include.push(fullView);
-  } else {
-    const minView = ["spotId", "startDate", "endDate"];
-    attributes.concat(minView)
   }
+  query.attributes = ["spotId", "startDate", "endDate"];
 
-  // --> different responses based on if user owns the spot or not
-  const results = { Bookings: [] };
-  let query = { where: { spotId } }
-  if (include && include.length > 0) {
-    query.include = include
-  }
-  if (attributes && attributes.length > 0) {
-    query.attributes = attributes;
-  }
+  // // --> different responses based on if user owns the spot or not
+  // const results = { Bookings: [] };
+  // // let query = { where: { spotId } };
+  // if (include && include.length > 0) {
+  //   query.include = include;
+  // }
+  // if (attributes && attributes.length > 0) {
+  //   query.attributes = attributes;
+  // }
 
   const Bookings = await Booking.findAll(query);
-
 
   return res.json(Bookings);
 });
@@ -383,7 +382,7 @@ router.post(
       spotId: req.params.spotId,
       userId: req.user.id,
       startDate,
-      endDate
+      endDate,
     });
     return res.json(newBooking);
   }
