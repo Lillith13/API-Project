@@ -46,7 +46,7 @@ const spotCreateErrorChecks = (req, _res, next) => {
     errTriggored = true;
   }
 
-  if (name.length > 50) {
+  if (name != null && name != undefined && name.length > 50) {
     err.errors.name = "Name must be less than 50 characters";
     errTriggored = true;
   }
@@ -55,7 +55,7 @@ const spotCreateErrorChecks = (req, _res, next) => {
   next();
 };
 
-// ! for later to allow for editting and send edit infor for only 1 or 2 attributes instead of having to send data for all of them every time
+// ! for later to allow for editting and send edit info for only 1 or 2 attributes instead of having to send data for all of them every time --- Not Yet Implemented
 const spotEditErrorChecks = async (req, res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
