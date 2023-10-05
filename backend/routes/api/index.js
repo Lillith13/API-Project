@@ -56,7 +56,7 @@ router.delete(
 );
 
 // display available endpoints on start-up -> /api
-router.get("/", async (req, res) => {
+/* router.get("/", async (req, res) => {
   const availableEndPointsList = {
     GET: {
       "/api": "displays all available endpoints W/ brief description",
@@ -108,7 +108,7 @@ router.get("/", async (req, res) => {
   };
   // * add list of available tables (if can, when able)
   res.json(availableEndPointsList);
-});
+}); */
 
 router.post("/test", function (req, res) {
   res.json({
