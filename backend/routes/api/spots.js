@@ -353,18 +353,9 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
       model: User,
       attributes: ["id", "firstName", "lastName"],
     };
+  } else {
+    query.attributes = ["spotId", "startDate", "endDate"];
   }
-  query.attributes = ["spotId", "startDate", "endDate"];
-
-  // // --> different responses based on if user owns the spot or not
-  // const results = { Bookings: [] };
-  // // let query = { where: { spotId } };
-  // if (include && include.length > 0) {
-  //   query.include = include;
-  // }
-  // if (attributes && attributes.length > 0) {
-  //   query.attributes = attributes;
-  // }
 
   const Bookings = await Booking.findAll(query);
 
