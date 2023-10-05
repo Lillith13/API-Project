@@ -43,7 +43,7 @@ const routes = require("./routes");
 app.use(routes); //collect all routes
 
 // display available endpoints on start-up -> /
-router.get("/", async (req, res) => {
+app.get("/", async (req, res) => {
   const availableEndPointsList = {
     GET: {
       "/api": "displays all available endpoints W/ brief description",
@@ -95,11 +95,21 @@ router.get("/", async (req, res) => {
   };
   // * add list of available tables (if can, when able)
   const availableTables = [
-    "Users", "Spots", "SpotImages", "Reviews", "ReviewImages", "Bookings"
-  ]
+    "Users",
+    "Spots",
+    "SpotImages",
+    "Reviews",
+    "ReviewImages",
+    "Bookings",
+  ];
+
+  console.log({
+    availableEndPointsList,
+    availableTables,
+  });
   res.json({
     availableEndPointsList,
-    availableTables
+    availableTables,
   });
 });
 
