@@ -93,7 +93,7 @@ app.get("/", async (req, res) => {
       "/api/review-images/:imageId": "delete review image by imgId",
     },
   };
-  // * add list of available tables (if can, when able)
+
   const availableTables = [
     "Users",
     "Spots",
