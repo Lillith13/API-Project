@@ -2,13 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
-// const moment = require("moment");
 
 const { requireAuth } = require("../../utils/auth.js");
 const { spotExists } = require("../../utils/recordExists.js");
 const {
   spotCreateErrorChecks,
-  /* spotEditErrorChecks, */
+  /* spotEditErrorChecks, */ // <-- may create later to allow for individual item updating
 } = require("../../utils/spotErrorChecks");
 const { spotBelongsToUser } = require("../../utils/belongsToUser.js");
 const { queryValidation } = require("../../utils/queryValidation.js");
@@ -30,6 +29,7 @@ const {
 
 // get all spots
 router.get("/", [queryValidation, filterNpagi], async (req, res) => {
+  // ? may turn this to half eager load w/ aggregates later
   const { where, pagination } = req;
 
   const Spots = await Spot.findAll({
@@ -79,6 +79,7 @@ router.get("/", [queryValidation, filterNpagi], async (req, res) => {
 
 // get spots owned by logged in user
 router.get("/current", requireAuth, async (req, res) => {
+  // ? may turn this to half eager load w/ aggregates later
   const userSpots = await Spot.findAll({
     where: {
       ownerId: req.user.id,
@@ -128,6 +129,7 @@ router.get("/current", requireAuth, async (req, res) => {
 
 // get spot by it's id
 router.get("/:spotId", spotExists, async (req, res) => {
+  // ? may turn this to half eager load w/ aggregates later
   const spot = await Spot.findByPk(req.params.spotId);
 
   const spotImages = await SpotImage.findAll({
@@ -290,6 +292,7 @@ router.get("/:spotId/reviews", spotExists, async (req, res) => {
       },
     },
   });
+  // ? may implement an alias for ReviewImages to eager query by
   const spotRevImgs = await ReviewImage.findAll();
 
   const results = { Reviews: [] };
@@ -309,7 +312,6 @@ router.get("/:spotId/reviews", spotExists, async (req, res) => {
   return res.json(results);
 });
 
-// POST Review -> Spot by spotId
 const spotDoesntBelongToUser = async (req, _res, next) => {
   const userId = req.user.id;
   const { spotId } = req.params;
@@ -324,17 +326,20 @@ const spotDoesntBelongToUser = async (req, _res, next) => {
   }
   next();
 };
+// POST Review -> Spot by spotId
 router.post(
   "/:spotId/reviews",
   [requireAuth, spotExists, spotDoesntBelongToUser, postRevErrChecks],
   async (req, res) => {
     const { review, stars } = req.body;
+
     const newReview = await Review.create({
       spotId: Number(req.params.spotId),
       userId: req.user.id,
       review,
       stars,
     });
+
     return res.json(newReview);
   }
 );
