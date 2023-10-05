@@ -10,7 +10,6 @@
     "start:development": "nodemon ./bin/www",
     "start:production": "node ./bin/www",
     "build": "node psql-setup-script.js",
-    "dbDown": "npx dotenv sequelize db:seed:undo:all && npx dotenv sequelize db:migrate:undo:all",
     "dbUp": "npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all"
   },
   "keywords": [],
@@ -27,6 +26,7 @@
     "express-validator": "^7.0.1",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "per-env": "^1.0.2",
     "pg": "^8.11.3",

@@ -12,7 +12,27 @@ if (process.env.NODE_ENV === "production") {
 const reviewImgSeed = [
   {
     reviewId: 1,
-    url: "reviewImage-url",
+    url: "seedReview1Image.url",
+  },
+  {
+    reviewId: 2,
+    url: "seedReview2Image.url",
+  },
+  {
+    reviewId: 3,
+    url: "seedReview3Image.url",
+  },
+  {
+    reviewId: 4,
+    url: "seedReview4Image.url",
+  },
+  {
+    reviewId: 5,
+    url: "seedReview5Image.url",
+  },
+  {
+    reviewId: 6,
+    url: "seedReview6Image.url",
   },
 ];
 
@@ -23,10 +43,13 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = "ReviewImages";
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        reviewId: 1,
+        reviewId: {
+          [Op.between]: [0, 8],
+        },
       },
       {}
     );

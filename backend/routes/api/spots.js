@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
+// const moment = require("moment");
 
 const { requireAuth } = require("../../utils/auth.js");
 const { spotExists } = require("../../utils/recordExists.js");
@@ -309,9 +310,23 @@ router.get("/:spotId/reviews", spotExists, async (req, res) => {
 });
 
 // POST Review -> Spot by spotId
+const spotDoesntBelongToUser = async (req, _res, next) => {
+  const userId = req.user.id
+  const {spotId} = req.params
+
+  const spot = await Spot.findByPk(spotId)
+  const ownerId = spot.ownerId
+
+  if(ownerId == userId) {
+    const err = new Error("Spot belongs to you");
+    err.status = 403;
+    return next(err);
+  }
+  next()
+}
 router.post(
   "/:spotId/reviews",
-  [requireAuth, spotExists, postRevErrChecks],
+  [requireAuth, spotExists, spotDoesntBelongToUser, postRevErrChecks],
   async (req, res) => {
     const { review, stars } = req.body;
     const newReview = await Review.create({
@@ -325,8 +340,9 @@ router.post(
 );
 
 router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
-  const spot = await Spot.findByPk(req.params.spotId);
-  const where = { spotId: req.params.spotId };
+  const {spotId} = req.params
+  const spot = await Spot.findByPk(spotId);
+
   const include = [];
   const attributes = [];
   if (spot.ownerId === req.user.id) {
@@ -337,34 +353,23 @@ router.get("/:spotId/bookings", [requireAuth, spotExists], async (req, res) => {
     include.push(fullView);
   } else {
     const minView = ["spotId", "startDate", "endDate"];
-    minView.forEach((view) => attributes.push(view));
+    attributes.concat(minView)
   }
 
   // --> different responses based on if user owns the spot or not
   const results = { Bookings: [] };
-  const query = { where };
-  if (include && include.length > 0) query.include = include;
-  if (attributes && attributes.length > 0) query.attributes = attributes;
-
-  const bookings = await Booking.findAll(query);
-  for (let booking of bookings) {
-    booking = booking.toJSON();
-    const { startDate, endDate } = booking;
-
-    let year = startDate.getFullYear();
-    let month = startDate.getMonth() + 1;
-    let day = startDate.getDate();
-    booking.startDate = `${year}-${month}-${day}`;
-
-    year = endDate.getFullYear();
-    month = endDate.getMonth() + 1;
-    day = endDate.getDate();
-    booking.endDate = `${year}-${month}-${day}`;
-
-    results.Bookings.push(booking);
+  let query = { where: { spotId } }
+  if (include && include.length > 0) {
+    query.include = include
+  }
+  if (attributes && attributes.length > 0) {
+    query.attributes = attributes;
   }
 
-  return res.json(results);
+  const Bookings = await Booking.findAll(query);
+
+
+  return res.json(Bookings);
 });
 
 // POST Booking for spotId
@@ -373,11 +378,12 @@ router.post(
   [requireAuth, spotExists, bookingConflicts, bodyValidation],
   async (req, res) => {
     const { startDate, endDate } = req.body;
+
     const newBooking = await Booking.create({
       spotId: req.params.spotId,
       userId: req.user.id,
       startDate,
-      endDate,
+      endDate
     });
     return res.json(newBooking);
   }

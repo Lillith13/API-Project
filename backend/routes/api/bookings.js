@@ -36,7 +36,7 @@ router.get("/current", requireAuth, async (req, res) => {
 
   let results = { Bookings: [] };
   for (let booking of bookings) {
-    booking = booking.toJSON();
+    /* booking = booking.toJSON();
     const startDate = booking.startDate;
     const endDate = booking.endDate;
 
@@ -48,7 +48,7 @@ router.get("/current", requireAuth, async (req, res) => {
     year = endDate.getFullYear();
     month = endDate.getMonth() + 1;
     day = endDate.getDate();
-    booking.endDate = `${year}-${month}-${day}`;
+    booking.endDate = `${year}-${month}-${day}`; */
 
     for (let spot of spots) {
       if (booking.spotId === spot["id"]) {

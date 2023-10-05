@@ -20,6 +20,41 @@ const spotImageSeed = [
     url: "ImageUrl1.5",
     preview: false,
   },
+  {
+    spotId: 1,
+    url: "ImageUrl1.5",
+    preview: false,
+  },
+  {
+    spotId: 2,
+    url: "ImageUrl1",
+    preview: true,
+  },
+  {
+    spotId: 2,
+    url: "ImageUrl1.5",
+    preview: false,
+  },
+  {
+    spotId: 2,
+    url: "ImageUrl1.5",
+    preview: false,
+  },
+  {
+    spotId: 3,
+    url: "ImageUrl1",
+    preview: true,
+  },
+  {
+    spotId: 3,
+    url: "ImageUrl1.5",
+    preview: false,
+  },
+  {
+    spotId: 3,
+    url: "ImageUrl1.5",
+    preview: false,
+  },
 ];
 
 module.exports = {
@@ -31,10 +66,13 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = "SpotImages";
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        spotId: 1,
+        spotId: {
+          [Op.between]: [0, 10],
+        },
       },
       {}
     );
