@@ -3,4 +3,5 @@ node_modules
 build
 .DS_Store
 *.db
+*.sql
 utils/stuff.js
