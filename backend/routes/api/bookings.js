@@ -24,60 +24,21 @@ router.get("/current", requireAuth, async (req, res) => {
     include: {
       model: Spot,
       attributes: {
-        exclude: ["updatedAt", "createdAt"]
+        exclude: ["updatedAt", "createdAt"],
       },
       include: {
         model: SpotImage,
-        as: "previewImage",
+        // as: "",
         where: {
-          preview: true
+          preview: true,
         },
-        attributes: ["url"]
-      }
-    }
+        attributes: {
+          fields: ["url"],
+          as: "previewImage"
+        },
+      },
+    },
   });
-  // const spots = await Spot.findAll({
-  //   attributes: {
-  //     exclude: ["description", "createdAt", "updatedAt"],
-  //   },
-  // });
-  // const spotImgs = await SpotImage.findAll({
-  //   where: {
-  //     preview: true,
-  //   },
-  //   attributes: ["spotId", "url"],
-  // });
-
-  // let results = { Bookings: [] };
-  // for (let booking of bookings) {
-    /* booking = booking.toJSON();
-    const startDate = booking.startDate;
-    const endDate = booking.endDate;
-
-    let year = startDate.getFullYear();
-    let month = startDate.getMonth() + 1;
-    let day = startDate.getDate();
-    booking.startDate = `${year}-${month}-${day}`;
-
-    year = endDate.getFullYear();
-    month = endDate.getMonth() + 1;
-    day = endDate.getDate();
-    booking.endDate = `${year}-${month}-${day}`; */
-
-    /* for (let spot of spots) {
-      if (booking.spotId === spot["id"]) {
-        booking.Spot = spot.dataValues;
-        break;
-      }
-    }
-    for (let spotImg of spotImgs) {
-      if (booking.Spot["id"] == spotImg["spotId"]) {
-        booking.Spot.previewImage = spotImg["url"];
-        break;
-      }
-    } */
-    // results.Bookings.push(booking);
-  // }
 
   return res.json(Bookings);
 });
