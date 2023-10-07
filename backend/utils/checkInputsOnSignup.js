@@ -19,10 +19,10 @@ const checkIfUserExists = async (req, _res, next) => {
     err.title = "User already exists";
     err.errors = {};
     if (usersWusername) {
-      err.errors.username = "User with that username already exists.";
+      err.errors.username = "User with that username already exists";
     }
     if (usersWemail) {
-      err.errors.email = "User with that email already exists.";
+      err.errors.email = "User with that email already exists";
     }
     next(err);
   }

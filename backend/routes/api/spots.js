@@ -185,21 +185,14 @@ router.post("/", [requireAuth, spotCreateErrorChecks], async (req, res) => {
   return res.status(201).json(newSpot);
 });
 
+/* const spotImgBodyValidator = async (req, _res, next) => {
+  //
+} */
 // add image to spot
 router.post(
   "/:spotId/images",
-  [requireAuth, spotExists, spotBelongsToUser],
-  async (req, res, next) => {
-    const spot = await Spot.findByPk(req.params.spotId, {
-      attributes: {
-        exclude: ["spotId", "createdAt", "updatedAt"],
-      },
-    });
-    if (req.user.id !== spot.ownerId) {
-      const err = new Error("Spot doesn't belong to you");
-      err.status = 200;
-      return next(err);
-    }
+  [requireAuth, spotExists, spotBelongsToUser/* , spotImgBodyValidator */],
+  async (req, res) => {
     const { url, preview } = req.body;
     const newSpotImg = await SpotImage.create({
       spotId: req.params.spotId,

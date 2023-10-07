@@ -64,26 +64,6 @@ const spotEditErrorChecks = async (req, res, next) => {
   err.status = 400;
   err.errors = {};
 
-  /* if (!address) {
-    err.errors.address = "Street address is required";
-    errTriggored = true;
-  }
-
-  if (!city) {
-    err.errors.city = "City is required";
-    errTriggored = true;
-  }
-
-  if (!state) {
-    err.errors.state = "State is required";
-    errTriggored = true;
-  }
-
-  if (!country) {
-    err.errors.country = "Country is required";
-    errTriggored = true;
-  } */
-
   if (!lat || Number(lat) < -90 || Number(lat) > 90 || isNaN(lat)) {
     err.errors.lat = "Latitude is not valid";
     errTriggored = true;
@@ -93,11 +73,6 @@ const spotEditErrorChecks = async (req, res, next) => {
     err.errors.lng = "Longitude is not valid";
     errTriggored = true;
   }
-
-  /* if (!description) {
-    err.errors.description = "Description is required";
-    errTriggored = true;
-  } */
 
   if (price <= 0) {
     err.errors.price = "Price per day is required";

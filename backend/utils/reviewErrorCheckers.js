@@ -19,10 +19,12 @@ async function postRevErrChecks(req, _res, next) {
 
   const { review, stars } = req.body;
   if (!review) {
+    err.status = 400;
     err.errors.review = "Review text is required";
     errTriggered = true;
   }
   if (!stars || isNaN(stars) || stars < 1 || stars > 5) {
+    err.status = 400;
     err.errors.stars = "Stars must be an integer from 1 to 5";
     errTriggered = true;
   }

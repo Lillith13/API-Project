@@ -16,6 +16,7 @@ async function spotBelongsToUser(req, _res, next) {
   }
   if (req.user.id !== spot.ownerId) {
     const err = new Error("Spot doesn't belong to you");
+    err.title = "Forbidden";
     err.status = 403;
     return next(err);
   }
@@ -32,6 +33,7 @@ async function reviewBelongsToUser(req, _res, next) {
   }
   if (review["userId"] !== req.user.id) {
     const err = new Error("Review doesn't belong to you");
+    err.title = "Forbidden";
     err.status = 403;
     next(err);
   }
@@ -42,6 +44,7 @@ async function bookingBelongsToUser(req, _res, next) {
   const booking = await Booking.findByPk(req.params.bookingId);
   if (req.user.id !== booking.userId) {
     const err = new Error("Booking doesn't belong to you");
+    err.title = "Forbidden";
     err.status = 403;
     next(err);
   }
