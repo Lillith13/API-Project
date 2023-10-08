@@ -16,23 +16,27 @@ const getRandNum = (max, min) => {
   // The maximum is inclusive and the minimum is inclusive
 };
 
-let seedsUrlCreationCount = 0;
 async function createSpotImages() {
-  const spotId = getRandNum(120, 1);
-  const url = `moreDemoSeedUrl${seedsUrlCreationCount}`; // by default
-  let preview = false;
-  seedsUrlCreationCount % 3 === 0 ? (preview = true) : (preview = false);
+  const spotCount = await Spot.count();
+  const demoSpotsArr = [];
+  let seedsUrlCreationCount = 0;
 
-  while (seedsUrlCreationCount <= 480) {
-    const demoSpot = {
+  while (seedsUrlCreationCount <= spotCount * 5) {
+    const spotId = getRandNum(spotCount, 1);
+    const url = `moreDemoSeedUrl${seedsUrlCreationCount}`; // by default
+
+    let preview = false;
+    seedsUrlCreationCount % 3 === 0 ? (preview = true) : (preview = false);
+
+    demoSpotsArr.push({
       spotId,
       url,
       preview,
-    };
+    });
 
-    await SpotImage.create(demoSpot);
     seedsUrlCreationCount++;
   }
+  await SpotImage.bulkCreate(demoSpotsArr);
 }
 
 module.exports = {

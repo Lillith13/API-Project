@@ -2,30 +2,44 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { Review } = require("../models");
+const { User, Spot, Review } = require("../models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA;
 }
 
-let demoReviewCount = 0;
-
 const getRandNum = (max, min) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+async function buildReviews() {
+  let demoReviewCount = 0;
+  const spotCount = await Spot.count();
+  const userCount = await User.count();
+  const newReviewsArr = [];
+
+  while (demoReviewCount <= spotCount / 2 - userCount) {
+    const spotId = getRandNum(spotCount / 2 - userCount, 1);
+    const userId = getRandNum(userCount, 1);
+    const review = `demoReview${demoReviewCount}`;
+    const stars = getRandNum(5, 1);
+    newReviewsArr.push({
+      spotId,
+      userId,
+      review,
+      stars,
+    });
+    demoReviewCount++;
+  }
+
+  await Review.bulkCreate(newReviewsArr);
+}
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    while (demoReviewCount <= 30) {
-      const newReview = {
-        spotId: getRandNum(20, 7),
-        userId: getRandNum(10, 4),
-        review: `demoReview${demoReviewCount}`,
-        stars: getRandNum(5, 1),
-      };
-      await Review.create(newReview);
-      demoReviewCount++;
+    for (let i = 0; i <= 5; i++) {
+      buildReviews();
     }
   },
 

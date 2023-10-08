@@ -10,8 +10,17 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const getRandNum = (max, min, precision) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
+  const posOneg = Math.floor(Math.random() * (1 - 0) + 1);
+  if (posOneg) {
+    min = min * -1;
+    return (
+      (Math.floor(
+        Math.random() * (max * precision - min * precision) + precision
+      ) /
+        precision) *
+      -1
+    );
+  }
   return (
     Math.floor(
       Math.random() * (max * precision - min * precision) + precision
@@ -20,24 +29,28 @@ const getRandNum = (max, min, precision) => {
   // The maximum is inclusive and the minimum is inclusive - precision adjusts decimal, 100 = 2decimal
 };
 
-module.exports = {
-  async up(queryInterface, Sequelize) {
-    let creationCount;
+async function buildSpots() {
+  let demoSpotDataArray = [];
+  let creationCount;
 
-    while (creationCount <= 120) {
-      const ownerId = getRandNum(15, 1, 1); // random userId from users list
-      const address = `${num} user${creationCount}'s Lane`;
+  const allUsers = await User.findAll({
+    attibutes: ["id"],
+  });
+  while (allUsers.length > 0) {
+    const userId = allUsers[0].id;
+    for (let i = 0; i < 5; i++) {
+      const address = `${userId} user${creationCount}'s Lane`;
       const city = `Seed${creationCount}`;
       const state = `Seedica${creationCount}`;
       const country = "United States of Seeds";
-      const lat = getRandNum(90, -90, 100);
-      const lng = getRandNum(180, -180, 100);
-      const name = `demoSpot${creationCount}.${i}url`;
+      const lat = getRandNum(90, 0, 100);
+      const lng = getRandNum(180, 0, 100);
+      const name = `demoSpot${creationCount}.${userId}url`;
       const description = `Belongs to demoUser${creationCount}`;
       const price = getRandNum(5000, 1, 100);
 
-      const demoSpotData = {
-        ownerId,
+      demoSpotDataArray.push({
+        ownerId: userId,
         address,
         city,
         state,
@@ -47,11 +60,17 @@ module.exports = {
         name,
         description,
         price,
-      };
-
-      await Spot.create(demoSpotData);
+      });
       creationCount++;
     }
+    allUsers.splice(0, 1); //remove first array item
+  }
+  await Spot.bulkCreate(demoSpotDataArray);
+}
+
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    buildSpots();
   },
 
   async down(queryInterface, Sequelize) {

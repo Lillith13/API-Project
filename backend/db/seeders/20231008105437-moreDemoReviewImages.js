@@ -2,14 +2,12 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { ReviewImage } = require("../models");
+const { Review, ReviewImage } = require("../models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA;
 }
-
-let revImgSeedCount = 0;
 
 const getRandNum = (max, min) => {
   min = Math.ceil(min);
@@ -18,16 +16,28 @@ const getRandNum = (max, min) => {
   // The maximum is inclusive and the minimum is inclusive
 };
 
+async function buildRevImages() {
+  const reviewCount = await Review.count();
+  const revImgArr = [];
+  let revImgSeedCount = 0;
+
+  while (revImgSeedCount <= reviewCount * 3) {
+    const reviewId = getRandNum(reviewCount * 3, 1);
+    const url = `reviewImageDemoUrl${revImgSeedCount}`;
+
+    revImgArr.push({
+      reviewId,
+      url,
+    });
+
+    revImgSeedCount++;
+  }
+  await ReviewImage.bulkCreate(revImgArr);
+}
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    while (revImgSeedCount <= 20) {
-      const reviewImageSeed = {
-        reviewId: getRandNum(30, 1),
-        url: `reviewImageDemoUrl${revImgSeedCount}`,
-      };
-      await ReviewImage.create(reviewImageSeed);
-      revImgSeedCount++;
-    }
+    buildRevImages();
   },
 
   async down(queryInterface, Sequelize) {
