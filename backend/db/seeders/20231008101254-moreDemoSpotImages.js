@@ -18,7 +18,6 @@ const getRandNum = (max, min) => {
 
 let seedUrlCreationCount = 0;
 async function createSpotImages() {
-  let demoSpot;
   const allSpotIds = await Spot.findAll({
     attributes: ["id"],
   });
@@ -26,8 +25,8 @@ async function createSpotImages() {
   allSpotIds.forEach((spot) => {
     allSpotIdsSet.add(spot.id);
   });
-  while (seedUrlCreationCount <= 30) {
-    demoSpot = {
+  while (seedUrlCreationCount <= 100) {
+    const demoSpot = {
       spotId: getRandNum(allSpotIds.length + 1, 1),
       url: `moreDemoSeedUrl${seedUrlCreationCount}`,
       preview: false, // by default
@@ -36,8 +35,8 @@ async function createSpotImages() {
     seedUrlCreationCount % 3 === 0
       ? (demoSpot.preview = true)
       : (demoSpot.preview = false);
+    await SpotImage.create(demoSpot);
   }
-  await SpotImage.create(demoSpot);
 }
 
 module.exports = {
