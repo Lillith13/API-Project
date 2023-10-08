@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { Spot, SpotImage } = require("../models");
+const { Spot, SpotImage } = require("./backend/db/models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
@@ -16,26 +16,22 @@ const getRandNum = (max, min) => {
   // The maximum is inclusive and the minimum is inclusive
 };
 
-let seedUrlCreationCount = 0;
+let seedsUrlCreationCount = 0;
 async function createSpotImages() {
-  const allSpotIds = await Spot.findAll({
-    attributes: ["id"],
-  });
-  const allSpotIdsSet = new Set();
-  allSpotIds.forEach((spot) => {
-    allSpotIdsSet.add(spot.id);
-  });
-  while (seedUrlCreationCount <= 300) {
+  const spotId = getRandNum(120, 1);
+  const url = `moreDemoSeedUrl${seedsUrlCreationCount}`; // by default
+  let preview = false;
+  seedsUrlCreationCount % 3 === 0 ? (preview = true) : (preview = false);
+
+  while (seedsUrlCreationCount <= 480) {
     const demoSpot = {
-      spotId: getRandNum(allSpotIds.length + 1, 1),
-      url: `moreDemoSeedUrl${seedUrlCreationCount}`,
-      preview: false, // by default
+      spotId,
+      url,
+      preview,
     };
-    seedUrlCreationCount++;
-    seedUrlCreationCount % 3 === 0
-      ? (demoSpot.preview = true)
-      : (demoSpot.preview = false);
+
     await SpotImage.create(demoSpot);
+    seedsUrlCreationCount++;
   }
 }
 
