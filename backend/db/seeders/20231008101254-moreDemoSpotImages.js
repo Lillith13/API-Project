@@ -23,10 +23,15 @@ async function createSpotImages() {
 
   while (seedsUrlCreationCount <= spotCount * 5) {
     const spotId = getRandNum(spotCount, 1);
-    const url = `moreDemoSeedUrl${seedsUrlCreationCount}`; // by default
+    const url = `moreDemoSeedUrl${seedsUrlCreationCount}`;
+    // by default
 
     let preview = false;
-    seedsUrlCreationCount % 3 === 0 ? (preview = true) : (preview = false);
+    if(seedsUrlCreationCount % 3 === 0) {
+      preview = true
+    } else {
+      preview = false
+    };
 
     demoSpotsArr.push({
       spotId,
