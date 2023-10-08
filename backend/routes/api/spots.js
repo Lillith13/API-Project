@@ -163,6 +163,7 @@ router.get("/:spotId", spotExists, async (req, res) => {
   result.avgStarRating = Number(spotReviews[0].dataValues.avgRating).toFixed(1);
   result.SpotImages = spotImages;
   result.Owner = ownerInfo;
+
   return res.json(result);
 });
 
@@ -204,7 +205,7 @@ router.post(
       url,
       preview,
     };
-    return res.json(results);
+    return res.status(201).json(results);
   }
 );
 
@@ -302,7 +303,7 @@ router.get("/:spotId/reviews", spotExists, async (req, res) => {
     }
     results.Reviews.push(spotRev);
   }
-  return res.status(201).json(results);
+  return res.json(results);
 });
 
 const spotDoesntBelongToUser = async (req, _res, next) => {
@@ -333,7 +334,7 @@ router.post(
       stars,
     });
 
-    return res.json(newReview);
+    return res.status(201).json(newReview);
   }
 );
 

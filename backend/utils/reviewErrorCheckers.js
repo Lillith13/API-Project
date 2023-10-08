@@ -53,6 +53,7 @@ async function postRevImgErrChecks(req, _res, next) {
 async function reviewEditErrChecks(req, _res, next) {
   const err = new Error("Bad Request");
   err.errors = {};
+  err.status = 400;
   let errTriggered = false;
   const { review, stars } = req.body;
 
