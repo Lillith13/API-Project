@@ -22,7 +22,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     while (revImgSeedCount <= 20) {
       const reviewImageSeed = {
-        reviewId: getRandNum(),
+        reviewId: getRandNum(30, 1),
         url: `reviewImageDemoUrl${revImgSeedCount}`,
       };
       await ReviewImage.create(reviewImageSeed);
