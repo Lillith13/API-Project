@@ -26,42 +26,39 @@ async function bookingConflicts(req, _res, next) {
     },
   });
 
-  // v queried bookings.ids NOT equal to a provided bookingId will be tested against, if they do equal tests will be skipped, allowing for editing but also preventing booking conflicts --- no bookingId provided bookingId === 0 v
-  if (!bookingId || bookingId == undefined) bookingId = 0;
+  /* v queried bookings.ids NOT equal to a provided bookingId will be tested against, if they do equal tests will be skipped, allowing for editing but also preventing booking conflicts --- no bookingId provided bookingId === 0 v */
 
   if (bookings) {
     for (let booking of bookings) {
       // if start date falls on or between existing booking dates
-      if (
-        booking.id != bookingId &&
-        ((booking.startDate > startDate && booking.startDate < endDate) ||
+      if (bookingId != "undefined" && bookingId != booking.id) {
+        if (
+          (booking.startDate > startDate && booking.startDate < endDate) ||
           booking.startDate === startDate ||
           (booking.startDate < startDate && booking.endDate > startDate) ||
-          booking.endDate === startDate)
-      ) {
-        err.errors.startDate = "Start date conflicts with an existing booking";
-        errTriggered = true;
-      }
-      // if send date falls on or between existing booking dates
-      if (
-        booking.id != bookingId &&
-        (booking.startDate === endDate ||
+          booking.endDate === startDate
+        ) {
+          err.errors.startDate =
+            "Start date conflicts with an existing booking";
+          errTriggered = true;
+        }
+        // if send date falls on or between existing booking dates
+        if (
+          booking.startDate === endDate ||
           (booking.startDate < endDate && booking.endDate > endDate) ||
           booking.endDate === endDate ||
-          (booking.endDate > startDate && booking.endDate < endDate))
-      ) {
-        err.errors.endDate = "End date conflicts with an existing booking";
-        errTriggered = true;
-      }
-      // if existing booking falls between desired booking dates
-      if (
-        booking.id != bookingId &&
-        booking.startDate > startDate &&
-        booking.endDate < endDate
-      ) {
-        err.errors.startDate = "Start date conflicts with an existing booking";
-        err.errors.endDate = "End date conflicts with an existing booking";
-        errTriggered = true;
+          (booking.endDate > startDate && booking.endDate < endDate)
+        ) {
+          err.errors.endDate = "End date conflicts with an existing booking";
+          errTriggered = true;
+        }
+        // if existing booking falls between desired booking dates
+        if (booking.startDate > startDate && booking.endDate < endDate) {
+          err.errors.startDate =
+            "Start date conflicts with an existing booking";
+          err.errors.endDate = "End date conflicts with an existing booking";
+          errTriggered = true;
+        }
       }
     }
   }
