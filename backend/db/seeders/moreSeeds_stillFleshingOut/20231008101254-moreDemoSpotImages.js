@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { Spot, SpotImage } = require("../models");
+const { Spot, SpotImage } = require("../../models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
@@ -27,11 +27,11 @@ async function createSpotImages() {
     // by default
 
     let preview = false;
-    if(seedsUrlCreationCount % 3 === 0) {
-      preview = true
+    if (seedsUrlCreationCount % 3 === 0) {
+      preview = true;
     } else {
-      preview = false
-    };
+      preview = false;
+    }
 
     demoSpotsArr.push({
       spotId,

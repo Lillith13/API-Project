@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { Booking } = require("../models");
+const { Booking } = require("../../models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {

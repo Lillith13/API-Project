@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { Review, ReviewImage } = require("../models");
+const { Review, ReviewImage } = require("../../models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
