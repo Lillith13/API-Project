@@ -26,7 +26,6 @@ router.get("/current", requireAuth, async (req, res) => {
       attributes: {
         exclude: ["updatedAt", "createdAt"],
       },
-      // ! may have to change this and lazy load the spotImgs - dependent on pretest
       include: {
         model: SpotImage,
         where: {
@@ -38,7 +37,7 @@ router.get("/current", requireAuth, async (req, res) => {
     },
   });
 
-  return res.json(Bookings);
+  return res.json({ Bookings });
 });
 
 // PUT Booking
@@ -57,7 +56,9 @@ router.put(
     const editBooking = await Booking.findByPk(req.params.bookingId);
     if (startDate) editBooking.startDate = startDate;
     if (endDate) editBooking.endDate = endDate;
+
     await editBooking.save();
+
     return res.json(editBooking);
   }
 );

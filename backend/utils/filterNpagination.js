@@ -1,5 +1,4 @@
 const { Op } = require("sequelize");
-const { Spot } = require("../db/models");
 
 async function filterNpagi(req, _res, next) {
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
