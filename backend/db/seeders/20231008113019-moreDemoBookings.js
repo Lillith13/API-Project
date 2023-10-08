@@ -39,8 +39,8 @@ const buildRandTimeFrame = () => {
     endDay = getRandNum(30, startDay);
   }
 
-  const startDate = `${startYear}-${startMonth}-${startDay}`;
-  const endDate = `${endYear}-${endMonth}-${endDay}`;
+  const startDate = `${startYear}/${startMonth}/${startDay}`;
+  const endDate = `${endYear}/${endMonth}/${endDay}`;
   console.log(startDate);
   console.log(endDate);
   return {
