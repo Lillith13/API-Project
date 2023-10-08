@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { Spot, SpotImage } = require("./backend/db/models");
+const { Spot, SpotImage } = require("../models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
