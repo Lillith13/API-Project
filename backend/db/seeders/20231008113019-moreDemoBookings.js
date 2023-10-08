@@ -41,7 +41,8 @@ const buildRandTimeFrame = () => {
 
   const startDate = `${startYear}-${startMonth}-${startDay}`;
   const endDate = `${endYear}-${endMonth}-${endDay}`;
-
+  console.log(startDate);
+  console.log(endDate);
   return {
     startDate,
     endDate,
