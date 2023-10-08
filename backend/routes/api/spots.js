@@ -191,7 +191,7 @@ router.post("/", [requireAuth, spotCreateErrorChecks], async (req, res) => {
 // add image to spot
 router.post(
   "/:spotId/images",
-  [requireAuth, spotExists, spotBelongsToUser/* , spotImgBodyValidator */],
+  [requireAuth, spotExists, spotBelongsToUser /* , spotImgBodyValidator */],
   async (req, res) => {
     const { url, preview } = req.body;
     const newSpotImg = await SpotImage.create({
@@ -302,7 +302,7 @@ router.get("/:spotId/reviews", spotExists, async (req, res) => {
     }
     results.Reviews.push(spotRev);
   }
-  return res.json(results);
+  return res.status(201).json(results);
 });
 
 const spotDoesntBelongToUser = async (req, _res, next) => {
