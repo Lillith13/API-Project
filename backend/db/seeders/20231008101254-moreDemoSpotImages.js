@@ -25,7 +25,7 @@ async function createSpotImages() {
   allSpotIds.forEach((spot) => {
     allSpotIdsSet.add(spot.id);
   });
-  while (seedUrlCreationCount <= 100) {
+  while (seedUrlCreationCount <= 300) {
     const demoSpot = {
       spotId: getRandNum(allSpotIds.length + 1, 1),
       url: `moreDemoSeedUrl${seedUrlCreationCount}`,
