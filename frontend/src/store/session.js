@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const LOG_IN = "session/setUser";
 const LOG_OUT = "session/unsetUser";
 const SIGN_UP = "session/newUser";
+const RESTORE_USER = "session/restoreUser";
 
 const setUser = (user) => {
   return {
@@ -20,6 +21,13 @@ const unsetUser = () => {
 const newUser = (user) => {
   return {
     type: SIGN_UP,
+    user,
+  };
+};
+
+const currUser = (user) => {
+  return {
+    type: RESTORE_USER,
     user,
   };
 };
@@ -51,7 +59,6 @@ export const signup = (user) => async (dispatch) => {
     }),
   });
   const data = await res.json();
-  console.log(data);
   dispatch(newUser(data.user));
   return res;
 };
@@ -61,6 +68,15 @@ export const logout = () => async (dispatch) => {
     method: "DELETE",
   });
   dispatch(unsetUser());
+  return res;
+};
+
+export const restoreUser = () => async (dispatch) => {
+  const res = await csrfFetch("/api/session", {
+    method: "GET",
+  });
+  const data = await res.json();
+  dispatch(newUser(data.user));
   return res;
 };
 
@@ -76,12 +92,15 @@ const sessionReducer = (state = initialState, action) => {
     case SIGN_UP:
       newState = Object.assign({}, state);
       newState.user = action.user;
-      console.log(action.user);
       return newState;
     case LOG_OUT:
       newState = Object.assign({}, state);
       newState.user = null;
       return state;
+    case RESTORE_USER:
+      newState = Object.assign({}, state);
+      newState.user = action.user;
+      return newState;
     default:
       return state;
   }
