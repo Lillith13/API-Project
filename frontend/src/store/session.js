@@ -3,7 +3,6 @@ import { csrfFetch } from "./csrf";
 const LOG_IN = "session/setUser";
 const LOG_OUT = "session/unsetUser";
 const SIGN_UP = "session/newUser";
-const RESTORE_USER = "session/restoreUser";
 
 const setUser = (user) => {
   return {
@@ -21,13 +20,6 @@ const unsetUser = () => {
 const newUser = (user) => {
   return {
     type: SIGN_UP,
-    user,
-  };
-};
-
-const currUser = (user) => {
-  return {
-    type: RESTORE_USER,
     user,
   };
 };
@@ -76,7 +68,7 @@ export const restoreUser = () => async (dispatch) => {
     method: "GET",
   });
   const data = await res.json();
-  dispatch(newUser(data.user));
+  dispatch(setUser(data.user));
   return res;
 };
 
@@ -97,10 +89,6 @@ const sessionReducer = (state = initialState, action) => {
       newState = Object.assign({}, state);
       newState.user = null;
       return state;
-    case RESTORE_USER:
-      newState = Object.assign({}, state);
-      newState.user = action.user;
-      return newState;
     default:
       return state;
   }
