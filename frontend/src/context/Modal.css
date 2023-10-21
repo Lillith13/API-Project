@@ -21,7 +21,7 @@
 #modal-content {
   position: absolute;
   /* set themes later - curr === spring */
-  background-color: rgba(158, 242, 248, 0.75);
+  background-color: rgba(158, 242, 248);
   border: 5px dotted rgb(220, 108, 126);
   border-radius: 30px;
   padding: 25px;

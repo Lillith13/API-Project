@@ -1,0 +1,27 @@
+.spotPreviewDiv {
+  display: flex;
+  justify-content: space-evenly;
+  align-content: center;
+  padding: 15px;
+}
+
+.spotPreview {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  width: 25%;
+  border: 1px solid blue;
+  background-color: rgba(135, 206, 235, 0.5);
+  border-radius: 15px;
+}
+
+.infoDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+.priceButton {
+  border: 1px solid rgb(150, 47, 240);
+  align-self: flex-end;
+}

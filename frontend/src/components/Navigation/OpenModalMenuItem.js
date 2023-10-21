@@ -27,7 +27,7 @@ function OpenModalMenuItem({
     display = (
       <div>
         <button className="menu" onClick={onClick}>
-          <i class="fa-solid fa-bars"></i>
+          <i className="fa-solid fa-bars"></i>
           <i className="fas fa-user-circle" />
         </button>
       </div>
