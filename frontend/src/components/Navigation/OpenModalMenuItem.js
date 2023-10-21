@@ -16,7 +16,7 @@ function OpenModalMenuItem({
   };
 
   let display;
-  if (itemText && itemText != "undefined") {
+  if (itemText && itemText !== "undefined") {
     display = (
       <div className="button">
         {/* change to link/plain text later */}
