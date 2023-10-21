@@ -2,59 +2,61 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { Booking } = require("../models");
+const { Review } = require("../../models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA;
 }
 
-const bookingSeed = [
+const reviewSeed = [
   {
     spotId: 1,
     userId: 2,
-    startDate: "12/15/2023",
-    endDate: "12/30/2023",
+    review: "seededReview for seededSpot",
+    stars: 2,
   },
   {
     spotId: 1,
     userId: 3,
-    startDate: "11/30/2023",
-    endDate: "12/14/2023",
+    review: "seededReview for seededSpot",
+    stars: 4,
   },
   {
     spotId: 2,
     userId: 1,
-    startDate: "10/30/2023",
-    endDate: "11/15/2023",
+    review: "seededReview for seededSpot",
+    stars: 5,
   },
   {
     spotId: 2,
     userId: 3,
-    startDate: "11/30/2023",
-    endDate: "12/15/2023",
+    review: "seededReview for seededSpot",
+    stars: 1,
   },
   {
     spotId: 3,
     userId: 1,
-    startDate: "11/30/2023",
-    endDate: "12/14/2023",
+    review: "seededReview for seededSpot",
+    stars: 3,
   },
   {
     spotId: 3,
     userId: 2,
-    startDate: "01/15/2024",
-    endDate: "02/20/2024",
+    review: "seededReview for seededSpot",
+    stars: 3,
   },
 ];
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await Booking.bulkCreate(bookingSeed, { validate: true });
+    await Review.bulkCreate(reviewSeed, {
+      validate: true,
+    });
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "Bookings";
+    options.tableName = "Reviews";
     return queryInterface.bulkDelete(
       options,
       {
