@@ -47,6 +47,18 @@ const spotSeed = [
     description: "CO tourist trap",
     price: 89,
   },
+  {
+    ownerId: 3,
+    address: "4 demo spot",
+    city: "DemoSpotia",
+    state: "Spotia",
+    country: "Spotsilvania",
+    lat: 50.916,
+    lng: -12.88,
+    name: "Demo Spot",
+    description: "demo spot",
+    price: 150.0,
+  },
 ];
 
 module.exports = {
