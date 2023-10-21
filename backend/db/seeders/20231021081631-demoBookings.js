@@ -42,8 +42,8 @@ const randStartDate = () => {
   } else {
     randDay = randomNum(1, 31);
   }
-  const randStartDate = `${randYear}-${randMonth}-${randDay}`;
 
+  const randStartDate = `${randYear}-${randMonth}-${randDay}`;
   return randStartDate;
 };
 const randEndDate = (startDate) => {
@@ -97,19 +97,21 @@ const randEndDate = (startDate) => {
       randDay = randomNum(1, 31);
     }
   }
-  const randEndDate = `${randYear}-${randMonth}-${randDay}`;
 
+  const randEndDate = `${randYear}-${randMonth}-${randDay}`;
   return randEndDate;
 };
 
 const buildDemoBookings = async () => {
   const demoBookings = [];
+
   const users = await User.findAll({
     attributes: ["id"],
   });
   const spots = await Spot.findAll({
     attributes: ["id", "ownerId"],
   });
+
   spots.forEach((spot) => {
     users.forEach((user) => {
       const startDate = randStartDate();
@@ -124,6 +126,7 @@ const buildDemoBookings = async () => {
       }
     });
   });
+
   return demoBookings;
 };
 
@@ -136,8 +139,14 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = "Bookings";
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      // TBD
-    });
+    return queryInterface.bulkDelete(
+      options,
+      {
+        userId: {
+          [Op.between]: [1, 6],
+        },
+      },
+      {}
+    );
   },
 };
