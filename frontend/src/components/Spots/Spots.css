@@ -1,7 +1,8 @@
 .spotPreviewDiv {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
+  margin-left: 15px;
   align-content: center;
   padding: 15px;
 }
@@ -10,7 +11,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px;
+  padding: 15px;
   border: 1px solid blue;
   background-color: rgba(135, 206, 235, 0.5);
   border-radius: 15px;
@@ -23,33 +24,59 @@
 
 .priceButton {
   border: 1px solid rgb(150, 47, 240);
+  color: rgb(57, 10, 114);
   align-self: flex-end;
+  padding: 10px 7px;
+  font-size: 10px;
 }
 
-@media screen and (min-width: 692px) {
+/* sizing changes */
+@media screen and (max-width: 750px) {
   .spotPreviewDiv {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .spotPreview {
+    width: 90%;
+    margin-bottom: 25px;
+    font-size: 15px;
+  }
+  .infoDiv {
+    font-size: 10px;
   }
 }
-@media screen and (max-width: 856px) {
+@media screen and (min-width: 751px) {
+  .spotPreviewDiv {
+    justify-content: center;
+  }
   .spotPreview {
-    margin: 15px 3px;
-    width: 26%;
-    font-size: 17px;
+    margin: 15px 10px;
+    width: 20%;
+  }
+  .infoDiv {
+    font-size: 15px;
   }
 }
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 900px) {
   .spotPreview {
-    margin: 15px 3px;
-    width: 27%;
-    font-size: 25px;
+    margin: 15px 5px;
+    width: 20%;
+    font-size: 20px;
+  }
+  .infoDiv {
+    font-size: 13px;
   }
 }
 @media screen and (min-width: 1600px) {
+  .spotPreviewDiv {
+    margin-left: 50px;
+  }
   .spotPreview {
-    margin: 15px 3px;
-    width: 30%;
+    margin: 15px 15px;
     font-size: 30px;
+  }
+  .infoDiv {
+    font-size: 20px;
   }
 }

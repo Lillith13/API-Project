@@ -1,9 +1,15 @@
+/* BoilerPlate */
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+
+/* Import Necessities */
 import { useModal } from "../../../context/Modal";
 import * as sessionActions from "../../../store/session";
 import "./SignupForm.css";
 
+/* Import Related CSS */
+
+/* Build & Export Modal - SignUp Form */
 function SignupFormModal() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");

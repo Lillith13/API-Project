@@ -1,10 +1,15 @@
+/* BoilerPlate */
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
+/* Import Necessities */
 import * as sessionActions from "../../../store/session";
 import { useModal } from "../../../context/Modal";
+
+/* Import Related CSS */
 import "./LoginForm.css";
 
+/* Build & Export Modal --- LogIn Form */
 function LoginFormModal() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");

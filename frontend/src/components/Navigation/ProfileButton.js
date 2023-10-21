@@ -1,8 +1,13 @@
+/* BoilerPlate */
 import React, { useState, useEffect, useRef } from "react";
 
-import MenuModal from "./MenuModal";
+/* Import Necessities */
 import OpenModalMenuItem from "./OpenModalMenuItem";
+import MenuModal from "./MenuModal";
 
+/* Import Related CSS */
+
+/* Build & Export Component --- Menu/Profile Button */
 function ProfileButton({ user }) {
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();

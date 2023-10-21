@@ -1,9 +1,14 @@
+/* BoilerPlate */
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
+/* Import Necessities */
 import * as spotsActions from "../../store/spots";
+
+/* Import Related CSS */
 import "./Spots.css";
 
+/* Build & Export Component */
 export default function Spots() {
   const dispatch = useDispatch();
   const spots = useSelector((state) => state.spots);
@@ -35,10 +40,11 @@ export default function Spots() {
                 <p>
                   {spot.city}, {spot.state}
                 </p>
+                {/* {// ! get star icon from Font Awesome } */}
                 <p>avgRating: {spot.avgRating}</p>
               </div>
 
-              <button className="priceButton">price: {spot.price}</button>
+              <button className="priceButton">{spot.price}/night</button>
             </div>
           ))}
         </div>
