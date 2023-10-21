@@ -15,7 +15,12 @@ function OpenModalMenuItem({
     if (onItemClick) onItemClick();
   };
 
-  return <li onClick={onClick}>{itemText}</li>;
+  return (
+    <div>
+      {/* change to link/plain text later */}
+      <button onClick={onClick}>{itemText}</button>
+    </div>
+  );
 }
 
 export default OpenModalMenuItem;

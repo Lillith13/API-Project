@@ -86,9 +86,8 @@ const sessionReducer = (state = initialState, action) => {
       newState.user = action.user;
       return newState;
     case LOG_OUT:
-      newState = Object.assign({}, state);
-      newState.user = null;
-      return state;
+      newState = { user: null };
+      return newState;
     default:
       return state;
   }

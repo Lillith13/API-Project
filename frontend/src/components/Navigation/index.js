@@ -8,29 +8,15 @@ function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
 
   return (
-    <>
-      <div>
-        <h1>
-          <i class="fa-brands fa-airbnb"></i>
+    <nav className="navigationBar">
+      <NavLink exact to="/">
+        <h1 className="logo">
+          <i className="fa-brands fa-airbnb"></i>
           AirBurbs
         </h1>
-      </div>
-      <div>
-        <ul>
-          <li>
-            <NavLink exact to="/">
-              {/* <button onClick={}></button> */}
-              Home
-            </NavLink>
-          </li>
-          {isLoaded && (
-            <li>
-              <ProfileButton user={sessionUser} />
-            </li>
-          )}
-        </ul>
-      </div>
-    </>
+      </NavLink>
+      {isLoaded && <ProfileButton user={sessionUser} />}
+    </nav>
   );
 }
 

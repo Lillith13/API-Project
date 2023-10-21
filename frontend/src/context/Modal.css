@@ -20,5 +20,36 @@
 
 #modal-content {
   position: absolute;
-  background-color: white;
+  /* set themes later - curr === spring */
+  background-color: rgba(158, 242, 248, 0.75);
+  border: 5px dotted rgb(220, 108, 126);
+  border-radius: 30px;
+  padding: 25px;
+}
+
+h1.header {
+  display: flex;
+  justify-content: center;
+}
+
+.inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 10px 5px;
+}
+
+.submitButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.errors {
+  color: purple;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }

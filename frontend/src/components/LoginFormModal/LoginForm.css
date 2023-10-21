@@ -1,0 +1,5 @@
+div.logInModal {
+  margin-inline: auto;
+  z-index: 1;
+  position: relative;
+}

@@ -1,3 +1,28 @@
-.hidden {
-  visibility: hidden;
+.navigationBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-inline: auto;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  position: relative;
+  border: 1px solid skyblue;
+  border-radius: 20px;
+  background-color: aliceblue;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  gap: 10px;
+}
+
+.logo > i {
+  transform: rotate(90deg);
 }

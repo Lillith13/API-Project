@@ -12,10 +12,10 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <div>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Switch></Switch>}
-    </>
+    </div>
   );
 }
 

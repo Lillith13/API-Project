@@ -1,0 +1,5 @@
+div.signUpModal {
+  margin-inline: auto;
+  z-index: 1;
+  position: relative;
+}

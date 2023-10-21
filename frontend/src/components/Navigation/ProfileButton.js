@@ -41,12 +41,13 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={openMenu}>
+      <button className="menu" onClick={openMenu}>
+        <i class="fa-solid fa-bars"></i>
         <i className="fas fa-user-circle" />
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
-          <>
+          <div>
             <li>{user.username}</li>
             <li>
               {user.firstName} {user.lastName}
@@ -55,9 +56,10 @@ function ProfileButton({ user }) {
             <li>
               <button onClick={logout}>Log Out</button>
             </li>
-          </>
+          </div>
         ) : (
-          <>
+          // make the following into another modal so that the menu "popsOut" instead of just adding text to the screen
+          <div>
             <OpenModalMenuItem
               itemText="Log In"
               onItemClick={closeMenu}
@@ -68,7 +70,7 @@ function ProfileButton({ user }) {
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
             />
-          </>
+          </div>
         )}
       </ul>
     </>
