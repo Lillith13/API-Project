@@ -15,12 +15,26 @@ function OpenModalMenuItem({
     if (onItemClick) onItemClick();
   };
 
-  return (
-    <div>
-      {/* change to link/plain text later */}
-      <button onClick={onClick}>{itemText}</button>
-    </div>
-  );
+  let display;
+  if (itemText && itemText != "undefined") {
+    display = (
+      <div className="button">
+        {/* change to link/plain text later */}
+        <button onClick={onClick}>{itemText}</button>
+      </div>
+    );
+  } else {
+    display = (
+      <div>
+        <button className="menu" onClick={onClick}>
+          <i class="fa-solid fa-bars"></i>
+          <i className="fas fa-user-circle" />
+        </button>
+      </div>
+    );
+  }
+
+  return display;
 }
 
 export default OpenModalMenuItem;

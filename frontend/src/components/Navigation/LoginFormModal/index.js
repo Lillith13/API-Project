@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import * as sessionActions from "../../store/session";
-import { useModal } from "../../context/Modal";
+import * as sessionActions from "../../../store/session";
+import { useModal } from "../../../context/Modal";
 import "./LoginForm.css";
 
 function LoginFormModal() {
@@ -38,6 +38,7 @@ function LoginFormModal() {
             required
           />
         </div>
+        {errors.credential && <p className="errors">* {errors.credential}</p>}
 
         <div className="inputs">
           <label>Password</label>
@@ -47,7 +48,6 @@ function LoginFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          {errors.credential && <p className="errors">{errors.credential}</p>}
         </div>
 
         <div className="submitButton">

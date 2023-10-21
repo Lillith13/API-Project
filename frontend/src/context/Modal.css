@@ -32,7 +32,8 @@ h1.header {
   justify-content: center;
 }
 
-.inputs {
+.inputs,
+.button {
   display: flex;
   justify-content: space-between;
   align-items: center;

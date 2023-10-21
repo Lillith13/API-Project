@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import * as sessionActions from "../../store/session";
+
+import MenuModal from "./MenuModal";
 import OpenModalMenuItem from "./OpenModalMenuItem";
-import LoginFormModal from "../LoginFormModal";
-import SignupFormModal from "../SignUpFormModal";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -31,49 +30,20 @@ function ProfileButton({ user }) {
 
   const closeMenu = () => setShowMenu(false);
 
-  const logout = (e) => {
-    e.preventDefault();
-    dispatch(sessionActions.logout());
-    closeMenu();
+  const propData = {
+    closeMenu,
+    user,
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  // ! figure out error displays for nav modals
 
   return (
-    <>
-      <button className="menu" onClick={openMenu}>
-        <i class="fa-solid fa-bars"></i>
-        <i className="fas fa-user-circle" />
-      </button>
-      <ul className={ulClassName} ref={ulRef}>
-        {user ? (
-          <div>
-            <li>{user.username}</li>
-            <li>
-              {user.firstName} {user.lastName}
-            </li>
-            <li>{user.email}</li>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
-          </div>
-        ) : (
-          // make the following into another modal so that the menu "popsOut" instead of just adding text to the screen
-          <div>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
-          </div>
-        )}
-      </ul>
-    </>
+    <div>
+      <OpenModalMenuItem
+        onItemClick={closeMenu}
+        modalComponent={<MenuModal propData={propData} />}
+      />
+    </div>
   );
 }
 
