@@ -14,18 +14,38 @@ const buildSpotImageSeeds = async () => {
   const spotsIdsArr = await Spot.findAll({
     attributes: ["id"],
   });
-  let count = 0;
+  let count = 1;
   spotsIdsArr.forEach((spot) => {
     const tempArr = [];
-    for (let i = 1; i <= 10; i++) {
-      let preview = i === 1;
+    for (let i = 1; i <= 5; i++) {
+      let preview =
+        count === 1 ||
+        count === 6 ||
+        count === 11 ||
+        count === 16 ||
+        count === 21 ||
+        count === 26 ||
+        count === 31 ||
+        count === 36 ||
+        count === 41 ||
+        count === 46 ||
+        count === 51 ||
+        count === 56 ||
+        count === 61 ||
+        count === 66 ||
+        count === 71 ||
+        count === 76 ||
+        count === 81 ||
+        count === 86 ||
+        count === 91 ||
+        count === 96;
       tempArr.push({
         spotId: `${spot.id}`,
-        url: `demoImage${count + i}.url`,
+        url: count,
         preview,
       });
+      count++;
     }
-    count++;
     demoSpotImgs.push(...tempArr);
   });
   return demoSpotImgs;

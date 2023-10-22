@@ -7,6 +7,7 @@ import { Switch, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Spots from "./components/Spots";
 import * as sessionActions from "./store/session";
+import SpotDetails from "./components/SpotDetails";
 
 /* Build & Export Component */
 function App() {
@@ -23,6 +24,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <Spots />
+          </Route>
+          <Route path="/:spotId">
+            <SpotDetails />
           </Route>
         </Switch>
       )}

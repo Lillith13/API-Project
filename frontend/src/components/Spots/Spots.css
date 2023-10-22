@@ -1,7 +1,6 @@
 .spotPreviewDiv {
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-evenly; */
   margin-left: 15px;
   align-content: center;
   padding: 15px;
@@ -59,6 +58,9 @@
   }
 }
 @media screen and (min-width: 900px) {
+  .spotPreviewDiv {
+    justify-content: left;
+  }
   .spotPreview {
     margin: 15px 5px;
     width: 20%;

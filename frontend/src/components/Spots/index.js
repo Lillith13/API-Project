@@ -34,6 +34,10 @@ export default function Spots() {
             <div className="spotPreview" key={spot.id}>
               <h3>
                 {spot.name} - ImageUrl: {spot.previewImage}
+                <img
+                  src={require(`../SpotDetails/images/BirdHouse${spot.previewImage}.jpg`)}
+                  alt="birdhouse"
+                />
               </h3>
 
               <div className="infoDiv">
