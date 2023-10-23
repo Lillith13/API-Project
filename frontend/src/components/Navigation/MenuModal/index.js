@@ -3,11 +3,11 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 /* Import Necessities */
-import * as sessionActions from "../../store/session";
-import OpenModalMenuItem from "./OpenModalMenuItem";
-import LoginFormModal from "./LoginFormModal";
-import SignupFormModal from "./SignUpFormModal";
-import { useModal } from "../../context/Modal";
+import * as sessionActions from "../../../store/session";
+import OpenModalMenuItem from "../OpenModalMenuItem";
+import LoginFormModal from "../LoginFormModal";
+import SignupFormModal from "../SignUpFormModal";
+import { useModal } from "../../../context/Modal";
 
 /* Import Related CSS */
 
@@ -22,10 +22,12 @@ export default function MenuModal({ propData }) {
     dispatch(sessionActions.logout()).then(closeModal);
   };
 
+  // ! work on attaching menu model directionly beneath the menu/profile button instead of displaying in the middle of the screen
+
   return (
     <div>
       {user ? (
-        <div className="userInfo">
+        <div className="dropdownmenu">
           <li>{user.username}</li>
           <li>
             {user.firstName} {user.lastName}

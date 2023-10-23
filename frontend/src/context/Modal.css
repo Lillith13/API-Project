@@ -45,6 +45,7 @@ h1.header {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  /* figure out how to change the width of JUST the log in and sign up modal submit buttons */
 }
 
 .errors {

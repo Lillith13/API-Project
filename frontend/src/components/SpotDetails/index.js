@@ -27,10 +27,23 @@ export default function SpotDetails() {
         <div className="spotDetailsImages">
           {spot.SpotImages.map((sdImg) => (
             <div>
-              <img
-                src={require(`./images/BirdHouse${sdImg.url}.jpg`)}
-                alt="birdhouse"
-              />
+              <div className="previewImg">
+                {sdImg.preview && (
+                  <img
+                    // className="previewImg"
+                    src={require(`./images/BirdHouse${sdImg.url}.jpg`)}
+                  />
+                )}
+              </div>
+              <div className="detailsImg">
+                {!sdImg.preview && (
+                  <img
+                    // className="detailsImg"
+                    src={require(`./images/BirdHouse${sdImg.url}.jpg`)}
+                    alt="birdhouse"
+                  />
+                )}
+              </div>
             </div>
           ))}
         </div>

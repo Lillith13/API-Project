@@ -1,0 +1,13 @@
+.spotDetailsImages {
+  display: flex;
+}
+
+.previewImg {
+  width: 50%;
+  margin: 10px;
+}
+
+.detailsImg {
+  flex-wrap: wrap;
+  margin: 10px;
+}

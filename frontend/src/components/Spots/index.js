@@ -33,10 +33,11 @@ export default function Spots() {
           {spotsArr.map((spot) => (
             <div className="spotPreview" key={spot.id}>
               <h3>
-                {spot.name} - ImageUrl: {spot.previewImage}
+                {spot.name} {/* - ImageUrl: {spot.previewImage} */}
                 <img
                   src={require(`../SpotDetails/images/BirdHouse${spot.previewImage}.jpg`)}
                   alt="birdhouse"
+                  id="previewImage"
                 />
               </h3>
 

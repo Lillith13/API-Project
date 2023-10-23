@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 /* Import Necessities */
 import OpenModalMenuItem from "./OpenModalMenuItem";
-import MenuModal from "./MenuModal";
+import MenuModal from "./MenuModal/index";
 
 /* Import Related CSS */
 
