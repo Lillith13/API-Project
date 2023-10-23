@@ -1,6 +1,7 @@
 /* BoilerPlate */
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 /* Import Necessities */
 import * as spotsActions from "../../store/spots";
@@ -49,7 +50,9 @@ export default function Spots() {
                 <p>avgRating: {spot.avgRating}</p>
               </div>
 
-              <button className="priceButton">{spot.price}/night</button>
+              <Link to={`/${spot.id}`} id="spotDetailsLink">
+                <button className="priceButton">{spot.price}/night</button>
+              </Link>
             </div>
           ))}
         </div>

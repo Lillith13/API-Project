@@ -11,3 +11,8 @@
   flex-wrap: wrap;
   margin: 10px;
 }
+
+#reservationButton {
+  width: fit-content;
+  padding: 10px;
+}

@@ -25,5 +25,8 @@ button {
   padding: 10px 5px;
   width: 70px;
 }
+button:hover {
+  cursor: pointer;
+}
 
 /* ! add themeing for colorBlind variants to standard themes */
