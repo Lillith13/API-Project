@@ -9,7 +9,7 @@
 .spotPreview {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 15px;
   border: 1px solid blue;
   background-color: rgba(135, 206, 235, 0.5);
@@ -22,6 +22,7 @@
 .infoDiv {
   display: flex;
   justify-content: space-between;
+  /* align-self: flex-end; */
 }
 
 .priceButton {
@@ -29,11 +30,9 @@
   color: rgb(57, 10, 114);
   align-self: flex-end;
   padding: 10px 7px;
-  font-size: 10px;
-  width: fit-content;
-}
-#spotDetailsLink {
-  align-self: flex-end;
+  font-size: 13px;
+  width: 100%;
+  /* align-self: flex-end; */
 }
 
 /* sizing changes */

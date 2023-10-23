@@ -20,11 +20,9 @@ export default function Spots() {
     dispatch(spotsActions.loadAllSpots()).then(() => setIsLoad(true));
   }, [dispatch]);
 
-  //   ! Add styling in spots.css
-
   useEffect(() => {
     spots.spots ? setSpotsArr(spots.spots) : setSpotsArr(null);
-    if (spots.errors) console.log(spots.errors);
+    // if (spots.errors) console.log(spots.errors);
   }, [isLoaded]);
 
   return (
@@ -32,28 +30,33 @@ export default function Spots() {
       {spotsArr && spotsArr.length > 0 ? (
         <div className="spotPreviewDiv">
           {spotsArr.map((spot) => (
-            <div className="spotPreview" key={spot.id}>
-              <h3>
-                {spot.name} {/* - ImageUrl: {spot.previewImage} */}
-                <img
-                  src={require(`../SpotDetails/images/BirdHouse${spot.previewImage}.jpg`)}
-                  alt="birdhouse"
-                  id="previewImage"
-                />
-              </h3>
+            <Link to={`/${spot.id}`} className="spotPreview" key={spot.id}>
+              <div>
+                <h3>
+                  {spot.name}
+                  <img
+                    src={require(`../SpotDetails/images/BirdHouse${spot.previewImage}.jpg`)}
+                    alt="birdhouse"
+                    id="previewImage"
+                  />
+                </h3>
 
-              <div className="infoDiv">
-                <p>
-                  {spot.city}, {spot.state}
-                </p>
-                {/* {// ! get star icon from Font Awesome } */}
-                <p>avgRating: {spot.avgRating}</p>
-              </div>
+                <div className="infoDiv">
+                  <p>
+                    {spot.city}, {spot.state}
+                  </p>
+                  <p>
+                    <i
+                      className="fa-solid fa-feather"
+                      style={{ color: "#000000" }}
+                    ></i>{" "}
+                    {spot.avgRating}
+                  </p>
+                </div>
 
-              <Link to={`/${spot.id}`} id="spotDetailsLink">
                 <button className="priceButton">{spot.price}/night</button>
-              </Link>
-            </div>
+              </div>
+            </Link>
           ))}
         </div>
       ) : (
