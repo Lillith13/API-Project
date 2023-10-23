@@ -1,5 +1,5 @@
 /* BoilerPlate */
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -12,9 +12,18 @@ import "./Navigation.css";
 /* Build & Export Component */
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
+  const [position, setPosition] = useState("relative");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY >= 5) {
+      setPosition("fixed");
+    } else {
+      setPosition("relative");
+    }
+  });
 
   return (
-    <nav className="navigationBar">
+    <nav className="navigationBar" style={{ position }}>
       <NavLink exact to="/">
         <h1 className="logo">
           <i className="fa-brands fa-airbnb"></i>
