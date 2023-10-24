@@ -34,29 +34,40 @@ function LoginFormModal() {
     <div className="logInModal">
       <h1 className="header">Log In</h1>
       <form onSubmit={handleSubmit}>
+        {errors.credential && <p className="errors">* {errors.credential}</p>}
         <div className="inputs">
-          <label>Username or Email</label>
           <input
             type="text"
             value={credential}
+            placeholder="Username or Email..."
             onChange={(e) => setCredential(e.target.value)}
             required
           />
         </div>
-        {errors.credential && <p className="errors">* {errors.credential}</p>}
+        {(!credential || credential.length < 4) && (
+          <p className="errors">* Username or Email Required</p>
+        )}
 
         <div className="inputs">
-          <label>Password</label>
           <input
             type="password"
             value={password}
+            placeholder="Password..."
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
+        {(!password || password.length < 6) && (
+          <p className="errors">* Password Required</p>
+        )}
 
         <div className="submitButton">
-          <button type="submit">Log In</button>
+          <button
+            type="submit"
+            disabled={!(credential && password) ? true : false}
+          >
+            Log In
+          </button>
         </div>
       </form>
     </div>

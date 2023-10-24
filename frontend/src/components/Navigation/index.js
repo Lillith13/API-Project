@@ -23,14 +23,24 @@ function Navigation({ isLoaded }) {
   });
 
   return (
-    <nav className="navigationBar" style={{ position }}>
+    <nav
+      className="navigationBar"
+      style={
+        position === "relative" ? { position } : { position, width: "96.2%" }
+      }
+    >
       <NavLink exact to="/">
         <h1 className="logo">
           <i className="fa-brands fa-airbnb"></i>
           AirBurbs
         </h1>
       </NavLink>
-      {isLoaded && <ProfileButton user={sessionUser} />}
+      {isLoaded && (
+        <div className="navLinksDiv">
+          {sessionUser && <NavLink to="/newSpot">Create a New Spot</NavLink>}
+          <ProfileButton user={sessionUser} />
+        </div>
+      )}
     </nav>
   );
 }

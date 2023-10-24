@@ -1,3 +1,11 @@
+.spotAddDiv {
+  width: 100%;
+}
+.spotName,
+.spotAddress {
+  margin: 10px 37px;
+}
+
 .spotPreviewDiv {
   display: flex;
   flex-wrap: wrap;
@@ -15,19 +23,27 @@
   background-color: rgba(135, 206, 235, 0.5);
   border-radius: 15px;
 }
+
+.previewImgDiv {
+  display: flex;
+  align-items: center;
+}
+
 #previewImage {
   width: 100%;
+  border-radius: 10px;
 }
 
 .infoDiv {
   display: flex;
   justify-content: space-between;
-  /* align-self: flex-end; */
+  color: black;
 }
 
 .priceButton {
   border: 1px solid rgb(150, 47, 240);
   color: rgb(57, 10, 114);
+  color: rgb(51, 38, 68);
   align-self: flex-end;
   padding: 10px 7px;
   font-size: 13px;

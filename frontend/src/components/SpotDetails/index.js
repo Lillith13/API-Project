@@ -35,69 +35,74 @@ export default function SpotDetails() {
   const displayFetchData = () => {
     return (
       <>
-        <h1 className="spotName">{spot.name}</h1>
-        <div className="spotAddress">
-          <p>
+        <div className="spotNameNAddDiv">
+          <h1 className="spotName">{spot.name}</h1>
+          <p className="spotAddress" style={{ width: "100%" }}>
             {spot.city}, {spot.state}, {spot.country}
           </p>
         </div>
         <div className="spotDetailsImages">
           {isLoaded &&
             spot.SpotImages.map((sdImg) => (
-              <div key={`image${sdImg.id}`}>
-                <div className="previewImg">
-                  {sdImg.preview && (
-                    <img
-                      // className="previewImg"
-                      src={require(`./images/BirdHouse${sdImg.url}.jpg`)}
-                      alt="prevbirdhouse"
-                      key={`image${sdImg.id}`}
-                    />
-                  )}
-                </div>
-                <div className="detailsImg" key={`image${sdImg.id}`}>
+              <div className="previewImgDiv">
+                {sdImg.preview ? (
+                  <img
+                    className="previewImg"
+                    src={require(`./images/BirdHouse${sdImg.url}.jpg`)}
+                    alt="prevbirdhouse"
+                    key={`image${sdImg.id}`}
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
+            ))}
+          <div className="detailsImgDiv">
+            {isLoaded &&
+              spot.SpotImages.map((sdImg) => (
+                <>
                   {!sdImg.preview && (
                     <img
-                      // className="detailsImg"
+                      className="detailsImg"
                       src={require(`./images/BirdHouse${sdImg.url}.jpg`)}
                       alt="birdhouse"
                       key={`image${sdImg.id}`}
                     />
                   )}
-                </div>
-              </div>
-            ))}
-        </div>
-
-        <div className="spotOwnerName">
-          {isLoaded && owner && (
-            <h3>
-              Hosted by {owner.firstName} {owner.lastName}
-            </h3>
-          )}
-        </div>
-
-        <div className="descriptionDiv">
-          <p id="description">description: {spot.description}</p>
-        </div>
-
-        <div className="reservationDiv">
-          <h3 id="price">price: {spot.price}</h3>
-          <div className="revBlurb">
-            <h3 id="avgStarRating">
-              <i
-                className="fa-solid fa-feather"
-                style={{ color: "#000000" }}
-              ></i>{" "}
-              {spot.avgStarRating} - {spot.numReviews} reviews
-            </h3>
+                </>
+              ))}
           </div>
-          <button id="reservationButton">Make Reservation</button>
         </div>
 
+        <div className="spotDetails">
+          <div className="descriptionDiv">
+            {isLoaded && owner && (
+              <h3 className="spotOwnerName">
+                Hosted by {owner.firstName} {owner.lastName}
+              </h3>
+            )}
+            <p id="description">description: {spot.description}</p>
+          </div>
+
+          <div className="reservationDiv">
+            <div className="revBlurb">
+              <p id="price">
+                <strong>{spot.price}</strong> night
+              </p>
+              <p id="avgStarRating">
+                <i
+                  className="fa-solid fa-feather"
+                  style={{ color: "rgb(32, 185, 32)" }}
+                ></i>{" "}
+                {spot.avgStarRating} / {spot.numReviews} reviews
+              </p>
+            </div>
+            <button id="reservationButton">Make Reservation</button>
+          </div>
+        </div>
         {/* Dividing line */}
 
-        <div className="revBlurb">
+        <div>
           <h3 id="avgStarRating">
             <i className="fa-solid fa-feather" style={{ color: "#000000" }}></i>{" "}
             {spot.avgStarRating} - {spot.numReviews} reviews
@@ -125,9 +130,9 @@ export default function SpotDetails() {
 
   return (
     <div className="spotDetailHead">
-      <p className="latNlng">
+      {/* <p className="latNlng">
         lat: {spot.lat} lng: {spot.lng}
-      </p>
+      </p> */}
 
       <div>{isLoaded && displayFetchData()}</div>
     </div>

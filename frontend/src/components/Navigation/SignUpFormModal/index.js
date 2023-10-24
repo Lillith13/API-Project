@@ -53,10 +53,10 @@ function SignupFormModal() {
       <h1 className="header">Sign Up</h1>
       <form onSubmit={handleSubmit} className="form">
         <div className="inputs">
-          <label>Email</label>
           <input
-            type="text"
+            type="email"
             value={email}
+            placeholder="Email..."
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -64,10 +64,10 @@ function SignupFormModal() {
         {errors.email && <p className="errors">* {errors.email}</p>}
 
         <div className="inputs">
-          <label>Username</label>
           <input
             type="text"
             value={username}
+            placeholder="Username..."
             onChange={(e) => setUsername(e.target.value)}
             required
           />
@@ -75,10 +75,10 @@ function SignupFormModal() {
         {errors.username && <p className="errors">* {errors.username}</p>}
 
         <div className="inputs">
-          <label>First Name</label>
           <input
             type="text"
             value={firstName}
+            placeholder="First Name..."
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
@@ -86,10 +86,10 @@ function SignupFormModal() {
         {errors.firstName && <p className="errors">* {errors.firstName}</p>}
 
         <div className="inputs">
-          <label>Last Name</label>
           <input
             type="text"
             value={lastName}
+            placeholder="Last Name..."
             onChange={(e) => setLastName(e.target.value)}
             required
           />
@@ -97,31 +97,50 @@ function SignupFormModal() {
         {errors.lastName && <p className="errors">* {errors.lastName}</p>}
 
         <div className="inputs">
-          <label>Password</label>
           <input
             type="password"
             value={password}
+            placeholder="Password..."
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
+        {password && password.length < 6 && (
+          <p className="errors">* Password must be 6+ characters</p>
+        )}
         {errors.password && <p className="errors">* {errors.password}</p>}
 
         <div className="inputs">
-          <label>Confirm Password</label>
           <input
             type="password"
             value={confirmPassword}
+            placeholder="Confirm Password..."
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
         </div>
+        {password !== confirmPassword && (
+          <p className="errors">* Must match Paswsword</p>
+        )}
         {errors.confirmPassword && (
           <p className="errors">* {errors.confirmPassword}</p>
         )}
 
         <div className="submitButton">
-          <button type="submit">Sign Up</button>
+          <button
+            type="submit"
+            disabled={
+              email.length > 0 &&
+              username.length >= 4 &&
+              firstName.length > 0 &&
+              lastName.length > 0 &&
+              password === confirmPassword
+                ? false
+                : true
+            }
+          >
+            Sign Up
+          </button>
         </div>
       </form>
     </div>

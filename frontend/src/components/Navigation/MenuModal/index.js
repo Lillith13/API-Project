@@ -27,13 +27,15 @@ export default function MenuModal({ propData }) {
   return (
     <div>
       {user ? (
-        <div className="dropdownmenu">
-          <li>{user.username}</li>
-          <li>
+        <div className="dropdownmenu" style={{ textAlign: "center" }}>
+          <p id="menuText">{user.username}</p>
+          <p id="menuText">
             {user.firstName} {user.lastName}
-          </li>
-          <li>{user.email}</li>
-          <button onClick={logout}>Log Out</button>
+          </p>
+          <p id="menuText">{user.email}</p>
+          <button onClick={logout} id="logoutButton" style={{ width: "100%" }}>
+            Log Out
+          </button>
         </div>
       ) : (
         <div>

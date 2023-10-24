@@ -1,7 +1,7 @@
 /* BoilerPlate */
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 /* Import Necessities */
 import * as spotsActions from "../../store/spots";
@@ -22,7 +22,6 @@ export default function Spots() {
 
   useEffect(() => {
     spots.spots ? setSpotsArr(spots.spots) : setSpotsArr(null);
-    // if (spots.errors) console.log(spots.errors);
   }, [isLoaded]);
 
   return (
@@ -32,14 +31,13 @@ export default function Spots() {
           {spotsArr.map((spot) => (
             <Link to={`/${spot.id}`} className="spotPreview" key={spot.id}>
               <div>
-                <h3>
-                  {spot.name}
+                <div title={spot.name} className="previewImgDiv">
                   <img
                     src={require(`../SpotDetails/images/BirdHouse${spot.previewImage}.jpg`)}
                     alt="birdhouse"
                     id="previewImage"
                   />
-                </h3>
+                </div>
 
                 <div className="infoDiv">
                   <p>
@@ -48,7 +46,7 @@ export default function Spots() {
                   <p>
                     <i
                       className="fa-solid fa-feather"
-                      style={{ color: "#000000" }}
+                      style={{ color: "rgb(32, 185, 32)" }}
                     ></i>{" "}
                     {spot.avgRating}
                   </p>

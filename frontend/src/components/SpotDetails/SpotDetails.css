@@ -1,18 +1,65 @@
+.spotName,
+.spotAddress {
+  width: fit-content;
+  margin: 10px 37px;
+}
+
 .spotDetailsImages {
   display: flex;
+  justify-content: center;
 }
 
-.previewImg {
-  width: 50%;
-  margin: 10px;
-}
-
-.detailsImg {
-  flex-wrap: wrap;
-  margin: 10px;
-}
-
-#reservationButton {
+.previewImgDiv {
   width: fit-content;
+}
+.previewImg {
+  width: 100%;
+  height: 85%;
+  border-radius: 15px;
+  margin: 5px 0px 0px 20px;
+}
+
+.detailsImgDiv {
+  display: flex;
+  justify-content: space-evenly;
+  align-content: space-evenly;
+  flex-wrap: wrap;
+  width: 50%;
+}
+.detailsImg {
+  width: 40%;
+  height: 40%;
+  border-radius: 10px;
+}
+
+.spotDetails {
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: 1px solid black;
+}
+.descriptionDiv {
+  /* border: 3px solid black; */
+  width: 60%;
+  padding: 10px 50px;
+}
+.reservationDiv {
+  background-color: rgba(108, 251, 206, 0.5);
+  border: 1px solid black;
+  border-radius: 7px;
+  width: 40%;
+  padding: 5px 25px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+.revBlurb {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 50px;
+  font-size: 20px;
+}
+#reservationButton {
+  width: 100%;
   padding: 10px;
+  font-size: 17px;
+  margin-bottom: 10px;
 }

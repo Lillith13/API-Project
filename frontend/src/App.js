@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import Spots from "./components/Spots";
 import * as sessionActions from "./store/session";
 import SpotDetails from "./components/SpotDetails";
+import CreateSpotForm from "./components/Forms/NewSpot";
 
 /* Build & Export Component */
 function App() {
@@ -26,9 +27,13 @@ function App() {
           <Route exact path="/">
             <Spots />
           </Route>
+          <Route path="/newSpot">
+            <CreateSpotForm />
+          </Route>
           <Route path="/:spotId">
             <SpotDetails />
           </Route>
+          <Route>"404 Page Not Found"</Route>
         </Switch>
       )}
     </div>

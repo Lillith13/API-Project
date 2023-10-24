@@ -1,8 +1,8 @@
 /* TODO Add site wide styles */
 body {
-  /* z-index: -1; */
-  /* set themes later - curr would list as Spring */
   background-color: rgba(31, 235, 123, 0.35);
+  /* padding: 10px; */
+  align-content: center;
 }
 
 .hidden {
@@ -16,6 +16,7 @@ a:visited {
 }
 
 input,
+.input,
 button {
   background-color: rgba(126, 106, 242, 0.25);
   border: 1px solid skyblue;

@@ -1,0 +1,100 @@
+.createSpotFormDiv {
+  display: flex;
+  justify-content: center;
+}
+.createSpotForm {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 30px;
+  padding: 50px;
+  background-color: rgba(241, 201, 207, 0.5);
+  border: 1px solid black;
+}
+
+.countryDiv,
+.addressDiv,
+.cityDiv,
+.stateDiv,
+.latDiv,
+.lngDiv,
+.descDiv,
+.nameDiv,
+.priceDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.cityState,
+.latNlng {
+  display: flex;
+  align-items: center;
+}
+.cityDiv {
+  width: 80%;
+}
+.stateDiv {
+  width: 20%;
+}
+
+#descInput,
+#nameInput,
+#priceInput,
+.imgInputsDiv {
+  margin-bottom: 35px;
+}
+
+.priceInputDiv {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+}
+#dollarSign {
+  margin: 15px;
+}
+#priceInput {
+  width: 90%;
+}
+
+.fullAddressDiv,
+.descDiv,
+.nameDiv,
+.priceDiv,
+.imgSecDiv {
+  border-bottom: 3px solid black;
+}
+
+.input#descInput {
+  background-color: rgba(126, 106, 242, 0.25);
+  border: 1px solid skyblue;
+  color: rgb(101, 100, 111);
+  height: auto;
+}
+
+.imgInputsDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.imgInputsDiv > input {
+  width: 96%;
+}
+
+#formComma {
+  font-size: 45px;
+}
+
+.subSpotDiv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+}
+.submitNewSpot {
+  width: fit-content;
+  padding: 15px 30px;
+  margin-top: 30px;
+}

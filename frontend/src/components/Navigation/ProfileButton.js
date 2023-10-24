@@ -33,8 +33,6 @@ function ProfileButton({ user }) {
     user,
   };
 
-  // ! figure out error displays for nav modals
-
   return (
     <div>
       <OpenModalMenuItem
