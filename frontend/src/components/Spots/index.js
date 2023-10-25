@@ -29,7 +29,6 @@ export default function Spots() {
 
   // ! Change img urls for spotImages before continueing here
   const loadSpots = () => {
-    console.log(spots);
     const display = [];
     let disp;
     spots.forEach((spot) => {

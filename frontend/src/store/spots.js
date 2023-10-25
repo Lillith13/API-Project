@@ -41,7 +41,6 @@ export const loadAllSpots = (queryObj) => async (dispatch) => {
     method: "GET",
   });
   const data = await res.json();
-  console.log(data);
   dispatch(loadSpots(data.Spots));
   return res;
 };

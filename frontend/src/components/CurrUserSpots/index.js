@@ -13,9 +13,15 @@ export default function CurrUserSpots() {
   const dispatch = useDispatch();
   const spots = useSelector((state) => state.spots);
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
-    dispatch(spotsActions.loadUserSpots()).then(() => console.log(spots));
+    dispatch(spotsActions.loadUserSpots()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
-  return <div>coming soon...</div>;
+  return (
+    <div>
+      <h1>coming soon...</h1>
+    </div>
+  );
 }
