@@ -28,11 +28,11 @@ function App() {
           <Route exact path="/">
             <Spots />
           </Route>
-          <Route path="/mySpots">
-            <CurrUserSpots />
-          </Route>
           <Route path="/newSpot">
             <CreateSpotForm />
+          </Route>
+          <Route path="/mySpots">
+            <CurrUserSpots />
           </Route>
           <Route path="/:spotId">
             <SpotDetails />
