@@ -9,6 +9,7 @@ import Spots from "./components/Spots";
 import * as sessionActions from "./store/session";
 import SpotDetails from "./components/SpotDetails";
 import CreateSpotForm from "./components/Forms/NewSpot";
+import CurrUserSpots from "./components/CurrUserSpots";
 
 /* Build & Export Component */
 function App() {
@@ -27,7 +28,9 @@ function App() {
           <Route exact path="/">
             <Spots />
           </Route>
-          <Route path="/mySpots"></Route>
+          <Route path="/mySpots">
+            <CurrUserSpots />
+          </Route>
           <Route path="/newSpot">
             <CreateSpotForm />
           </Route>

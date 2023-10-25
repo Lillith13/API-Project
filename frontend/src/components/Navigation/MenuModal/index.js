@@ -1,6 +1,7 @@
 /* BoilerPlate */
 import React from "react";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 /* Import Necessities */
 import * as sessionActions from "../../../store/session";
@@ -28,6 +29,7 @@ export default function MenuModal({ propData }) {
     <div>
       {user ? (
         <div className="dropdownmenu" style={{ textAlign: "center" }}>
+          <Link to="/mySpots">Your Spots</Link>
           <p id="menuText">{user.username}</p>
           <p id="menuText">
             {user.firstName} {user.lastName}
