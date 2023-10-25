@@ -27,6 +27,7 @@ function App() {
           <Route exact path="/">
             <Spots />
           </Route>
+          <Route path="/mySpots"></Route>
           <Route path="/newSpot">
             <CreateSpotForm />
           </Route>

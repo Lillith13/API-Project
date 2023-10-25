@@ -12,54 +12,73 @@ import "./Spots.css";
 /* Build & Export Component */
 export default function Spots() {
   const dispatch = useDispatch();
+  const urlSearch = new URLSearchParams(window.location.search);
+
+  const queryObj = {
+    page: urlSearch.get("page") || 1,
+    size: urlSearch.get("size") || 10,
+  };
+
   const spots = useSelector((state) => state.spots);
-  const [isLoaded, setIsLoad] = useState(false);
-  const [spotsArr, setSpotsArr] = useState(spots.spots || null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  // const [spotsArr, setSpotsArr] = useState(spots || null);
 
   useEffect(() => {
-    dispatch(spotsActions.loadAllSpots()).then(() => setIsLoad(true));
+    dispatch(spotsActions.loadAllSpots(queryObj)).then(() => setIsLoaded(true));
   }, [dispatch]);
 
-  useEffect(() => {
-    spots.spots ? setSpotsArr(spots.spots) : setSpotsArr(null);
-  }, [isLoaded]);
+  // ! Change img urls for spotImages before continueing here
+  const loadSpots = () => {
+    console.log(spots);
+    const display = [];
+    let disp;
+    spots.forEach((spot) => {
+      const prevImg = spot.previewImage;
+      // const endTag = prevImg.subString();
+      // console.log(prevImg[0]);
+      if (!prevImg || prevImg == undefined) {
+        disp = (
+          <img
+            src={`../SpotDetails/images/BirdHouseundefined.jpg`}
+            alt="birdhouse"
+            id="previewImage"
+          />
+        );
+      }
+      if (typeof prevImg === "string" && [...prevImg][0] === "/") {
+        disp = (
+          <img
+            src={require(`../SpotDetails${prevImg}`)}
+            alt="birdhouse"
+            id="previewImage"
+          />
+        );
+      } else {
+        // console.log([...prevImg][0]);
+        disp = <img src={prevImg} alt="birdhouse" id="previewImage" />;
+      }
 
-  return (
-    <div>
-      {spotsArr && spotsArr.length > 0 ? (
-        <div className="spotPreviewDiv">
-          {spotsArr.map((spot) => (
-            <Link to={`/${spot.id}`} className="spotPreview" key={spot.id}>
-              <div>
-                <div title={spot.name} className="previewImgDiv">
-                  <img
-                    src={require(`../SpotDetails/images/BirdHouse${spot.previewImage}.jpg`)}
-                    alt="birdhouse"
-                    id="previewImage"
-                  />
-                </div>
+      display.push(
+        <Link to={`/${spot.id}`} className="spotPreview" key={spot.id}>
+          {disp}
+          <div className="infoDiv">
+            <p>
+              {spot.city}, {spot.state}
+            </p>
+            <p>
+              <i
+                className="fa-solid fa-feather"
+                style={{ color: "rgb(32, 185, 32)" }}
+              />{" "}
+              {spot.avgRating}
+            </p>
+          </div>
+          <button className="priceButton">{spot.price}/night</button>
+        </Link>
+      );
+    });
+    return <div className="spotPreviewDiv">{display}</div>;
+  };
 
-                <div className="infoDiv">
-                  <p>
-                    {spot.city}, {spot.state}
-                  </p>
-                  <p>
-                    <i
-                      className="fa-solid fa-feather"
-                      style={{ color: "rgb(32, 185, 32)" }}
-                    ></i>{" "}
-                    {spot.avgRating}
-                  </p>
-                </div>
-
-                <button className="priceButton">{spot.price}/night</button>
-              </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p>error loading spots</p>
-      )}
-    </div>
-  );
+  return <div>{isLoaded && loadSpots()}</div>;
 }

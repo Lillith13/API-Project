@@ -1,5 +1,6 @@
 /* BoilerPlate */
 import { useEffect, useState } from "react";
+import { Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 /* Import Necessities */
@@ -9,9 +10,10 @@ import * as spotActions from "../../../store/spots";
 import "./newSpotForm.css";
 
 export default function CreateSpotForm() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const session = useSelector((state) => state.session);
-  console.log(session.user); // returns current user info
+  // console.log(session.user); // returns current user info
 
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -35,7 +37,8 @@ export default function CreateSpotForm() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log({
+
+    const newSpot = {
       country,
       address,
       city,
@@ -45,12 +48,23 @@ export default function CreateSpotForm() {
       description,
       name,
       price,
-      spotImgUrls: [prevImg, img1, img2, img3, img4],
-    });
+    };
 
-    // ! setup action/thunk and dispatch to create new database entry
+    let spotImgUrls = [prevImg, img1, img2, img3, img4];
+    spotImgUrls = spotImgUrls.filter((img) => img && img != "undefined");
+
+    dispatch(
+      spotActions.createASpot(newSpot, spotImgUrls, session.user.id)
+    ).then(
+      (newSpotId) => history.push(`/${newSpotId}`)
+      /* console.log(newSpotId)*/
+    );
 
     setHasSubmitted(true);
+  };
+
+  useEffect(() => {
+    setHasSubmitted(false);
     setCountry("");
     setAddress("");
     setCity("");
@@ -65,7 +79,7 @@ export default function CreateSpotForm() {
     setImg2("");
     setImg3("");
     setImg4("");
-  };
+  }, [hasSubmitted]);
 
   return (
     <div className="createSpotFormDiv">
@@ -85,7 +99,7 @@ export default function CreateSpotForm() {
               value={country}
               onChange={(e) => setCountry(e.target.value)}
               id="countryInput"
-              require
+              required
             />
           </div>
           <br />
@@ -156,17 +170,14 @@ export default function CreateSpotForm() {
             Mention the best features of your space, any special amentities like
             fast wifi or parking, and what you love about the neighborhood.
           </p>
-          <span
-            className="input"
+          <textarea
             id="descInput"
-            role="textbox"
-            contentEditable
+            className="input"
+            placeholder="Please write at least 30 characters"
+            style={{ height: "250px" }}
             value={description}
-            onClick={(e) => (e.target.value = "")}
             onChange={(e) => setDescription(e.target.value)}
-          >
-            Please write at least 30 characters{" "}
-          </span>
+          />
           {/* {description.length < 30 && <p className="errors">Description needs a minimum of 30 characters</p>} */}
         </div>
 
@@ -194,7 +205,7 @@ export default function CreateSpotForm() {
             in search results.
           </p>
           <div className="priceInputDiv">
-            <i class="fa-solid fa-dollar-sign fa-shake" id="dollarSign" />
+            <i className="fa-solid fa-dollar-sign fa-shake" id="dollarSign" />
             <input
               type="text"
               placeholder="Price per night (USD)"

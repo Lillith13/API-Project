@@ -23,7 +23,7 @@ export default function SpotDetails() {
   useEffect(() => {
     dispatch(spotsActions.getASpot(spotId))
       .then(() => {
-        setOwner(spot.Owner);
+        setOwner(spot[0].Owner);
       })
       .then(() =>
         dispatch(reviewsActions.loadSpotReviews(spotId)).then(() => {
@@ -32,45 +32,93 @@ export default function SpotDetails() {
       );
   }, [isLoaded, dispatch]);
 
+  const loadPrevImage = (spotImgs) => {
+    const prevImg = spotImgs.find((img) => img.preview);
+
+    let display;
+    if (prevImg.url[0] === "/") {
+      display = (
+        <img
+          className="detailsImg"
+          src={require(`.${prevImg.url}`)}
+          alt="birdhouse"
+          key={`image${prevImg.id}`}
+        />
+      );
+    } else if (!prevImg || prevImg == "undefined") {
+      display = (
+        <img
+          className="detailsImg"
+          src={require(`./images/BirdHouseundefined.jpg`)}
+          alt="birdhouse"
+          key={`image${prevImg.id}`}
+        />
+      );
+    } else {
+      display = (
+        <img
+          className="detailsImg"
+          src={prevImg.url}
+          alt="birdhouse"
+          key={prevImg.id}
+        />
+      );
+    }
+
+    return display;
+  };
+
+  const loadOtherImages = (spotImgs) => {
+    const allOtherImgs = spotImgs.filter((img) => !img.preview);
+
+    let count = 0;
+    while (allOtherImgs.length < 4) {
+      allOtherImgs.push({
+        id: `default${count}`,
+        url: `/images/BirdHouseundefined.jpg`,
+      });
+      count++;
+    }
+
+    const display = [];
+    allOtherImgs.map((img) => {
+      if (img.url[0] === "/") {
+        display.push(
+          <img
+            className="detailsImg"
+            src={require(`.${img.url}`)}
+            alt="birdhouse"
+            key={`image${img.id}`}
+          />
+        );
+      } else {
+        display.push(
+          <img
+            className="detailsImg"
+            src={img.url}
+            alt="birdhouse"
+            key={`image${img.id}`}
+          />
+        );
+      }
+    });
+
+    return display;
+  };
+
   const displayFetchData = () => {
     return (
       <>
         <div className="spotNameNAddDiv">
-          <h1 className="spotName">{spot.name}</h1>
+          <h1 className="spotName">{spot[0].name}</h1>
           <p className="spotAddress" style={{ width: "100%" }}>
-            {spot.city}, {spot.state}, {spot.country}
+            {spot[0].city}, {spot[0].state}, {spot[0].country}
           </p>
         </div>
         <div className="spotDetailsImages">
-          {isLoaded &&
-            spot.SpotImages.map((sdImg) => (
-              <div className="previewImgDiv">
-                {sdImg.preview ? (
-                  <img
-                    className="previewImg"
-                    src={require(`./images/BirdHouse${sdImg.url}.jpg`)}
-                    alt="prevbirdhouse"
-                    key={`image${sdImg.id}`}
-                  />
-                ) : (
-                  ""
-                )}
-              </div>
-            ))}
+          {isLoaded && loadPrevImage(spot[0].SpotImages)}
           <div className="detailsImgDiv">
-            {isLoaded &&
-              spot.SpotImages.map((sdImg) => (
-                <>
-                  {!sdImg.preview && (
-                    <img
-                      className="detailsImg"
-                      src={require(`./images/BirdHouse${sdImg.url}.jpg`)}
-                      alt="birdhouse"
-                      key={`image${sdImg.id}`}
-                    />
-                  )}
-                </>
-              ))}
+            {isLoaded && loadOtherImages(spot[0].SpotImages)}
           </div>
         </div>
 
@@ -81,20 +129,20 @@ export default function SpotDetails() {
                 Hosted by {owner.firstName} {owner.lastName}
               </h3>
             )}
-            <p id="description">description: {spot.description}</p>
+            <p id="description">description: {spot[0].description}</p>
           </div>
 
           <div className="reservationDiv">
             <div className="revBlurb">
               <p id="price">
-                <strong>{spot.price}</strong> night
+                <strong>{spot[0].price}</strong> night
               </p>
               <p id="avgStarRating">
                 <i
                   className="fa-solid fa-feather"
                   style={{ color: "rgb(32, 185, 32)" }}
                 ></i>{" "}
-                {spot.avgStarRating} / {spot.numReviews} reviews
+                {spot[0].avgStarRating} / {spot[0].numReviews} reviews
               </p>
             </div>
             <button id="reservationButton">Make Reservation</button>
@@ -105,7 +153,7 @@ export default function SpotDetails() {
         <div>
           <h3 id="avgStarRating">
             <i className="fa-solid fa-feather" style={{ color: "#000000" }}></i>{" "}
-            {spot.avgStarRating} - {spot.numReviews} reviews
+            {spot[0].avgStarRating} - {spot[0].numReviews} reviews
           </h3>
           <div className="reviewsForSpot">
             {reviews.map((rev) => (

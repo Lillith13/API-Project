@@ -41,7 +41,7 @@ const buildSpotImageSeeds = async () => {
         count === 96;
       tempArr.push({
         spotId: `${spot.id}`,
-        url: count,
+        url: `/images/BirdHouse${count}.jpg`,
         preview,
       });
       count++;
