@@ -84,14 +84,16 @@ export const restoreUser = () => async (dispatch) => {
   });
   const data = await res.json();
   let uProfile = { ...data.user };
-  const uSpotsRes = await csrfFetch("/api/spots/current", {
-    method: "GET",
-  });
-  const uSpotsData = await uSpotsRes.json();
-  if (!uSpotsData.message && uSpotsData.Spots.length > 0)
-    uProfile.ownsSpots = true;
-  else uProfile.ownsSpots = false;
-  dispatch(setUser(uProfile));
+  if (data.user) {
+    const uSpotsRes = await csrfFetch("/api/spots/current", {
+      method: "GET",
+    });
+    const uSpotsData = await uSpotsRes.json();
+    if (!uSpotsData.message && uSpotsData.Spots.length > 0)
+      uProfile.ownsSpots = true;
+    else uProfile.ownsSpots = false;
+    dispatch(setUser(uProfile));
+  } else dispatch(setUser(data.user));
   return res;
 };
 
