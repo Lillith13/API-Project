@@ -8,6 +8,7 @@ import * as sessionActions from "../../../store/session";
 import "./SignupForm.css";
 
 /* Import Related CSS */
+import "./SignupForm.css";
 
 /* Build & Export Modal - SignUp Form */
 function SignupFormModal() {

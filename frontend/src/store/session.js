@@ -1,10 +1,11 @@
+import * as spotActions from "./spots";
 import { csrfFetch } from "./csrf";
 
 const LOG_IN = "session/setUser";
 const LOG_OUT = "session/unsetUser";
 const SIGN_UP = "session/newUser";
 
-const setUser = (user) => {
+export const setUser = (user) => {
   return {
     type: LOG_IN,
     user,
@@ -34,8 +35,18 @@ export const login = (user) => async (dispatch) => {
     }),
   });
   const data = await res.json();
-  dispatch(setUser(data.user));
-  return res;
+  let uProfile = { ...data.user };
+  const uSpotsRes = await csrfFetch("/api/spots/current", {
+    method: "GET",
+  });
+  const uSpotsData = await uSpotsRes.json();
+  if (!uSpotsData.message && uSpotsData.Spots.length > 0)
+    uProfile.ownsSpots = true;
+  else uProfile.ownsSpots = false;
+  dispatch(setUser(uProfile));
+  // additional protection on errors (technically not necessary)
+  if (!data.errors) return uProfile;
+  else return data; // rarely if ever hit
 };
 
 export const signup = (user) => async (dispatch) => {
@@ -51,7 +62,11 @@ export const signup = (user) => async (dispatch) => {
     }),
   });
   const data = await res.json();
-  dispatch(newUser(data.user));
+  const uProfile = {
+    ...data.user,
+    ownsSpots: false,
+  };
+  dispatch(newUser(uProfile));
   return res;
 };
 
@@ -68,7 +83,15 @@ export const restoreUser = () => async (dispatch) => {
     method: "GET",
   });
   const data = await res.json();
-  dispatch(setUser(data.user));
+  let uProfile = { ...data.user };
+  const uSpotsRes = await csrfFetch("/api/spots/current", {
+    method: "GET",
+  });
+  const uSpotsData = await uSpotsRes.json();
+  if (!uSpotsData.message && uSpotsData.Spots.length > 0)
+    uProfile.ownsSpots = true;
+  else uProfile.ownsSpots = false;
+  dispatch(setUser(uProfile));
   return res;
 };
 

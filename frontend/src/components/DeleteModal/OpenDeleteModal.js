@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useModal } from "../../context/Modal";
 
 export default function OpenVerifyDeleteModal({ modalComponent, itemText }) {
-  const { setModalContent, setOnModalClose } = useModal();
+  const { setModalContent } = useModal();
 
   const [show, setShow] = useState(false);
 

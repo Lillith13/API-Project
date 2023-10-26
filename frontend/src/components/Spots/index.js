@@ -1,7 +1,7 @@
 /* BoilerPlate */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 /* Import Necessities */
 import * as spotsActions from "../../store/spots";
@@ -14,7 +14,7 @@ export default function Spots() {
   const dispatch = useDispatch();
   const urlSearch = new URLSearchParams(window.location.search);
 
-  const [spots, setSpot] = useState({});
+  const spots = useSelector((state) => state.spots);
 
   const queryObj = {
     page: urlSearch.get("page") || 1,
@@ -25,7 +25,6 @@ export default function Spots() {
 
   useEffect(() => {
     dispatch(spotsActions.loadAllSpots(queryObj)).then((spots) => {
-      setSpot(spots);
       setIsLoaded(true);
     });
   }, [dispatch]);

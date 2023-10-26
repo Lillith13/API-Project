@@ -1,3 +1,5 @@
+import * as sessionActions from "./session";
+
 import { csrfFetch } from "./csrf";
 
 const LOAD_SPOTS = "spots/loadSpots";
@@ -93,6 +95,7 @@ export const createASpot = (spot, spotImgs, userId) => async (dispatch) => {
     });
   }
   dispatch(addSpot(nSpot)); // <- isn't really necessary ?
+  dispatch(sessionActions.restoreUser());
   return nSpot.id;
 };
 
@@ -114,11 +117,13 @@ export const updateSpot = (spotId, newSpot) => async (dispatch) => {
 };
 
 export const deleteASpot = (spotId) => async (dispatch) => {
-  console.log(spotId);
   const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: "DELETE",
   });
-  if (res.ok) dispatch(deleteSpot(spotId));
+  if (res.ok) {
+    dispatch(deleteSpot(spotId));
+    dispatch(sessionActions.restoreUser());
+  }
   return res;
 };
 

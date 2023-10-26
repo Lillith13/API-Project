@@ -8,7 +8,7 @@ import MenuModal from "./MenuModal";
 /* Import Related CSS */
 
 /* Build & Export Component --- Menu/Profile Button */
-function ProfileButton({ user }) {
+function ProfileButton() {
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -30,7 +30,6 @@ function ProfileButton({ user }) {
 
   const propData = {
     closeMenu,
-    user,
   };
 
   return (

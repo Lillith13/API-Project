@@ -1,9 +1,10 @@
 /* BoilerPlate */
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 /* Import Necessities */
 import * as sessionActions from "../../../store/session";
+import * as spotsActions from "../../../store/spots";
 import { useModal } from "../../../context/Modal";
 
 /* Import Related CSS */
@@ -14,6 +15,7 @@ function LoginFormModal() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
+  const [uProfile, setUProfile] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 

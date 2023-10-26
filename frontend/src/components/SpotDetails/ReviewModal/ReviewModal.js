@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { useModal } from "../../../context/Modal";
-import * as spotActions from "../../../store/spots";
+import * as reviewActions from "../../../store/reviews";
 
-export default function ReviewModal() {
+import "./ReviewModal.css";
+
+export default function ReviewModal({ spotId }) {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
   const [numStars, setNumStars] = useState(0);
+  const [activeStar, setActiveStar] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [errors, setErrors] = useState({});
   const stars = [1, 2, 3, 4, 5];
@@ -19,16 +22,15 @@ export default function ReviewModal() {
     if (reviewText.length < 10)
       errs.reviewText = "Review must be 10 characters or longer";
     else {
-      console.log("numStars => ", numStars);
-      console.log("reviewText => ", reviewText);
-      // dispatch();
-      window.location.reload(false);
+      const newRevData = {
+        spotId,
+        stars: numStars,
+        review: reviewText,
+      };
+      dispatch(reviewActions.newReview(newRevData));
       closeModal();
     }
     setErrors(errs);
-
-    // ! dispatch create spot review
-    // ! close modal & reload page
   };
 
   // ! Additional styling needed (CSS)
@@ -36,20 +38,24 @@ export default function ReviewModal() {
     <div>
       <h1>How was your stay?</h1>
       <form onSubmit={onSubmit}>
-        <div>
+        <div
+          onClick={(e) => {
+            numStars === e.target.id
+              ? setNumStars(0)
+              : setNumStars(e.target.id);
+          }}
+        >
           {stars.map((star) => (
-            <div onClick={(e) => setNumStars(e.target.id)}>
-              <i
-                className="fa-solid fa-feather"
-                style={
-                  star <= numStars
-                    ? { color: "rgb(32, 185, 32)" }
-                    : { color: "#000000" }
-                }
-                id={star}
-                key={star}
-              ></i>
-            </div>
+            <i
+              className={`fa-solid fa-feather`}
+              id={star}
+              key={star}
+              style={
+                numStars >= star
+                  ? { color: "rgb(32, 185, 32)" }
+                  : { color: "black" }
+              }
+            ></i>
           ))}{" "}
           Stars
         </div>

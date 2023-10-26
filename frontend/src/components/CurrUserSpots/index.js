@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 /* Import Necessities */
 import * as spotsActions from "../../store/spots";
-import OpenVerifyDeleteModal from "./OpenDeleteModal";
-import VerifyDeleteModal from "./DeleteModal/DeleteModal.js";
+import OpenVerifyDeleteModal from "../DeleteModal/OpenDeleteModal";
+import VerifyDeleteModal from "../DeleteModal/DeleteModal.js";
 
 /* Import Related CSS */
 import "./CurrUserSpots.css";
@@ -14,14 +14,13 @@ import "./CurrUserSpots.css";
 export default function CurrUserSpots() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const spots = useSelector((state) => state.spots);
 
-  const [spots, setSpots] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     dispatch(spotsActions.loadUserSpots()).then((data) => {
       if (!data.message) {
-        setSpots(data.Spots);
         setIsLoaded(true);
       }
     });

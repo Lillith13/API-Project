@@ -8,6 +8,8 @@ import * as spotsActions from "../../store/spots";
 import * as reviewsActions from "../../store/reviews";
 import OpenReviewModal from "./OpenReviewModal";
 import ReviewModal from "./ReviewModal/ReviewModal.js";
+import OpenVerifyDeleteModal from "../DeleteModal/OpenDeleteModal";
+import VerifyDeleteModal from "../DeleteModal/DeleteModal";
 
 /* Import Related CSS && Images */
 import "./SpotDetails.css";
@@ -18,16 +20,15 @@ export default function SpotDetails() {
   const dispatch = useDispatch();
   const session = useSelector((state) => state.session);
   const reviews = useSelector((state) => state.reviews);
+  const spot = useSelector((state) => state.spots);
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [owner, setOwner] = useState("");
-  const [spot, setSpot] = useState({});
 
   useEffect(() => {
     dispatch(spotsActions.getASpot(spotId))
       .then((currSpot) => {
         setOwner(currSpot.Owner);
-        setSpot(currSpot);
       })
       .then(() =>
         dispatch(reviewsActions.loadSpotReviews(spotId)).then(() => {
@@ -119,7 +120,7 @@ export default function SpotDetails() {
       return (
         <OpenReviewModal
           itemText="Post Your Review"
-          modalComponent={<ReviewModal />}
+          modalComponent={<ReviewModal spotId={spotId} />}
         />
       );
   };
@@ -207,7 +208,12 @@ export default function SpotDetails() {
                 </p>
                 <p>review: {rev.review}</p>
                 {session.user && session.user.id === rev.userId && (
-                  <button>Delete Review</button>
+                  <OpenVerifyDeleteModal
+                    itemText="Delete Review"
+                    modalComponent={
+                      <VerifyDeleteModal reviewId={rev.id} spotId={spotId} />
+                    }
+                  />
                 )}
               </div>
             ))}

@@ -32,6 +32,7 @@ export default function SpotForm({ user }) {
   const [img2, setImg2] = useState("");
   const [img3, setImg3] = useState("");
   const [img4, setImg4] = useState("");
+  const [imgsArr, setImgsArr] = useState([]);
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
@@ -52,13 +53,19 @@ export default function SpotForm({ user }) {
           setDescription(spot.description);
           setName(spot.name);
           setPrice(spot.price);
-          const prevImg = spot.SpotImages.find((img) => img.preview);
-          setPrevImg(prevImg.url);
+
+          const pImg = spot.SpotImages.find((img) => img.preview);
+          setPrevImg(pImg.url);
+
           const otherImgs = spot.SpotImages.filter((img) => !img.preview);
-          setImg1(otherImgs[0].url);
-          setImg2(otherImgs[1].url);
-          setImg3(otherImgs[2].url);
-          setImg4(otherImgs[3].url);
+          const iArr = [];
+          if (otherImgs.length > 0) {
+            otherImgs.forEach((img) => {
+              iArr.push(img);
+            });
+          }
+
+          setImgsArr(iArr);
         }
       });
     }
@@ -123,15 +130,16 @@ export default function SpotForm({ user }) {
       price,
     };
 
-    let spotImgUrls = [prevImg, img1, img2, img3, img4];
-    spotImgUrls = spotImgUrls.filter((img) => img && img != "undefined");
-
+    let spotImgUrls;
     if (spotId && spotId != "undefined") {
+      spotImgUrls = [prevImg, ...imgsArr];
       // dispatch spot update
       dispatch(spotActions.updateSpot(spotId, newSpot)).then(() =>
         history.push(`/${spotId}`)
       );
     } else {
+      spotImgUrls = [prevImg, img1, img2, img3, img4];
+      spotImgUrls = spotImgUrls.filter((img) => img && img != "undefined");
       // dispatch create
       dispatch(spotActions.createASpot(newSpot, spotImgUrls, user.id)).then(
         (newSpotId) => history.push(`/${newSpotId}`)
