@@ -29,15 +29,17 @@ function Navigation({ isLoaded }) {
         position === "relative" ? { position } : { position, width: "96.2%" }
       }
     >
-      <NavLink exact to="/">
+      <a href="/">
         <h1 className="logo">
           <i className="fa-brands fa-airbnb"></i>
           AirBurbs
         </h1>
-      </NavLink>
+      </a>
       {isLoaded && (
         <div className="navLinksDiv">
-          {sessionUser && <NavLink to="/newSpot">Create a New Spot</NavLink>}
+          {sessionUser && (
+            <NavLink to="/mySpots/new">Create a New Spot</NavLink>
+          )}
           <ProfileButton user={sessionUser} />
         </div>
       )}

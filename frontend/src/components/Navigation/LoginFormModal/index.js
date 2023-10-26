@@ -1,5 +1,5 @@
 /* BoilerPlate */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 /* Import Necessities */
@@ -18,7 +18,7 @@ function LoginFormModal() {
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
       .then(closeModal)
@@ -37,6 +37,7 @@ function LoginFormModal() {
         {errors.credential && <p className="errors">* {errors.credential}</p>}
         <div className="inputs">
           <input
+            id="credential"
             type="text"
             value={credential}
             placeholder="Username or Email..."
@@ -44,12 +45,13 @@ function LoginFormModal() {
             required
           />
         </div>
-        {(!credential || credential.length < 4) && (
+        {credential && credential.length < 4 && (
           <p className="errors">* Username or Email Required</p>
         )}
 
         <div className="inputs">
           <input
+            id="password"
             type="password"
             value={password}
             placeholder="Password..."
@@ -57,14 +59,34 @@ function LoginFormModal() {
             required
           />
         </div>
-        {(!password || password.length < 6) && (
+        {password && password.length < 6 && (
           <p className="errors">* Password Required</p>
         )}
+
+        <select
+          className="input"
+          defaultValue="or Choose Demo User..."
+          onChange={(e) => {
+            setCredential(e.target.value);
+            setPassword(`password${e.target.value[e.target.value.length - 1]}`);
+          }}
+        >
+          <option disabled>or Choose Demo User...</option>
+          <option value="demoUser1">demoUser1</option>
+          <option value="demoUser2">demoUser2</option>
+          <option value="demoUser3">demoUser3</option>
+          <option value="demoUser4">demoUser4</option>
+        </select>
 
         <div className="submitButton">
           <button
             type="submit"
-            disabled={!(credential && password) ? true : false}
+            disabled={
+              !(credential && password) ||
+              (credential.length < 4 && password.length < 6)
+                ? true
+                : false
+            }
           >
             Log In
           </button>

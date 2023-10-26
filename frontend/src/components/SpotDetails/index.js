@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 /* Import Necessities */
 import * as spotsActions from "../../store/spots";
 import * as reviewsActions from "../../store/reviews";
+import OpenReviewModal from "./OpenReviewModal";
+import ReviewModal from "./ReviewModal/ReviewModal.js";
 
 /* Import Related CSS && Images */
 import "./SpotDetails.css";
@@ -14,16 +16,18 @@ import "./SpotDetails.css";
 export default function SpotDetails() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
-  const spot = useSelector((state) => state.spots);
+  const session = useSelector((state) => state.session);
   const reviews = useSelector((state) => state.reviews);
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [owner, setOwner] = useState("");
+  const [spot, setSpot] = useState({});
 
   useEffect(() => {
     dispatch(spotsActions.getASpot(spotId))
-      .then(() => {
-        setOwner(spot[0].Owner);
+      .then((currSpot) => {
+        setOwner(currSpot.Owner);
+        setSpot(currSpot);
       })
       .then(() =>
         dispatch(reviewsActions.loadSpotReviews(spotId)).then(() => {
@@ -106,19 +110,33 @@ export default function SpotDetails() {
     return display;
   };
 
+  const reviewButton = () => {
+    const userRev = reviews.find((rev) => rev.userId === session.user.id);
+
+    if ((userRev && userRev != "undefined") || owner.id == session.user.id) {
+      return;
+    } else
+      return (
+        <OpenReviewModal
+          itemText="Post Your Review"
+          modalComponent={<ReviewModal />}
+        />
+      );
+  };
+
   const displayFetchData = () => {
     return (
       <>
         <div className="spotNameNAddDiv">
-          <h1 className="spotName">{spot[0].name}</h1>
+          <h1 className="spotName">{spot.name}</h1>
           <p className="spotAddress" style={{ width: "100%" }}>
-            {spot[0].city}, {spot[0].state}, {spot[0].country}
+            {spot.city}, {spot.state}, {spot.country}
           </p>
         </div>
         <div className="spotDetailsImages">
-          {isLoaded && loadPrevImage(spot[0].SpotImages)}
+          {isLoaded && loadPrevImage(spot.SpotImages)}
           <div className="detailsImgDiv">
-            {isLoaded && loadOtherImages(spot[0].SpotImages)}
+            {isLoaded && loadOtherImages(spot.SpotImages)}
           </div>
         </div>
 
@@ -129,45 +147,68 @@ export default function SpotDetails() {
                 Hosted by {owner.firstName} {owner.lastName}
               </h3>
             )}
-            <p id="description">description: {spot[0].description}</p>
+            <p id="description">description: {spot.description}</p>
           </div>
 
           <div className="reservationDiv">
             <div className="revBlurb">
               <p id="price">
-                <strong>{spot[0].price}</strong> night
+                <strong>{spot.price}</strong> night
               </p>
               <p id="avgStarRating">
                 <i
                   className="fa-solid fa-feather"
                   style={{ color: "rgb(32, 185, 32)" }}
                 ></i>{" "}
-                {spot[0].avgStarRating} / {spot[0].numReviews} reviews
+                {spot.numReviews
+                  ? `${spot.avgStarRating} / ${spot.numReviews} ${
+                      spot.numReviews === 1 ? "review" : "reviews"
+                    }`
+                  : "NEW"}
               </p>
             </div>
-            <button id="reservationButton">Make Reservation</button>
+            <button
+              id="reservationButton"
+              onClick={() => alert("Feature Coming Soon")}
+            >
+              Make Reservation
+            </button>
           </div>
         </div>
-        {/* Dividing line */}
 
+        {/* Dividing line */}
         <div>
           <h3 id="avgStarRating">
-            <i className="fa-solid fa-feather" style={{ color: "#000000" }}></i>{" "}
-            {spot[0].avgStarRating} - {spot[0].numReviews} reviews
+            <i
+              className="fa-solid fa-feather"
+              style={{ color: "rgb(32, 185, 32)" }}
+            ></i>{" "}
+            {spot.numReviews
+              ? `${spot.avgStarRating} / ${spot.numReviews} ${
+                  spot.numReviews === 1 ? "review" : "reviews"
+                }`
+              : "NEW"}
           </h3>
+
+          {session.user && reviewButton()}
+          {spot.numReviews === 0 && <p>Be the first to review!</p>}
+
           <div className="reviewsForSpot">
             {reviews.map((rev) => (
               <div key={`review${rev.id}`}>
+                <h4>
+                  Reviewer Name: {rev.User.firstName} {rev.User.lastName}
+                </h4>
                 <p>
                   date reviewed:{" "}
                   {rev.createdAt > rev.updatedAt
                     ? rev.createdAt.split("T")[0]
                     : rev.updatedAt.split("T")[0]}
                 </p>
-                <h4>
-                  Reviewer Name: {rev.User.firstName} {rev.User.lastName}
-                </h4>
                 <p>review: {rev.review}</p>
+                {session.user && session.user.id === rev.userId && (
+                  <button>Delete Review</button>
+                )}
               </div>
             ))}
           </div>
@@ -178,10 +219,6 @@ export default function SpotDetails() {
 
   return (
     <div className="spotDetailHead">
-      {/* <p className="latNlng">
-        lat: {spot.lat} lng: {spot.lng}
-      </p> */}
-
       <div>{isLoaded && displayFetchData()}</div>
     </div>
   );

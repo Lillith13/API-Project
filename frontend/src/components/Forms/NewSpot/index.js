@@ -1,19 +1,19 @@
 /* BoilerPlate */
 import { useEffect, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 /* Import Necessities */
 import * as spotActions from "../../../store/spots";
 
 /* Import Related CSS */
-import "./newSpotForm.css";
+import "./spotForm.css";
 
-export default function CreateSpotForm() {
+export default function SpotForm({ user }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const session = useSelector((state) => state.session);
-  // console.log(session.user); // returns current user info
+  const spot = useSelector((state) => state.spots);
+  const { spotId } = useParams();
 
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -34,34 +34,61 @@ export default function CreateSpotForm() {
   const [img4, setImg4] = useState("");
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (user && spotId) {
+      dispatch(spotActions.getASpot(spotId)).then((spot) => {
+        if (spot.ownerId != user.id) {
+          history.push("/");
+        }
+        if (spot && spot != "undefined") {
+          setCountry(spot.country);
+          setAddress(spot.address);
+          setCity(spot.city);
+          setState(spot.state);
+          setLat(spot.lat);
+          setLng(spot.lng);
+          setDescription(spot.description);
+          setName(spot.name);
+          setPrice(spot.price);
+          const prevImg = spot.SpotImages.find((img) => img.preview);
+          setPrevImg(prevImg.url);
+          const otherImgs = spot.SpotImages.filter((img) => !img.preview);
+          setImg1(otherImgs[0].url);
+          setImg2(otherImgs[1].url);
+          setImg3(otherImgs[2].url);
+          setImg4(otherImgs[3].url);
+        }
+      });
+    }
+  }, [dispatch]);
 
-    const newSpot = {
-      country,
-      address,
-      city,
-      state,
-      lat,
-      lng,
-      description,
-      name,
-      price,
-    };
+  useEffect(() => {
+    const errs = {};
 
-    let spotImgUrls = [prevImg, img1, img2, img3, img4];
-    spotImgUrls = spotImgUrls.filter((img) => img && img != "undefined");
+    if (!country) errs.country = "Country is Required";
+    if (!address) errs.address = "Address is Required";
+    if (!city) errs.city = "City is Required";
+    if (!state) errs.state = "State is Required";
+    if (!lat) errs.lat = "Latitude is Required";
+    if (isNaN(lat)) errs.lat = "Latitude must be a number";
+    if (lat && (lat < -90 || lat > 90))
+      errs.lat = "Latitude must be between -90 and 90 degrees";
+    if (!lng) errs.lng = "Longitude is Required";
+    if (isNaN(lng)) errs.lng = "Longitude must be a number";
+    if (lng && (lng < -180 || lng > 180))
+      errs.lng = "Longitude must be between -180 and 180 degrees";
+    if (!description) errs.description = "Description is Required";
+    if (description && description.length < 30)
+      errs.description = "Descriptions must be 30 characters or more";
+    if (!name) errs.name = "Spot title is Required";
+    if (!price) errs.price = "Price per night is Required";
+    if (isNaN(price)) errs.price = "Price must be a number";
+    if (!prevImg) errs.prevImg = "At least one image is Required";
 
-    dispatch(
-      spotActions.createASpot(newSpot, spotImgUrls, session.user.id)
-    ).then(
-      (newSpotId) => history.push(`/${newSpotId}`)
-      /* console.log(newSpotId)*/
-    );
-
-    setHasSubmitted(true);
-  };
+    setErrors({ ...errs });
+  }, [country, address, city, state, lat, lng, description, price, prevImg]);
 
   useEffect(() => {
     setHasSubmitted(false);
@@ -81,10 +108,43 @@ export default function CreateSpotForm() {
     setImg4("");
   }, [hasSubmitted]);
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    const newSpot = {
+      country,
+      address,
+      city,
+      state,
+      lat,
+      lng,
+      description,
+      name,
+      price,
+    };
+
+    let spotImgUrls = [prevImg, img1, img2, img3, img4];
+    spotImgUrls = spotImgUrls.filter((img) => img && img != "undefined");
+
+    if (spotId && spotId != "undefined") {
+      // dispatch spot update
+      dispatch(spotActions.updateSpot(spotId, newSpot)).then(() =>
+        history.push(`/${spotId}`)
+      );
+    } else {
+      // dispatch create
+      dispatch(spotActions.createASpot(newSpot, spotImgUrls, user.id)).then(
+        (newSpotId) => history.push(`/${newSpotId}`)
+      );
+    }
+
+    setHasSubmitted(true);
+  };
+
   return (
     <div className="createSpotFormDiv">
       <form className="createSpotForm" onSubmit={onSubmit}>
-        <h2>Create a new Spot</h2>
+        <h2>{spotId ? "Update your" : "Create a new"} Spot</h2>
         <h3>Where's your place located?</h3>
         <p>
           Guests will only get your exact address once they've booked a
@@ -101,6 +161,7 @@ export default function CreateSpotForm() {
               id="countryInput"
               required
             />
+            {errors.country && <p className="errors">{errors.country}</p>}
           </div>
           <br />
           <div className="addressDiv">
@@ -113,6 +174,7 @@ export default function CreateSpotForm() {
               id="addressInput"
               required
             />
+            {errors.address && <p className="errors">{errors.address}</p>}
           </div>
           <div className="cityState">
             <div className="cityDiv">
@@ -124,6 +186,7 @@ export default function CreateSpotForm() {
                 onChange={(e) => setCity(e.target.value)}
                 required
               />
+              {errors.city && <p className="errors">{errors.city}</p>}
             </div>
             <p id="formComma"> , </p>
             <div className="stateDiv">
@@ -135,6 +198,7 @@ export default function CreateSpotForm() {
                 onChange={(e) => setState(e.target.value)}
                 required
               />
+              {errors.state && <p className="errors">{errors.state}</p>}
             </div>
           </div>
           <div className="latNlng">
@@ -148,6 +212,7 @@ export default function CreateSpotForm() {
                 onChange={(e) => setLat(e.target.value)}
                 required
               />
+              {errors.lat && <p className="errors">{errors.lat}</p>}
             </div>
             <p id="formComma"> , </p>
             <div className="lngDiv">
@@ -160,6 +225,7 @@ export default function CreateSpotForm() {
                 onChange={(e) => setLng(e.target.value)}
                 required
               />
+              {errors.lng && <p className="errors">{errors.lng}</p>}
             </div>
           </div>
         </div>
@@ -178,7 +244,7 @@ export default function CreateSpotForm() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          {/* {description.length < 30 && <p className="errors">Description needs a minimum of 30 characters</p>} */}
+          {errors.description && <p className="errors">{errors.description}</p>}
         </div>
 
         <div className="nameDiv">
@@ -195,7 +261,7 @@ export default function CreateSpotForm() {
             onChange={(e) => setName(e.target.value)}
             required
           />
-          {/* {} */}
+          {errors.name && <p className="errors">{errors.name}</p>}
         </div>
 
         <div className="priceDiv">
@@ -214,8 +280,8 @@ export default function CreateSpotForm() {
               onChange={(e) => setPrice(e.target.value)}
               required
             />
-            {/* {} */}
           </div>
+          {errors.price && <p className="errors">{errors.price}</p>}
         </div>
 
         <div className="imgSecDiv">
@@ -230,7 +296,7 @@ export default function CreateSpotForm() {
               }}
               required
             />
-            {/* {} */}
+            {errors.prevImg && <p className="errors">{errors.prevImg}</p>}
             <br />
             <input
               placeholder="Image URL"
@@ -263,8 +329,12 @@ export default function CreateSpotForm() {
         </div>
 
         <div className="subSpotDiv">
-          <button className="submitNewSpot" type="submit">
-            Create Spot
+          <button
+            className="submitNewSpot"
+            type="submit"
+            disabled={Object.keys(errors).length > 0 ? true : false}
+          >
+            {spotId ? "Update" : "Create"} Spot
           </button>
         </div>
       </form>

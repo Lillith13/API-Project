@@ -1,7 +1,7 @@
 /* BoilerPlate */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 /* Import Necessities */
 import * as spotsActions from "../../store/spots";
@@ -14,28 +14,28 @@ export default function Spots() {
   const dispatch = useDispatch();
   const urlSearch = new URLSearchParams(window.location.search);
 
+  const [spots, setSpot] = useState({});
+
   const queryObj = {
     page: urlSearch.get("page") || 1,
     size: urlSearch.get("size") || 10,
   };
 
-  const spots = useSelector((state) => state.spots);
   const [isLoaded, setIsLoaded] = useState(false);
-  // const [spotsArr, setSpotsArr] = useState(spots || null);
 
   useEffect(() => {
-    dispatch(spotsActions.loadAllSpots(queryObj)).then(() => setIsLoaded(true));
+    dispatch(spotsActions.loadAllSpots(queryObj)).then((spots) => {
+      setSpot(spots);
+      setIsLoaded(true);
+    });
   }, [dispatch]);
 
-  // ! Change img urls for spotImages before continueing here
   const loadSpots = () => {
     const display = [];
     let disp;
-    spots.forEach((spot) => {
-      const prevImg = spot.previewImage;
-      // const endTag = prevImg.subString();
-      // console.log(prevImg[0]);
-      if (!prevImg || prevImg == undefined) {
+    for (let spot in spots) {
+      const prevImg = spots[spot].previewImage;
+      if (!prevImg || prevImg == "undefined") {
         disp = (
           <img
             src={`../SpotDetails/images/BirdHouseundefined.jpg`}
@@ -53,29 +53,32 @@ export default function Spots() {
           />
         );
       } else {
-        // console.log([...prevImg][0]);
         disp = <img src={prevImg} alt="birdhouse" id="previewImage" />;
       }
 
       display.push(
-        <Link to={`/${spot.id}`} className="spotPreview" key={spot.id}>
+        <Link
+          to={`/${spots[spot].id}`}
+          className="spotPreview"
+          key={spots[spot].id}
+        >
           {disp}
           <div className="infoDiv">
             <p>
-              {spot.city}, {spot.state}
+              {spots[spot].city}, {spots[spot].state}
             </p>
             <p>
               <i
                 className="fa-solid fa-feather"
                 style={{ color: "rgb(32, 185, 32)" }}
               />{" "}
-              {spot.avgRating}
+              {spots[spot].avgRating > 0 ? spots[spot].avgRating : "NEW"}
             </p>
           </div>
-          <button className="priceButton">{spot.price}/night</button>
+          <button className="priceButton">{spots[spot].price}/night</button>
         </Link>
       );
-    });
+    }
     return <div className="spotPreviewDiv">{display}</div>;
   };
 

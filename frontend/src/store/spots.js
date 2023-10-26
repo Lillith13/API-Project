@@ -4,6 +4,7 @@ const LOAD_SPOTS = "spots/loadSpots";
 const GET_SPOT = "spots/getSpot";
 const ADD_SPOT = "spots/addSpot";
 const USER_SPOTS = "spots/userSpots";
+const DELETE_SPOT = "spots/deleteSpot";
 
 const loadSpots = (spots) => {
   return {
@@ -33,6 +34,13 @@ const userSpots = (spots) => {
   };
 };
 
+const deleteSpot = (spotId) => {
+  return {
+    type: DELETE_SPOT,
+    spotId,
+  };
+};
+
 export const loadAllSpots = (queryObj) => async (dispatch) => {
   let url = "/api/spots?";
   if (queryObj && queryObj.page != "undefined") url += `page=${queryObj.page}&`;
@@ -41,8 +49,8 @@ export const loadAllSpots = (queryObj) => async (dispatch) => {
     method: "GET",
   });
   const data = await res.json();
-  dispatch(loadSpots(data.Spots));
-  return res;
+  dispatch(loadSpots({ ...data.Spots }));
+  return [...data.Spots];
 };
 
 export const getASpot = (spotId) => async (dispatch) => {
@@ -51,7 +59,7 @@ export const getASpot = (spotId) => async (dispatch) => {
   });
   const spot = await res.json();
   dispatch(getSpot(spot));
-  return res;
+  return spot;
 };
 
 export const createASpot = (spot, spotImgs, userId) => async (dispatch) => {
@@ -92,25 +100,48 @@ export const loadUserSpots = () => async (dispatch) => {
   const res = await csrfFetch("/api/spots/current", {
     method: "GET",
   });
-  const currUserSpots = await res.json();
-  dispatch(userSpots(currUserSpots.Spots));
+  const data = await res.json();
+  if (!data.message) dispatch(userSpots(data.Spots));
+  return data;
+};
+
+export const updateSpot = (spotId, newSpot) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "PUT",
+    body: JSON.stringify(newSpot),
+  });
   return res;
 };
 
-const spotsReducer = (state = [], action) => {
+export const deleteASpot = (spotId) => async (dispatch) => {
+  console.log(spotId);
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "DELETE",
+  });
+  if (res.ok) dispatch(deleteSpot(spotId));
+  return res;
+};
+
+const spotsReducer = (state = {}, action) => {
   let newState;
   switch (action.type) {
     case LOAD_SPOTS:
-      newState = [...action.spots];
+      newState = { ...action.spots };
       return newState;
     case GET_SPOT:
-      newState = [action.spot];
+      newState = action.spot;
       return newState;
     case ADD_SPOT: // <- isn't really necessary ?
-      newState = [...state, action.spot];
+      newState = { ...state, [action.spot.id]: { ...action.spot } };
       return newState;
     case USER_SPOTS:
-      newState = [...action.spots];
+      newState = { ...action.spots };
+      return newState;
+    case DELETE_SPOT:
+      newState = { ...state };
+      for (let spot in newState) {
+        if (newState[spot].id === action.spotId) delete newState[spot];
+      }
       return newState;
     default:
       return state;

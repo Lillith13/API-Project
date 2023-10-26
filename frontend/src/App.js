@@ -1,6 +1,6 @@
 /* BoilerPlate */
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 
 /* Import Necessities */
@@ -8,17 +8,21 @@ import Navigation from "./components/Navigation";
 import Spots from "./components/Spots";
 import * as sessionActions from "./store/session";
 import SpotDetails from "./components/SpotDetails";
-import CreateSpotForm from "./components/Forms/NewSpot";
+import SpotForm from "./components/Forms/NewSpot";
 import CurrUserSpots from "./components/CurrUserSpots";
+import spotsReducer from "./store/spots";
 
 /* Build & Export Component */
 function App() {
   const dispatch = useDispatch();
+  const session = useSelector((state) => state.session);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
+
+  // ! Style the 403 errors below - create error page component
 
   return (
     <div>
@@ -28,14 +32,29 @@ function App() {
           <Route exact path="/">
             <Spots />
           </Route>
-          <Route path="/newSpot">
-            <CreateSpotForm />
+          <Route exact path="/mySpots">
+            {session.user ? (
+              <CurrUserSpots />
+            ) : (
+              "403: Log In to view your spots"
+            )}
           </Route>
-          <Route path="/mySpots">
-            <CurrUserSpots />
+          <Route path="/mySpots/new">
+            {session.user ? (
+              <SpotForm user={session.user} />
+            ) : (
+              "403: Log In to create a new spot"
+            )}
           </Route>
-          <Route path="/:spotId">
+          <Route exact path="/:spotId">
             <SpotDetails />
+          </Route>
+          <Route path="/:spotId/update">
+            {session.user ? (
+              <SpotForm user={session.user} />
+            ) : (
+              "403: Log In to update spots"
+            )}
           </Route>
           <Route>"404 Page Not Found"</Route>
         </Switch>

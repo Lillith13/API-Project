@@ -19,7 +19,6 @@ function OpenModalMenuItem({
   if (itemText && itemText !== "undefined") {
     display = (
       <div className="button">
-        {/* change to link/plain text later */}
         <button onClick={onClick}>{itemText}</button>
       </div>
     );
