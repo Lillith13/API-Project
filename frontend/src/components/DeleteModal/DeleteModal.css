@@ -1,0 +1,42 @@
+.openDeleteModalButton {
+  width: 150px;
+}
+
+.deleteModalDiv {
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  right: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(158, 242, 248);
+  border: 5px dotted rgb(220, 108, 126);
+  border-radius: 30px;
+  padding: 25px;
+}
+
+.delModalButtonsDiv {
+  display: flex;
+  gap: 10px;
+}
+
+.delModalYesButton,
+.delModalNoButton {
+  width: 50%;
+  padding: 15px 10px;
+}
+
+@media screen and (min-width: 751px) {
+  .deleteModalDiv {
+    left: 30%;
+    right: 30%;
+  }
+}
+@media screen and (min-width: 900px) {
+  .deleteModalDiv {
+    left: 35%;
+    right: 35%;
+  }
+}

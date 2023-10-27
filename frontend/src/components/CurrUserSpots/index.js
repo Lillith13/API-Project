@@ -1,6 +1,6 @@
 /* BoilerPlate */
 import { useEffect, useState } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 /* Import Necessities */
@@ -70,7 +70,7 @@ export default function CurrUserSpots() {
                 {spot.avgRating > 0 ? spot.avgRating : "NEW"}
               </p>
             </div>
-            <p className="price">{spot.price}/night</p>
+            <p className="price">{spot.price} night</p>
           </Link>
           <div className="buttonsDiv">
             <button
@@ -93,7 +93,7 @@ export default function CurrUserSpots() {
   };
 
   return (
-    <div>
+    <div className="manageSpotsTitleDiv">
       <h1 className="manageSpotsHeader">Manage Your Spots</h1>
       <Link to="/mySpots/new">
         <button className="createSpotButton">Create a New Spot</button>

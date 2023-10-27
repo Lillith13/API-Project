@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { useModal } from "../../../context/Modal";
@@ -33,12 +33,34 @@ export default function ReviewModal({ spotId }) {
     setErrors(errs);
   };
 
-  // ! Additional styling needed (CSS)
+  useEffect(() => {
+    if (reviewText.length > 10) {
+      setErrors({});
+    }
+  }, [reviewText]);
+
   return (
-    <div>
+    <div className="reviewModalDiv">
       <h1>How was your stay?</h1>
       <form onSubmit={onSubmit}>
+        <div className="reviewFormDiv">
+          <textarea
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+            className="input" // ? may change class name
+            placeholder="Leave your review here..."
+            style={{ width: "100%" }}
+            required
+          ></textarea>
+          {errors.reviewText ? (
+            <p className="errors">Review must be 10 characters or longer</p>
+          ) : (
+            ""
+          )}
+        </div>
+
         <div
+          className="starsDiv"
           onClick={(e) => {
             numStars === e.target.id
               ? setNumStars(0)
@@ -60,22 +82,12 @@ export default function ReviewModal({ spotId }) {
           Stars
         </div>
 
-        <div>
-          <textarea
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            className="input" // ? may change class name
-            placeholder="Leave your review here..."
-            required
-          ></textarea>
-          {errors.reviewText ? (
-            <p className="errors">Review must be 10 characters or longer</p>
-          ) : (
-            ""
-          )}
-        </div>
-
-        <button disabled={!reviewText || !numStars ? true : false}>
+        <button
+          className="postRevButton"
+          disabled={
+            (!reviewText && reviewText.length < 10) || !numStars ? true : false
+          }
+        >
           Submit Your Review
         </button>
       </form>

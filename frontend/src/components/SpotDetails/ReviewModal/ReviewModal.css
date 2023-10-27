@@ -1,1 +1,47 @@
+.reviewModalDiv {
+  position: fixed;
+  top: 15%;
+  left: 35%;
+  right: 35%;
+  background-color: rgba(158, 242, 248);
+  border: 5px dotted rgb(220, 108, 126);
+  border-radius: 30px;
+  width: fit-content;
+  height: fit-content;
+  padding: 25px;
+}
 
+.reviewModalDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.reviewFormDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  gap: 25px;
+  margin: 10px 0px 25px 0px;
+}
+.reviewFormDiv > textarea {
+  max-height: 250px;
+}
+
+.starsDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  width: 100%;
+  gap: 10px;
+  margin: 10px 0px;
+}
+
+.postRevButton {
+  width: 100%;
+  margin: 10px 0px;
+}

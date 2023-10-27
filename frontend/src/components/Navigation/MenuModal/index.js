@@ -40,7 +40,14 @@ export default function MenuModal({ propData }) {
             <p>Hello, {user.firstName}</p>
             <p>{user.email}</p>
           </div>
-          <div style={{ borderBottom: "1px solid black", padding: "15px" }}>
+          <div
+            className="manageORcreateDiv"
+            style={{
+              borderBottom: "1px solid black",
+              padding: "15px",
+              fontSize: "20px",
+            }}
+          >
             {user.ownsSpots ? (
               <Link to="/mySpots" onClick={closeModal}>
                 Manage Spots

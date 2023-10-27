@@ -2,6 +2,10 @@ div.logInModal {
   margin-inline: auto;
   z-index: 1;
   position: relative;
+  background-color: rgba(158, 242, 248);
+  border: 5px dotted rgb(220, 108, 126);
+  border-radius: 30px;
+  padding: 25px;
 }
 
 #credential,

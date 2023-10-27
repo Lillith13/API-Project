@@ -64,10 +64,10 @@ export default function Spots() {
         >
           {disp}
           <div className="infoDiv">
-            <p>
+            <p className="cityState">
               {spots[spot].city}, {spots[spot].state}
             </p>
-            <p>
+            <p className="avgStarRating">
               <i
                 className="fa-solid fa-feather"
                 style={{ color: "rgb(32, 185, 32)" }}
@@ -75,7 +75,7 @@ export default function Spots() {
               {spots[spot].avgRating > 0 ? spots[spot].avgRating : "NEW"}
             </p>
           </div>
-          <button className="priceButton">{spots[spot].price}/night</button>
+          <button className="priceButton">{spots[spot].price} night</button>
         </Link>
       );
     }

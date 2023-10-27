@@ -10,5 +10,9 @@ export default function OpenReviewModal({ modalComponent, itemText }) {
     setModalContent(modalComponent);
   };
 
-  return <button onClick={onClick}>{itemText}</button>;
+  return (
+    <button className="openRevModal" onClick={onClick}>
+      {itemText}
+    </button>
+  );
 }

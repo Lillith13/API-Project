@@ -1,5 +1,5 @@
 /* BoilerPlate */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 /* Import Necessities */
@@ -20,12 +20,34 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const { closeModal } = useModal();
+
+  useEffect(() => {
+    let errs = {};
+    if (errors.email && email.includes("@")) {
+      errs = { ...errors };
+      delete errs.email;
+    }
+    if (!email.includes("@")) errs.email = "Please enter valid email";
+    setErrors(errs);
+  }, [email]);
+
+  useEffect(() => {
+    setEmail("");
+    setUsername("");
+    setFirstName("");
+    setLastName("");
+    setPassword("");
+    setConfirmPassword("");
+    setErrors({});
+    setHasSubmitted(false);
+  }, [hasSubmitted]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const errs = {};
     if (password === confirmPassword) {
-      setErrors({});
       return dispatch(
         sessionActions.signup({
           email,
@@ -39,20 +61,22 @@ function SignupFormModal() {
         .catch(async (res) => {
           const data = await res.json();
           if (data && data.errors) {
-            setErrors(data.errors);
+            setErrors({ ...errors, ...data.errors });
           }
         });
     }
     return setErrors({
+      ...errors,
       confirmPassword:
         "Confirm Password field must be the same as the Password field",
     });
+    setHasSubmitted(true);
   };
 
   return (
     <div className="signUpModal">
       <h1 className="header">Sign Up</h1>
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={handleSubmit} className="signUpForm">
         <div className="inputs">
           <input
             type="email"
@@ -121,14 +145,15 @@ function SignupFormModal() {
           />
         </div>
         {password !== confirmPassword && (
-          <p className="errors">* Must match Paswsword</p>
+          <p className="errors">* Must match Password</p>
         )}
         {errors.confirmPassword && (
           <p className="errors">* {errors.confirmPassword}</p>
         )}
 
-        <div className="submitButton">
+        <div className="submitButtonDiv">
           <button
+            className="submitButton"
             type="submit"
             disabled={
               email.length > 0 &&

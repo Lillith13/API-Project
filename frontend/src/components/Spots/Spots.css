@@ -35,14 +35,24 @@
 
 .infoDiv {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   color: black;
+}
+.cityState {
+  width: 50%;
+}
+.avgStarRating {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
 }
 
 .priceButton {
   border: 1px solid rgb(150, 47, 240);
-  color: rgb(57, 10, 114);
-  color: rgb(51, 38, 68);
+  color: rgb(48, 4, 102);
+  font-weight: bold;
   align-self: flex-end;
   padding: 10px 7px;
   font-size: 13px;

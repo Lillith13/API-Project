@@ -1,5 +1,15 @@
-#modal-content {
+.dropdownmenu {
   position: fixed;
   top: 75px;
   right: 50px;
+  background-color: rgba(158, 242, 248);
+  border: 5px dotted rgb(220, 108, 126);
+  border-radius: 30px;
+  padding: 25px;
+}
+
+.manageORcreateDiv {
+  border-bottom: 1px solid black;
+  padding: 15px;
+  font-size: 20px;
 }

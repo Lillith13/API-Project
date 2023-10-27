@@ -80,8 +80,9 @@ function LoginFormModal() {
           <option value="demoUser4">demoUser4</option>
         </select>
 
-        <div className="submitButton">
+        <div className="submitButtonDiv">
           <button
+            className="submitButton"
             type="submit"
             disabled={
               !(credential && password) ||

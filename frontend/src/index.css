@@ -4,6 +4,7 @@ body {
   /* padding: 10px; */
   align-content: center;
   padding-bottom: 50px;
+  overflow-x: hidden;
 }
 
 .hidden {

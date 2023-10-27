@@ -1,5 +1,35 @@
 div.signUpModal {
-  margin-inline: auto;
   z-index: 1;
+  margin-inline: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(158, 242, 248);
+  border: 5px dotted rgb(220, 108, 126);
+  border-radius: 30px;
+  padding: 25px;
+  width: 300px;
+}
+
+.signUpForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.signUpForm,
+.signUpForm > .inputs,
+.signUpForm > .inputs > input {
+  width: 100%;
+}
+
+.submitButtonDiv,
+.submitButton {
+  width: 100%;
+}
+.submitButton {
+  border: 3px solid rgb(196, 164, 169);
+  color: rgb(115, 95, 130);
+  font-weight: bold;
 }

@@ -21,3 +21,11 @@
 .manageSpotsHeader {
   margin: 25px 40px;
 }
+@media screen and (min-width: 1600px) {
+  .manageSpotsHeader {
+    margin: 25px 80px;
+  }
+  .createSpotButton {
+    margin: 0px 80px;
+  }
+}

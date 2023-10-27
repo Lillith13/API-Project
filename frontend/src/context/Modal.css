@@ -18,14 +18,9 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-#modal-content {
-  position: absolute;
-  /* set themes later - curr === spring */
-  background-color: rgba(158, 242, 248);
-  border: 5px dotted rgb(220, 108, 126);
-  border-radius: 30px;
-  padding: 25px;
-}
+/* #modal-content {
+    --- each modal is individually styled and positioned ---
+} */
 
 h1.header {
   display: flex;

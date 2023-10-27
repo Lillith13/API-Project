@@ -10,5 +10,9 @@ export default function OpenVerifyDeleteModal({ modalComponent, itemText }) {
     setModalContent(modalComponent);
   };
 
-  return <button onClick={onClick}>{itemText}</button>;
+  return (
+    <button className="openDeleteModalButton" onClick={onClick}>
+      {itemText}
+    </button>
+  );
 }

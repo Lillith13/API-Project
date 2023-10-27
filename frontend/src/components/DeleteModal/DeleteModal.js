@@ -4,6 +4,8 @@ import { useModal } from "../../context/Modal";
 import * as spotActions from "../../store/spots";
 import * as reviewActions from "../../store/reviews";
 
+import "./DeleteModal.css";
+
 export default function VerifyDeleteModal(props) {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
@@ -26,14 +28,16 @@ export default function VerifyDeleteModal(props) {
   };
 
   return (
-    <div>
+    <div className="deleteModalDiv">
       <h1>Confirm Delete</h1>
-      <button onClick={handleDelete}>
-        {props.reviewId ? "Yes (Delete Review)" : "Yes (Delete Spot)"}
-      </button>
-      <button onClick={handleClose}>
-        {props.reviewId ? "No (Keep Review" : "No (Keep Spot)"}
-      </button>
+      <div className="delModalButtonsDiv">
+        <button className="delModalYesButton" onClick={handleDelete}>
+          {props.reviewId ? "Yes (Delete Review)" : "Yes (Delete Spot)"}
+        </button>
+        <button className="delModalNoButton" onClick={handleClose}>
+          {props.reviewId ? "No (Keep Review" : "No (Keep Spot)"}
+        </button>
+      </div>
     </div>
   );
 }
