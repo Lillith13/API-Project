@@ -44,7 +44,7 @@ export default function SpotDetails() {
   }, [isLoaded, dispatch]);
 
   const loadPrevImage = (spotImgs) => {
-    const prevImg = spotImgs.find((img) => img.preview);
+    const prevImg = spotImgs.toReversed().find((img) => img.preview);
 
     let display;
     if (prevImg.url[0] === "/") {
