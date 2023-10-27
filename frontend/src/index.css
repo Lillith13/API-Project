@@ -42,4 +42,6 @@ button:hover {
   align-content: center;
 }
 
-/* ! add themeing for colorBlind variants to standard themes */
+img {
+  height: 250px;
+}

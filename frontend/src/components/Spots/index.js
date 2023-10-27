@@ -32,8 +32,13 @@ export default function Spots() {
   const loadSpots = () => {
     const display = [];
     let disp;
+    console.log(spots);
+    const spotsArr = [];
     for (let spot in spots) {
-      const prevImg = spots[spot].previewImage;
+      spotsArr.push(spots[spot]);
+    }
+    spotsArr.toReversed().map((spot) => {
+      const prevImg = spot.previewImage;
       if (!prevImg || prevImg == "undefined") {
         disp = (
           <img
@@ -57,28 +62,28 @@ export default function Spots() {
 
       display.push(
         <Link
-          to={`/${spots[spot].id}`}
+          to={`/${spot.id}`}
           className="spotPreview"
-          key={spots[spot].id}
-          title={spots[spot].name}
+          key={spot.id}
+          title={spot.name}
         >
           {disp}
           <div className="infoDiv">
             <p className="cityState">
-              {spots[spot].city}, {spots[spot].state}
+              {spot.city}, {spot.state}
             </p>
             <p className="avgStarRating">
               <i
                 className="fa-solid fa-feather"
                 style={{ color: "rgb(32, 185, 32)" }}
               />{" "}
-              {spots[spot].avgRating > 0 ? spots[spot].avgRating : "NEW"}
+              {spot.avgRating > 0 ? spot.avgRating : "NEW"}
             </p>
           </div>
-          <button className="priceButton">{spots[spot].price} night</button>
+          <button className="priceButton">{spot.price} night</button>
         </Link>
       );
-    }
+    });
     return <div className="spotPreviewDiv">{display}</div>;
   };
 
