@@ -14,18 +14,29 @@
   background-color: rgba(158, 242, 248);
   border: 5px dotted rgb(220, 108, 126);
   border-radius: 30px;
-  padding: 25px;
+  padding: 20px;
 }
 
 .delModalButtonsDiv {
   display: flex;
+  flex-direction: column;
+  width: 75%;
   gap: 10px;
 }
 
 .delModalYesButton,
 .delModalNoButton {
-  width: 50%;
+  width: 100%;
   padding: 15px 10px;
+  color: black;
+  font-weight: bold;
+  font-size: 20px;
+}
+.delModalYesButton {
+  background-color: rgb(186, 4, 4);
+}
+.delModalNoButton {
+  background-color: darkgray;
 }
 
 @media screen and (min-width: 751px) {
