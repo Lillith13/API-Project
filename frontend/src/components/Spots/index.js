@@ -60,6 +60,7 @@ export default function Spots() {
           to={`/${spots[spot].id}`}
           className="spotPreview"
           key={spots[spot].id}
+          title={spots[spot].name}
         >
           {disp}
           <div className="infoDiv">

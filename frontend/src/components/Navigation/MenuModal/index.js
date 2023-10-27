@@ -33,9 +33,9 @@ export default function MenuModal({ propData }) {
   // ! work on attaching menu model directly beneath the menu/profile button instead of displaying in the middle of the screen
 
   return (
-    <div>
+    <div className="dropdownmenu">
       {user ? (
-        <div className="dropdownmenu" style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center" }}>
           <div style={{ borderBottom: "1px solid black" }}>
             <p>Hello, {user.firstName}</p>
             <p>{user.email}</p>
@@ -43,7 +43,7 @@ export default function MenuModal({ propData }) {
           <div style={{ borderBottom: "1px solid black", padding: "15px" }}>
             {user.ownsSpots ? (
               <Link to="/mySpots" onClick={closeModal}>
-                Manage Your Spots
+                Manage Spots
               </Link>
             ) : (
               <Link to="/mySpots/new" onClick={closeModal}>

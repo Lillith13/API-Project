@@ -3,6 +3,7 @@ body {
   background-color: rgba(31, 235, 123, 0.35);
   /* padding: 10px; */
   align-content: center;
+  padding-bottom: 50px;
 }
 
 .hidden {
@@ -30,6 +31,14 @@ button {
 }
 button:hover {
   cursor: pointer;
+}
+
+.errors {
+  color: purple;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 /* ! add themeing for colorBlind variants to standard themes */

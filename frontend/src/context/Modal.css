@@ -47,11 +47,3 @@ h1.header {
   margin-top: 20px;
   /* figure out how to change the width of JUST the log in and sign up modal submit buttons */
 }
-
-.errors {
-  color: purple;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}

@@ -19,8 +19,10 @@ export default function SpotDetails() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const session = useSelector((state) => state.session);
+  console.log(session.user);
   const reviews = useSelector((state) => state.reviews);
   const spot = useSelector((state) => state.spots);
+  console.log(spot);
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [owner, setOwner] = useState("");
@@ -192,7 +194,9 @@ export default function SpotDetails() {
           </h3>
 
           {session.user && reviewButton()}
-          {spot.numReviews === 0 && <p>Be the first to review!</p>}
+          {spot.numReviews === 0 && spot.ownerId !== session.user.id && (
+            <p>Be the first to review!</p>
+          )}
 
           <div className="reviewsForSpot">
             {reviews.map((rev) => (
