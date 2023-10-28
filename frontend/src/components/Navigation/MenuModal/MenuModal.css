@@ -13,3 +13,9 @@
   padding: 15px;
   font-size: 20px;
 }
+
+.userTools {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

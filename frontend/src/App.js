@@ -9,8 +9,8 @@ import Spots from "./components/Spots";
 import * as sessionActions from "./store/session";
 import SpotDetails from "./components/SpotDetails";
 import SpotForm from "./components/Forms/NewSpot";
-import CurrUserSpots from "./components/CurrUserSpots";
-import spotsReducer from "./store/spots";
+import CurrUserSpots from "./components/ManageSpots";
+import ManageReviews from "./components/ManageReviews";
 
 /* Build & Export Component */
 function App() {
@@ -44,6 +44,13 @@ function App() {
               <SpotForm user={session.user} />
             ) : (
               "403: Log In to create a new spot"
+            )}
+          </Route>
+          <Route path="/myReviews">
+            {session.user ? (
+              <ManageReviews />
+            ) : (
+              "403: Log In to see the reviews you've left"
             )}
           </Route>
           <Route exact path="/:spotId">

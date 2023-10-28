@@ -108,11 +108,52 @@ export const loadUserSpots = () => async (dispatch) => {
   return data;
 };
 
-export const updateSpot = (spotId, newSpot) => async (dispatch) => {
+export const updateSpot = (spotId, spotImgs, newSpot) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: "PUT",
     body: JSON.stringify(newSpot),
   });
+  let uSpot = await res.json();
+
+  // fetch all spotImageData (to be deleted below)
+  const spotRes = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "GET",
+  });
+  const spotData = await spotRes.json();
+
+  // fetch delete all spot images (to be replaced below)
+  spotData.SpotImages.forEach(async (img) => {
+    await csrfFetch(`/api/spot-images/${img.id}`, {
+      method: "DELETE",
+    });
+  });
+
+  // fetch post spot image request(s)
+  await csrfFetch(`/api/spots/${uSpot.id}/images`, {
+    method: "POST",
+    body: JSON.stringify({
+      url: spotImgs[0],
+      preview: true,
+    }),
+  });
+  if (spotImgs.length > 1) {
+    spotImgs.splice(1).map(async (url) => {
+      await csrfFetch(`/api/spots/${uSpot.id}/images`, {
+        method: "POST",
+        body: JSON.stringify({
+          url,
+          preview: false,
+        }),
+      });
+    });
+  }
+
+  const spotRes2 = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "GET",
+  });
+  uSpot = await spotRes2.json();
+  console.log(uSpot);
+  dispatch(addSpot(uSpot));
   return res;
 };
 

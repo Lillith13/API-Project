@@ -49,9 +49,14 @@ export default function MenuModal({ propData }) {
             }}
           >
             {user.ownsSpots ? (
-              <Link to="/mySpots" onClick={closeModal}>
-                Manage Spots
-              </Link>
+              <div className="userTools">
+                <Link to="/mySpots" onClick={closeModal}>
+                  Manage Spots
+                </Link>
+                <Link to="/myReviews" onClick={closeModal}>
+                  Manage Reviews
+                </Link>
+              </div>
             ) : (
               <Link to="/mySpots/new" onClick={closeModal}>
                 Create A Spot

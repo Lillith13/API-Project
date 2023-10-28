@@ -1,10 +1,10 @@
 /* BoilerPlate */
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 /* Import Necessities */
 import * as sessionActions from "../../../store/session";
-import * as spotsActions from "../../../store/spots";
+// import * as spotsActions from "../../../store/spots";
 import { useModal } from "../../../context/Modal";
 
 /* Import Related CSS */
