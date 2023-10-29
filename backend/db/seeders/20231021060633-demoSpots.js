@@ -32,7 +32,7 @@ const buildDemoSpot = async () => {
         lng: `${randomNum(-180, 180)}`,
         name: `DemoSpot${count}`,
         description: `DemoSpot${count}`,
-        price: `${randomNum(0.99, 9999.99)}`,
+        price: `${randomNum(0.99, 999.99)}`,
       },
       {
         ownerId: user.id,

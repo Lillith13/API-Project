@@ -32,7 +32,6 @@ export default function Spots() {
   const loadSpots = () => {
     const display = [];
     let disp;
-    console.log(spots);
     const spotsArr = [];
     for (let spot in spots) {
       spotsArr.push(spots[spot]);

@@ -27,10 +27,11 @@ export default function ReviewModal({ spotId }) {
         stars: numStars,
         review: reviewText,
       };
-      dispatch(reviewActions.newReview(newRevData));
-      closeModal().catch((e) => {
-        setErrors(e); // ? no idea if this will actually catch errors for if someone who has already reviewed tries reviewing again (no way to test it without removing implemented error handlers for other required error checks)
-      });
+      dispatch(reviewActions.newReview(newRevData))
+        .then(() => closeModal())
+        .catch((e) => {
+          setErrors(e); // ? no idea if this will actually catch errors for if someone who has already reviewed tries reviewing again (no way to test it without removing implemented error handlers for other required error checks);
+        });
     }
     setErrors({ ...errors, ...errs });
   };
