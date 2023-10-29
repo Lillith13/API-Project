@@ -36,7 +36,7 @@ export default function Spots() {
     for (let spot in spots) {
       spotsArr.push(spots[spot]);
     }
-    spotsArr.toReversed().map((spot) => {
+    spotsArr.map((spot) => {
       const prevImg = spot.previewImage;
       if (!prevImg || prevImg == "undefined") {
         disp = (

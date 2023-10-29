@@ -34,6 +34,7 @@ router.get("/", [queryValidation, filterNpagi], async (req, res) => {
 
   const Spots = await Spot.findAll({
     where,
+    order: [["id", "DESC"]],
     ...pagination,
   });
 
